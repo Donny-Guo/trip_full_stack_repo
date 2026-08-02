@@ -6,7 +6,7 @@
 
 构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 15 App Router、TypeScript、MUI v6；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 0.3.31；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
 
-D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002` 已在本地完成；从 `F-01`/`ISSUE-003` 开始按依赖顺序推进，不得超出该切片。
+D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002` 与 `F-01`/`ISSUE-003` 已在本地完成；继续按依赖顺序推进 `F-02`/`ISSUE-004` 和 `F-03`/`ISSUE-005`，不得超出该切片。
 
 2026-08-02，Owner 还确认 `P-03` 必须保留 Next.js 15 + MUI v6 组合，使用 TypeORM 0.3.31 与 PostgreSQL 18，并选择 Jest/Supertest 进行 API 测试、Vitest/React Testing Library 进行 Web Unit/Component 测试、Playwright 进行 Browser E2E。将这些视为明确约束，不得静默替换其他 Major 或测试系列。由于上游当前将 MUI v6 列为不再支持，而 Next.js 15 处于 Maintenance LTS，必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权 Major-version 变更；变更仍需 Owner 明确批准。
 

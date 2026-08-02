@@ -7,8 +7,9 @@
 - Owner：**`@Donny-Guo`**
 - Runtime 版本线：**Node.js 24.18.0 + pnpm 11.18.0**
 - 明确约束：**Next.js 15 + MUI v6、TypeORM 0.3.31、PostgreSQL 18**
+- 下游 Enforcement：**F-01/ISSUE-003 已于 2026-08-02 在本地完成**
 
-“已冻结”表示下游任务必须使用这些精确 Direct Selection；只有经 Review 的同一变更更新本矩阵后才能改动。它不表示依赖已经安装、Lockfile 已存在、应用可以 Build、Native Module 可以加载、数据库镜像已经 Pull 或 CI 已通过。那些事实必须由下文指定的 Downstream Enforcement Task 证明。
+“已冻结”表示下游任务必须使用这些精确 Direct Selection；只有经 Review 的同一变更更新本矩阵后才能改动。P-03 Status 本身不声称 Installation、Lockfile、Build、Native-runtime、Database 或 CI Result 已存在；这些事实由下文指定的 Downstream Enforcement Task 证明。F-01 现已提供 Root Installation、Lockfile 与 Task-graph Evidence。Application Build、Native-module Loading、Database-image Verification 与 CI 仍由后续 Owner Task 负责。
 
 ## 已确认选择与支持例外
 
@@ -20,7 +21,7 @@
 
 ## Pin 与更新策略
 
-1. F-01 设置 `save-exact=true`、`engine-strict=true`、根 `packageManager: "pnpm@11.18.0"`、精确 Node/pnpm Engine Constraint 及唯一 Frozen Root Lockfile。所有 Direct Runtime/Development Dependency 使用精确版本；内部依赖使用 `workspace:`。Transitive Version 由 Lockfile 控制。
+1. F-01 在 `pnpm-workspace.yaml` 中保存 Workspace Glob 与结构化 pnpm Project Policy：`engineStrict: true`、`saveExact: true`、`saveWorkspaceProtocol: rolling`。根 `package.json` 设置 `packageManager: "pnpm@11.18.0"` 与精确 Node/pnpm Engine Constraint，仓库只保留一个 Frozen Root Lockfile。所有 Direct Runtime/Development Dependency 使用精确版本；内部依赖使用 `workspace:`。Transitive Version 由 Lockfile 控制。
 2. `.node-version` 精确为 `24.18.0`。Local Setup 与 F-06 CI 读取同一文件，并在执行任务前断言实际 `node --version` 与 `pnpm --version`。
 3. Install Command 不得使用未限定 Package、`latest`、Wildcard、Canary、Preview、RC、Beta 或其他 Prerelease。Scaffold Generator 的产出必须先归一化至本矩阵才能验收。
 4. GitHub Action 使用完整 40 字符 Commit SHA，并附可读 Release Comment。Mutable Tag 只能作为 Review/Source Metadata，绝不作为可执行 `uses:` Reference。
@@ -49,7 +50,7 @@
 | Component | 精确选择 | Compatibility 与 Support Evidence | Pin / Downstream Enforcement | Class | Primary Source |
 | --- | --- | --- | --- | --- | --- |
 | Node.js | `24.18.0` | Node 24 是 LTS，EOL 为 2028-04-30，并满足最严格的已选 Engine Floor：pnpm `>=22.13`、lint-staged `>=22.22.1`、jsdom `^24.15.0`。 | 当前 `.node-version`；F-01 Root Engine/Package Manager；F-06 CI Assertion | R1 | [Node Releases](https://nodejs.org/en/about/previous-releases) |
-| pnpm | `11.18.0` | 要求 Node `>=22.13`；已选 Node 满足。必须只有一个 Root Lockfile，并使用 `workspace:`。 | F-01 `packageManager`、Engine 与 `.npmrc`；F-06 Frozen Install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
+| pnpm | `11.18.0` | 要求 Node `>=22.13`；已选 Node 满足。必须只有一个 Root Lockfile，并使用 `workspace:`。 | F-01 在 `package.json` 中设置 `packageManager`/Engine，并在 `pnpm-workspace.yaml` 中设置 Project Policy；F-06 Frozen Install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
 | TypeScript | `5.9.3` | 与当前 Nest 11 Starter 一致，且位于 `typescript-eslint` `>=4.8.4 <6.1.0` 与 `ts-jest` `>=4.3 <7` 范围内。明确排除 TypeScript 7.0.2，因为所选 Lint Transformer 尚不支持。 | F-01 Root Pin；F-02/F-03 App Config；F-04 Shared Strict Config | R2 | [TypeScript 5.9.3](https://www.npmjs.com/package/typescript/v/5.9.3)、[Nest Starter](https://github.com/nestjs/typescript-starter) |
 | Turborepo | `2.10.8` | Stable 2.x Task Orchestrator；Remote Cache 保持禁用。 | F-01 Root Dependency 与 `turbo.json`；F-06 Task Invocation | R3 | [turbo 2.10.8](https://www.npmjs.com/package/turbo/v/2.10.8) |
 | GitHub Runner | `ubuntu-24.04` | Stable Standard x64 VM Label，支持 Docker/Service Container；`ubuntu-26.04` 是 Preview，`ubuntu-slim` 无法承载常规 Docker CI Workload。 | F-06 全部常规 Node/Database Job | R5 | [GitHub-hosted Runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)、[Runner Images](https://github.com/actions/runner-images) |
@@ -116,7 +117,7 @@ Source：[GitHub Secure-use Reference](https://docs.github.com/en/actions/refere
 | Artifact 或 Assertion | 实现/证明任务 | 必需证据 |
 | --- | --- | --- |
 | `.node-version` 等于 `24.18.0`；本文件与英文权威版一致 | P-03 / ISSUE-002 | File Comparison、Markdown/Link/Language Check |
-| 精确 `packageManager`、Node/pnpm Engine、`save-exact`、Workspace Protocol、Root Lockfile 与 Turbo Graph | F-01 / ISSUE-003 | Clean Frozen Install 与 Root Task Discovery |
+| 精确 `packageManager`、Node/pnpm Engine、`pnpm-workspace.yaml` Install/Workspace Policy、Root Lockfile 与 Turbo Graph | F-01 / ISSUE-003 | Clean Frozen Install 与 Root Task Discovery |
 | 精确 Next/React/Type Package 与独立 Web Build | F-02 / ISSUE-004 | Web Lint/Typecheck/Test/Build |
 | 精确 Nest/Runtime/Build/Test Package 与独立 API Lifecycle | F-03 / ISSUE-005 | API Lint/Typecheck/Test/Build/Start/Health/Shutdown |
 | Shared TypeScript 5.9.3、ESLint 9 与 Prettier Policy | F-04 / ISSUE-006 | Positive/Negative Root Config Check |
@@ -134,6 +135,6 @@ Source：[GitHub Secure-use Reference](https://docs.github.com/en/actions/refere
 - 全部 Direct Selection 是 Stable Exact Version；没有所选 Dependency 或 Action Reference 使用 Floating/Prerelease。
 - 已记录 Next/MUI、Nest/TypeORM/PostgreSQL、pgvector、Test Runner、Native Argon2、Runner 与 Action Reference 的 Compatibility/Support Evidence 及检查日期。
 - 每个选择继承明确 Owner、Update Cadence、Rollback Class、Pin Location 与 Downstream Verification Task。
-- 本文明确不声称属于后续任务的 Installation、Lockfile、Build、Native Runtime、Database、SSR、E2E 或 CI Evidence。
+- P-03 关闭时，本记录没有预先声称属于后续任务的 Installation、Lockfile、Build、Native Runtime、Database、SSR、E2E 或 CI Evidence。
 
-因此，在中英文文档通过 Repository Documentation Check 后，P-03 可以作为 Version-policy Task 关闭。下游失败须通过经 Review 的 Matrix Update 重新打开相应 Compatibility Decision；绝不使用 `--force`、Legacy Peer Handling、Unpinned Replacement 或 Skipped Test 隐藏失败。
+因此，中英文文档通过 Repository Documentation Check 后，P-03 已于 2026-08-02 作为 Version-policy Task 关闭。下游失败须通过经 Review 的 Matrix Update 重新打开相应 Compatibility Decision；绝不使用 `--force`、Legacy Peer Handling、Unpinned Replacement 或 Skipped Test 隐藏失败。

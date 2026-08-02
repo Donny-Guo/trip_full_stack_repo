@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+sharedWorkspaceLockfile: true
+saveWorkspaceProtocol: rolling
+engineStrict: true
+saveExact: true

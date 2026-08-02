@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 已在本地完成，下一项为 ISSUE-003**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 与 ISSUE-003 已在本地完成，下一步为 ISSUE-004 与 ISSUE-005**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 同日完成 `P-03`；因此 `ISSUE-001` 与 `ISSUE-002` 在本地为 `DONE`，下一个任务是 `ISSUE-003`。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`；因此 `ISSUE-001` 至 `ISSUE-003` 在本地为 `DONE`，下一步为 `ISSUE-004` 与 `ISSUE-005`。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -212,20 +212,21 @@
 
 **审核/验收**
 
-- [x] `.node-version` 包含精确的已选 Node Release 并与矩阵一致；记录精确 pnpm Release 及其后续 F-01/F-06 Enforcement Location。
+- [x] `.node-version` 包含精确的已选 Node Release 并与矩阵一致；记录精确 pnpm Release 及其 F-01/F-06 Enforcement Location。
 - [x] 不选择浮动 `latest`、未批准 Canary、Preview、Prerelease 或可变 Action Reference。
 - [x] 在完成的 Toolchain Artifact 中明确记录 MUI v6 支持例外、Next.js 15 Maintenance Status/重新评估触发条件、TypeORM 0.3.31、PostgreSQL 18 及所选测试系列。
 - [x] 兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2id 及受支持的 Node/pnpm Runtime 交集。
 - [x] 每个固定工具都有 Primary-source Link 与检查日期、Owner、经 Review 的升级路径、回滚及下游 Enforcement Task。
 - [x] Issue 不声称在其对应下游任务存在前，Package Installation、Lockfile Resolution、Application Build、Runtime Smoke Test 或 CI 一致性已经通过。
 
-**证据：** `.node-version`、`docs/toolchain.md`、同步的 `docs/toolchain_ZH.md`，以及上述要求的 Matrix/Register 内容。2026-08-02，Exact File/Heading Parity、Local Markdown Link、权威英文 Language Policy、Full Action-SHA Length 与 Whitespace Check 均通过；本地观察到的 Node/pnpm 版本也与选择一致。Dependency Installation 与 Runtime/CI Check 仍是下游证据。
+**证据：** `.node-version`、`docs/toolchain.md`、同步的 `docs/toolchain_ZH.md`，以及上述要求的 Matrix/Register 内容。2026-08-02，Exact File/Heading Parity、Local Markdown Link、权威英文 Language Policy、Full Action-SHA Length 与 Whitespace Check 均通过；本地观察到的 Node/pnpm 版本也与选择一致。F-01 此后已提供 Dependency-installation、Lockfile 与 Root-task Evidence；Application Runtime 与 CI Check 仍由下游任务负责。
 
 **非目标：** 安装依赖、生成 Lockfile、创建应用脚手架、声称下游 Runtime/CI Evidence 已存在，或选择最终生产 Container Base。
 
 ### ISSUE-003 — [F-01] 创建 pnpm/Turborepo Monorepo 根
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** GitHub Issue #3 保持 Open，等待 Owner 的 PR/Review/Close Workflow。
 - **Labels：** `type:task`、`area:foundation`、`priority:p0`
 - **Blocked by：** ISSUE-001、ISSUE-002
 - **PR Boundary：** 一个 Root-workspace PR
@@ -236,18 +237,19 @@
 
 **工作**
 
-- [ ] 加入 pnpm Workspace/Package-manager Constraint、Root Script、Ignore/Editor 约定及唯一 Root Lockfile。
-- [ ] 为 `format`、`lint`、`typecheck`、`test`、`build` 建立依赖/Output 正确且仅本地 Cache 的 Turbo Task Graph。
-- [ ] 为 Husky 保留 Root `prepare` Boundary，不创建 Speculative Package。
+- [x] 加入 pnpm Workspace/Package-manager Constraint、Root Script、Ignore/Editor 约定及唯一 Root Lockfile。
+- [x] 为 `format`、`lint`、`typecheck`、`test`、`build` 建立依赖/Output 正确且仅本地 Cache 的 Turbo Task Graph。
+- [x] 为 Husky 保留 Root `prepare` Boundary，不创建 Speculative Package。
 
 **审核/验收**
 
-- [ ] Root 能发现 `apps/*` 和 `packages/*`，内部包使用 `workspace:`。
-- [ ] Root Task 执行预期 Package Graph，Cache Hit 不会掩盖缺失 Output。
-- [ ] 只有一个 pnpm Lockfile，无 npm/yarn Lockfile、Remote Turbo Cache 或含 Secret 的 Cache Config。
-- [ ] Clean Checkout Install 与 Root Task Discovery 可重复且有文档。
+- [x] Root 能发现 `apps/*` 和 `packages/*`，内部包使用 `workspace:`。
+- [x] Root Task 执行预期 Package Graph，Cache Hit 不会掩盖缺失 Output。
+- [x] 只有一个 pnpm Lockfile，无 npm/yarn Lockfile、Remote Turbo Cache 或含 Secret 的 Cache Config。
+- [x] Clean Checkout Install 与 Root Task Discovery 可重复且有文档。
 
-**证据：** Workspace Discovery 与 Turbo Dry/run Command Transcript。  
+**证据：** 2026-08-02，本地 Node 24.18.0 与 pnpm 11.18.0 符合所选基线。`pnpm install --frozen-lockfile` 在 Working Tree 以及由 Committed HEAD 加本次变更组装的 Disposable Fresh Candidate Tree 中均成功。组合 Turbo Dry Run 与 `pnpm format`、`pnpm lint`、`pnpm typecheck`、`pnpm test`、`pnpm build` 全部成功；F-02/F-03 加入应用前，零个 Package Task 符合预期。Disposable App/Package Fixture 证明了两个 Workspace Glob 的发现、`workspace:*` Resolution、Package Dependency Ordering、将 Cached Output 移出仓库后的 Build-output Restoration，以及 Format Cache Bypass。仓库搜索确认只有一个 Dependency Lockfile，且不存在 npm/yarn Lockfile、Remote-cache Enablement、Cache Credential 或 Speculative Application/Shared-package Scaffold。可重复命令已记录在 `README.md` 及同步跟随版中。
+
 **非目标：** Root Boundary 以外的应用脚手架或 Speculative `common` Package。
 
 ### ISSUE-004 — [F-02] 创建 Next.js 应用脚手架

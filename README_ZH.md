@@ -2,9 +2,9 @@
 
 本文件是权威英文 [`README.md`](./README.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-面向生产环境的旅游 Agent 全栈应用。项目计划使用 pnpm Monorepo 管理 Next.js Web、NestJS API、LangGraph Agent 编排以及共享工程配置，并以 PostgreSQL + pgvector 作为业务数据与向量检索基础。
+面向生产环境的旅游 Agent 全栈应用。仓库现已建立 pnpm/Turborepo Monorepo 根，用于后续管理 Next.js Web、NestJS API、LangGraph Agent 编排及共享工程配置，并以 PostgreSQL + pgvector 作为业务数据与未来向量检索基础。
 
-> 当前状态：**D-01 至 D-24 已确认，首个本地认证切片已于 2026-08-02 获得实施授权**。`P-03`/`ISSUE-002` 已在本地完成，下一项为 `F-01`/`ISSUE-003`。远程 Issue [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) 已覆盖到 Sign Up/Login 页面为止的批准路径，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。根 MIT `LICENSE` 早于本次授权已存在，其 Notice 待 F-08 对齐。生产部署和公开暴露仍未授权。权威状态见英文 [`PLANS.md`](./PLANS.md)。
+> 当前状态：**D-01 至 D-24 已确认，首个本地认证切片已于 2026-08-02 获得实施授权**。`P-03`/`ISSUE-002` 与 `F-01`/`ISSUE-003` 已在本地完成；下一步为 `F-02`/`ISSUE-004` 和 `F-03`/`ISSUE-005`。远程 Issue [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3) 仍保持 Open，等待 Owner 管理的 PR/Review/Close Workflow。根 Workspace、精确 Toolchain Dependency、Lockfile 与仅本地缓存的 Turbo Graph 已存在，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。根 MIT `LICENSE` 早于本次授权已存在，其 Notice 待 F-08 对齐。生产部署和公开暴露仍未授权。权威状态见英文 [`PLANS.md`](./PLANS.md)。
 
 首个纵向切片由多个可独立 Review 的变更集组成；它是里程碑和执行顺序，不承诺生产级基础、API、Web、集成与质量工作全部在一个自然日内完成。
 
@@ -46,7 +46,7 @@ P-03 在创建脚手架前通过 [`docs/toolchain_ZH.md`](./docs/toolchain_ZH.md
 
 ## 计划中的仓库结构
 
-以下是目标结构，不代表这些文件现已存在：
+以下目标目录结构同时包含当前与计划文件。靠近底部的 F-01 根 Artifact 已存在；其他后续路径仅在其 Owner Task 完成后才视为已实现。
 
 ```text
 .
@@ -108,7 +108,6 @@ P-03 在创建脚手架前通过 [`docs/toolchain_ZH.md`](./docs/toolchain_ZH.md
 ├── .editorconfig
 ├── .gitignore
 ├── .node-version                     # P-03 选择的精确 Node 版本线
-├── .npmrc                            # pnpm/Install 策略；不得包含 Secret
 ├── AGENTS.md
 ├── AGENTS_ZH.md
 ├── CONTRIBUTING.md
@@ -120,10 +119,10 @@ P-03 在创建脚手架前通过 [`docs/toolchain_ZH.md`](./docs/toolchain_ZH.md
 ├── README.md
 ├── README_ZH.md
 ├── SECURITY.md
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-└── turbo.json                     # 跨包任务图与本地缓存
+├── package.json                       # 精确 Engine、Dependency 与根任务
+├── pnpm-lock.yaml                     # 唯一 Dependency Lockfile
+├── pnpm-workspace.yaml                # Workspace Glob 与 pnpm/Install 策略
+└── turbo.json                         # 跨包任务图；仅本地缓存
 ```
 
 ### Web 内部边界
@@ -203,7 +202,23 @@ P-03 在创建脚手架前通过 [`docs/toolchain_ZH.md`](./docs/toolchain_ZH.md
 
 ## 本地开发与容器化策略
 
-是的，本计划采用“应用循序本地运行、基础设施容器化”的开发方式：
+在仓库根目录使用 Node.js 24.18.0 与 pnpm 11.18.0。Clean Checkout Install 与根任务发现检查可通过以下命令重复执行：
+
+```sh
+node --version
+pnpm --version
+pnpm install --frozen-lockfile
+pnpm exec turbo run format lint typecheck test build --dry=json
+pnpm format
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+在 F-02 与 F-03 加入真实 Workspace Package 前，Turbo 正确报告零个 Package Task；成功的 Dry Run 仍会验证根 Graph 与 Workspace Discovery 配置。根 `prepare` Script 是为 F-07 Husky Installation 保留的有意 No-op Boundary；内部 Workspace Dependency 必须使用 `workspace:` Reference。
+
+本计划采用“应用循序本地运行、基础设施容器化”的开发方式：
 
 - 日常开发在宿主机通过 pnpm/Turborepo 启动 Next.js 和 NestJS，保留快速 HMR、断点调试与类型反馈。
 - PostgreSQL + pgvector 使用固定镜像的 Docker Compose 服务、健康检查和开发持久卷；Redis 与本地邮件捕获服务等到对应功能阶段再加入。

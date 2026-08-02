@@ -7,8 +7,9 @@ This document is the authoritative English output of `P-03`/`ISSUE-002`. Simplif
 - Owner: **`@Donny-Guo`**
 - Runtime line: **Node.js 24.18.0 + pnpm 11.18.0**
 - Deliberate constraints: **Next.js 15 + MUI v6, TypeORM 0.3.31, PostgreSQL 18**
+- Downstream enforcement: **F-01/ISSUE-003 completed locally on 2026-08-02**
 
-“Frozen” means downstream tasks must use these exact direct selections unless a reviewed same-change update modifies this matrix. It does not mean packages are installed, a lockfile exists, applications build, a native module loads, a database image has been pulled, or CI has passed. Those claims belong to the downstream enforcement tasks named below.
+“Frozen” means downstream tasks must use these exact direct selections unless a reviewed same-change update modifies this matrix. The P-03 status did not by itself assert installation, lockfile, build, native-runtime, database, or CI results; those claims belong to the downstream enforcement tasks named below. F-01 now supplies the root installation, lockfile, and task-graph evidence. Application builds, native-module loading, database-image verification, and CI remain assigned to their later owners.
 
 ## Confirmed choices and support exception
 
@@ -20,7 +21,7 @@ This document is the authoritative English output of `P-03`/`ISSUE-002`. Simplif
 
 ## Pin and update policy
 
-1. F-01 sets `save-exact=true`, `engine-strict=true`, root `packageManager: "pnpm@11.18.0"`, exact Node/pnpm engine constraints, and one frozen root lockfile. All direct runtime and development dependencies are exact versions; internal dependencies use `workspace:`. Transitive versions are lockfile-controlled.
+1. F-01 stores the workspace globs and structured pnpm project policy in `pnpm-workspace.yaml`: `engineStrict: true`, `saveExact: true`, and `saveWorkspaceProtocol: rolling`. Root `package.json` sets `packageManager: "pnpm@11.18.0"` plus exact Node/pnpm engine constraints, and the repository has one frozen root lockfile. All direct runtime and development dependencies are exact versions; internal dependencies use `workspace:`. Transitive versions are lockfile-controlled.
 2. `.node-version` is exactly `24.18.0`. Local setup and F-06 CI read the same file and assert the observed `node --version` and `pnpm --version` before running tasks.
 3. No install command may use an unqualified package, `latest`, wildcard, canary, preview, RC, beta, or other prerelease. A scaffold generator's output is normalized to this matrix before its result is accepted.
 4. GitHub Actions use full 40-character commit SHAs with readable release comments. Mutable tags appear only as review/source metadata, never as executable `uses:` references.
@@ -49,7 +50,7 @@ Every linked source in this section was checked on 2026-08-02. npm links identif
 | Component | Exact selection | Compatibility and support evidence | Pin / downstream enforcement | Class | Primary source |
 | --- | --- | --- | --- | --- | --- |
 | Node.js | `24.18.0` | Node 24 is LTS through 2028-04-30 and satisfies the strictest selected engine floors: pnpm `>=22.13`, lint-staged `>=22.22.1`, and jsdom `^24.15.0`. | `.node-version` now; root engines/package manager in F-01; CI assertion in F-06 | R1 | [Node releases](https://nodejs.org/en/about/previous-releases) |
-| pnpm | `11.18.0` | Requires Node `>=22.13`; the selected Node line satisfies it. One root lockfile and `workspace:` are mandatory. | F-01 `packageManager`, engine and `.npmrc`; F-06 frozen install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
+| pnpm | `11.18.0` | Requires Node `>=22.13`; the selected Node line satisfies it. One root lockfile and `workspace:` are mandatory. | F-01 `packageManager`/engines in `package.json` and project policy in `pnpm-workspace.yaml`; F-06 frozen install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
 | TypeScript | `5.9.3` | Matches the current Nest 11 starter and is within `typescript-eslint` `>=4.8.4 <6.1.0` and `ts-jest` `>=4.3 <7`. TypeScript 7.0.2 is deliberately excluded because the selected lint transformer does not support it. | F-01 root pin; F-02/F-03 app configs; F-04 shared strict config | R2 | [TypeScript 5.9.3](https://www.npmjs.com/package/typescript/v/5.9.3), [Nest starter](https://github.com/nestjs/typescript-starter) |
 | Turborepo | `2.10.8` | Stable 2.x task orchestrator; remote cache remains disabled. | F-01 root dependency and `turbo.json`; F-06 task invocation | R3 | [turbo 2.10.8](https://www.npmjs.com/package/turbo/v/2.10.8) |
 | GitHub runner | `ubuntu-24.04` | Stable standard x64 VM label with Docker/service-container support; `ubuntu-26.04` is preview and `ubuntu-slim` cannot host the routine Docker CI workload. | F-06 every routine Node/database job | R5 | [GitHub-hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners), [runner images](https://github.com/actions/runner-images) |
@@ -116,7 +117,7 @@ No cache, path-filter, artifact, Docker-build, or deployment Action is selected 
 | Artifact or assertion | Implemented/proved by | Required evidence |
 | --- | --- | --- |
 | `.node-version` equals `24.18.0`; this document and follower agree | P-03 / ISSUE-002 | File comparison, Markdown/link/language checks |
-| Exact `packageManager`, Node/pnpm engines, `save-exact`, workspace protocol, root lockfile and Turbo graph | F-01 / ISSUE-003 | Clean frozen install and root task discovery |
+| Exact `packageManager`, Node/pnpm engines, `pnpm-workspace.yaml` install/workspace policy, root lockfile and Turbo graph | F-01 / ISSUE-003 | Clean frozen install and root task discovery |
 | Exact Next/React/type packages and independent Web build | F-02 / ISSUE-004 | Web lint/typecheck/test/build |
 | Exact Nest/runtime/build/test packages and independent API lifecycle | F-03 / ISSUE-005 | API lint/typecheck/test/build/start/health/shutdown |
 | Shared TypeScript 5.9.3, ESLint 9 and Prettier policy | F-04 / ISSUE-006 | Positive and negative root config checks |
@@ -134,6 +135,6 @@ No cache, path-filter, artifact, Docker-build, or deployment Action is selected 
 - All direct selections are stable exact versions; no selected dependency or Action reference is floating or prerelease.
 - Next/MUI, Nest/TypeORM/PostgreSQL, pgvector, test-runner, native-Argon2, runner, and Action-reference compatibility/support evidence is recorded with a check date.
 - Every selection inherits an explicit owner, update cadence, rollback class, pin location, and downstream verification task.
-- The document explicitly avoids claiming installation, lockfile, build, native runtime, database, SSR, E2E, or CI evidence that belongs to later tasks.
+- At P-03 closure, this record did not preclaim installation, lockfile, build, native runtime, database, SSR, E2E, or CI evidence assigned to later tasks.
 
-Therefore P-03 can close as a version-policy task once the English/Chinese documents pass repository documentation checks. Downstream failures reopen the relevant compatibility decision through a reviewed matrix update; they are never hidden with `--force`, legacy peer handling, unpinned replacements, or skipped tests.
+P-03 therefore closed as a version-policy task on 2026-08-02 after the English/Chinese documents passed repository documentation checks. Downstream failures reopen the relevant compatibility decision through a reviewed matrix update; they are never hidden with `--force`, legacy peer handling, unpinned replacements, or skipped tests.
