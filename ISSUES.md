@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **planning artifact; remote creation is authorized only for ISSUE-001 through ISSUE-027, while implementation remains unauthorized**  
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-001 is complete locally and ISSUE-002 is next**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -9,7 +9,7 @@ Simplified Chinese translation: [`ISSUES_ZH.md`](./ISSUES_ZH.md). This English f
 
 ## 1. Purpose, authority, and usage
 
-This catalog converts the approved plan into implementation-ready GitHub issue bodies. The registry below is the evidence for drafts that now exist remotely; entries without a registered URL remain local drafts. Remote issue creation does not authorize code, scaffolding, dependencies, hooks, a license artifact, repository settings beyond the scoped issue metadata, migrations, infrastructure, deployment, or public exposure.
+This catalog converts the approved plan into implementation-ready GitHub issue bodies. The registry below is the evidence for drafts that now exist remotely; entries without a registered URL remain local drafts. The 2026-07-30 remote issue authorization did not authorize implementation. The owner separately authorized the planned first local authentication slice on 2026-08-02. Post-MVP work, deployment, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue remain outside that authorization.
 
 Authority and synchronization rules:
 
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. `ISSUE-001` remains blocked until the user explicitly satisfies `P-02`.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02` on 2026-08-02, so `ISSUE-001` is `DONE` locally and `ISSUE-002` is the next task.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -156,9 +156,9 @@ The sequence below is the safe default. Items in the same wave may proceed in pa
 
 ### ISSUE-001 — [P-02] Authorize implementation
 
-- **Status:** `BLOCKED`
+- **Status:** `DONE`
 - **Labels:** `type:governance`, `priority:p0`, `scope:first-slice`
-- **Blocked by:** P-01 is complete; an explicit user decision is still required
+- **Blocked by:** none; P-01 is complete and owner authorization was recorded on 2026-08-02
 - **PR boundary:** none
 
 **Outcome**
@@ -167,17 +167,18 @@ Create an auditable implementation gate so planning approval cannot be mistaken 
 
 **Work**
 
-- [ ] Obtain an explicit instruction authorizing the first-slice scope.
-- [ ] Record whether authorization covers code, scaffolding, dependencies, hooks, MIT `LICENSE`, GitHub settings, migrations, and local infrastructure.
-- [ ] Record the authorization date and any exclusions in `PLANS.md` and its Chinese follower before implementation starts.
+- [x] Obtain an explicit instruction authorizing the first-slice scope.
+- [x] Record whether authorization covers code, scaffolding, dependencies, hooks, MIT `LICENSE` governance, first-slice GitHub CI/governance settings, migrations, and local infrastructure.
+- [x] Record the 2026-08-02 authorization date and exclusions in `PLANS.md` and its Chinese follower before implementation starts.
 
 **Review / acceptance**
 
-- [ ] The instruction is unambiguous and comes from the repository owner.
-- [ ] Scope and exclusions match the approved decisions D-01 through D-24.
-- [ ] No implementation artifact or remote setting is changed before this gate closes.
+- [x] The instruction is unambiguous and comes from the repository owner.
+- [x] Scope and exclusions match the approved decisions D-01 through D-24.
+- [x] No implementation artifact or remote setting was changed as part of closing this gate before authorization was recorded.
 
-**Evidence:** owner instruction plus synchronized plan status.  
+**Evidence:** owner instruction dated 2026-08-02 plus synchronized English/Chinese plan status. The tracked MIT `LICENSE` predates this authorization and is handled by F-08; no remote GitHub state was changed while closing this local gate.
+
 **Non-goals:** technical implementation, issue creation on GitHub, or public-release authorization.
 
 ### ISSUE-002 — [P-03] Freeze the compatible version matrix

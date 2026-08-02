@@ -4,7 +4,7 @@ Production-oriented planning for a full-stack travel agent application. The repo
 
 Simplified Chinese translation: [`README_ZH.md`](./README_ZH.md). This English file is authoritative.
 
-> Status: **planning; decisions D-01 through D-24 are confirmed, and implementation is not authorized**. Remote issues [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) now cover the approved path through the Sign Up and Login pages, but no application scaffolding, automation, hooks, or business code exists yet. The repository is public. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
+> Status: **decisions D-01 through D-24 are confirmed, and the first local authentication slice was authorized for implementation on 2026-08-02**. `P-02`/`ISSUE-001` is complete and `P-03`/`ISSUE-002` is next. Remote issues [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) cover the approved path through the Sign Up and Login pages, but no application scaffolding, automation, hooks, or business code exists yet. A root MIT `LICENSE` predates this authorization and awaits F-08 notice alignment. Production deployment and public exposure remain unauthorized. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
 
 The first vertical slice is a milestone composed of several independently reviewable change sets, not a promise that production-quality foundation, API, Web, integration, and quality work all fit into one calendar day.
 
@@ -111,7 +111,7 @@ The following is the target structure; it does not imply that these files exist 
 ├── CONTRIBUTING.md
 ├── ISSUES.md
 ├── ISSUES_ZH.md
-├── LICENSE                            # MIT text; created during authorized F-08 implementation
+├── LICENSE                            # Existing MIT text; F-08 verifies and aligns the notice
 ├── PLANS.md
 ├── PLANS_ZH.md
 ├── README.md
@@ -215,7 +215,7 @@ The plan deliberately uses host-run applications with containerized infrastructu
 
 The first slice includes repository governance and continuous integration, but not a live production deployment:
 
-- The public repository is owned by `@Donny-Guo`. MIT is the confirmed open-source license choice; the root license artifact is governed separately from application implementation. Changes still reach `main` through pull requests with squash merge and linear history. The ruleset blocks deletion and force pushes and requires resolved conversations plus the stable aggregate CI check.
+- The public repository is owned by `@Donny-Guo`. MIT is the confirmed open-source license choice. A root `LICENSE` already exists, but its current `Copyright (c) 2026 Dongping Guo (Donny)` notice does not match confirmed decision D-23; F-08 must align and verify the artifact through a reviewable governance change. Changes still reach `main` through pull requests with squash merge and linear history. The ruleset blocks deletion and force pushes and requires resolved conversations plus the stable aggregate CI check.
 - The standard root MIT `LICENSE` must use `Copyright (c) 2026 Donny-Guo`; F-08 verifies that GitHub recognizes it and keeps source-file headers optional.
 - During bootstrap, approval requirements must remain satisfiable without weakening CI. `CODEOWNERS` still documents workflow, authentication/security, migration, and agent/tool ownership; require at least one non-author approval and owned-path review whenever eligible reviewers are available.
 - Root Husky hooks run lint-staged formatting/linting on staged files and commitlint on commit messages. They stay fast, work with partial staging, and avoid network, database, build, or full-test work. Because hooks can be bypassed, CI repeats all merge requirements and validates the pull-request title used by squash merge.

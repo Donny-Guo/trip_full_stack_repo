@@ -1,10 +1,14 @@
 # Development Plan: Monorepo Foundation and Authentication Vertical Slice
 
-Status: **decisions D-01 through D-24 confirmed; implementation not authorized**  
+Status: **decisions D-01 through D-24 confirmed; first-slice implementation authorized on 2026-08-02; P-03 is next**\
 Plan date: 2026-07-30  
+Implementation authorization date: 2026-08-02\
 Scope source: project directories, Sign Up/Login, Navigation, User table, and Auth API requested by the user  
-Constraint: the original planning round created documentation only. A later 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies; it did not authorize code, scaffolding, dependencies, hooks, a license artifact, other GitHub settings, migrations, or infrastructure files.  
-Current repository state: `Donny-Guo/trip_full_stack_repo` is public. Remote issue creation and repository visibility do not authorize implementation.
+Authorization history: the original planning round created documentation only. A 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies. On 2026-08-02, the owner explicitly authorized the planned first local authentication slice, including code and scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates.
+
+Authorization exclusions: post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue still require separate explicit authorization.
+
+Current repository state: `Donny-Guo/trip_full_stack_repo` is public. No tracked application scaffolding, automation, hooks, dependencies, migrations, infrastructure configuration, or business code exists yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
 
 Simplified Chinese translation: [`PLANS_ZH.md`](./PLANS_ZH.md). This English plan is authoritative.
 
@@ -232,12 +236,12 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Output: authoritative English `PLANS.md` and synchronized `PLANS_ZH.md` follower.
 - Acceptance: satisfied on 2026-07-30—the user explicitly accepted D-14 through D-19, required GitHub governance, CI/CD planning, and pre-commit standards, then confirmed `@Donny-Guo`, MIT licensing, and the manual non-blocking advisory AI-review policy; all decisions have one answer; no planning statement is presented as implemented behavior.
 
-#### P-02 Authorize implementation — `BLOCKED`
+#### P-02 Authorize implementation — `DONE`
 
 - Prerequisite: P-01
-- Action: wait for an explicit user instruction to start implementation. Review feedback and planning edits do not count as authorization.
-- Output: an unambiguous implementation-start instruction.
-- Acceptance: the user explicitly authorizes code, scaffolding, dependencies, hooks, the license artifact, GitHub configuration, migrations, and infrastructure work and confirms the first-slice scope.
+- Action: obtain an explicit user instruction to start implementation. Review feedback and planning edits do not count as authorization.
+- Output: the owner's unambiguous 2026-08-02 implementation-start instruction.
+- Acceptance: satisfied on 2026-08-02—the owner explicitly authorized the planned first local authentication slice, covering code, scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. Post-MVP work, production deployment/CD, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue remain excluded.
 
 #### P-03 Freeze a compatible version matrix — `TODO`
 
@@ -651,7 +655,7 @@ Every set must build and test independently. Do not mix a database migration wit
 | Local completion is mistaken for launch readiness | Public system lacks abuse, operations, or privacy controls | D-19 and blocked R-14 require R-02/R-09/R-10 evidence plus explicit authorization |
 | English and Chinese docs drift | Conflicting instructions | English is authoritative; matching `_ZH` updates are part of definition of done |
 
-## 13. Resolved conclusions and remaining gate
+## 13. Resolved conclusions and next gate
 
 Resolved in D-01 through D-13: access JWT + same-origin HttpOnly cookie, automatic login after registration, generic invalid credentials, TypeORM, pnpm workspace + Turborepo, same public origin with independent services, backend TypeScript LangGraph created only with its first use case, UUID/`users`/normalized unique email, first English UI with later `zh-CN`, no verification/status/roles in the first migration, host-run applications with containerized infrastructure, the initial 8–20 composition password policy, and English-authoritative documentation with `_ZH` followers.
 
@@ -659,7 +663,7 @@ Accepted from the audit in D-14 through D-19: the exact JWT/cookie profile, Orig
 
 Confirmed in D-20 through D-24: GitHub as source-control/automation platform; a public repository owned by `@Donny-Guo`; a bootstrap review mode that never removes required CI or permits a general bypass; fast Husky/lint-staged/commitlint local checks with authoritative CI; a later GitHub CD model based on trusted build-once artifacts, immutable digest promotion, protected Environments, OIDC, approval, and rollback; MIT licensing; and a manual provider-neutral advisory AI-review evaluation.
 
-No foundational product question or review gate remains. One separate implementation gate remains: the user must explicitly instruct the agent to begin code, scaffolding, dependencies, hooks, GitHub configuration, migrations, or infrastructure work.
+No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02` on 2026-08-02; `P-03` is the next task. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
 
 Assumption recorded for D-08: `$#@%` is the complete allowed special-character set for the first policy, not merely an example list. If the user intended these as examples, updating the plan is small and does not affect the architecture.
 
@@ -673,13 +677,13 @@ The plan review is complete:
 - D-20 through D-24 GitHub identity/governance, hook/CI authority, gated-CD boundaries, MIT licensing, and advisory AI-review policy are accepted.
 - English authority and `_ZH` follower rules are accepted.
 
-Implementation becomes authorized only after a separate explicit start instruction. Review comments, document edits, or the phrase “use this policy” do not by themselves authorize implementation.
+The owner issued the separate implementation-start instruction on 2026-08-02. It authorizes only the planned first local authentication slice and its listed repository-governance work. It does not authorize post-MVP scope, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, or remote update/closure of any GitHub issue.
 
 ## 15. Implementation-time inputs
 
 These inputs do not reopen the accepted architecture. Their current disposition is:
 
-1. **F-08 repository profile — resolved:** the public repository is owned by `@Donny-Guo`, and MIT is its confirmed open-source license choice. F-08 verifies and maintains the standard license with `Copyright (c) 2026 Donny-Guo` and assigns initial sensitive-path ownership to `@Donny-Guo`.
+1. **F-08 repository profile — policy resolved; artifact alignment pending:** the public repository is owned by `@Donny-Guo`, and MIT is its confirmed open-source license choice. A tracked root `LICENSE` already exists with `Copyright (c) 2026 Dongping Guo (Donny)`, which does not match D-23's confirmed `Copyright (c) 2026 Donny-Guo` notice. F-08 must align and verify the artifact through a reviewable governance change and assign initial sensitive-path ownership to `@Donny-Guo`; do not silently rewrite it during the P-02 gate.
 2. **F-08 review policy — resolved:** bootstrap approval requirements remain satisfiable without a general owner bypass of required CI; author self-review and any non-required advisory AI review are requested manually after green CI for selected risk-bearing pull requests. Evaluate three representative pull requests without enabling overlapping reviewers, and record useful findings, false positives, misses, and latency before changing the policy. Provider and account details remain outside the public repository. Require at least one non-author owned-path approval whenever eligible reviewers are available.
 3. **R-09 delivery target — deferred by the user:** hosting platform, region, image registry, `staging`/`production` domains, and OIDC provider will be decided later. The image evaluation method is defined, but no base image or platform is selected yet.
 4. **R-09/R-14 operations — deferred by the user:** production approver, RPO, RTO, SLO, alerting/on-call, data residency, and rollback targets will be decided later.
