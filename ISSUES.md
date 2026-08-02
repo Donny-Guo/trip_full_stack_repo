@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 is complete locally and ISSUE-003 is next**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 and ISSUE-003 are complete locally; ISSUE-004 and ISSUE-005 are next**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02` and the version-policy evidence completed `P-03` on 2026-08-02, so `ISSUE-001` and `ISSUE-002` are `DONE` locally and `ISSUE-003` is next.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. `ISSUE-001` through `ISSUE-003` are therefore `DONE` locally; `ISSUE-004` and `ISSUE-005` are next.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -212,20 +212,21 @@ Produce one reproducible toolchain baseline whose supported components and expli
 
 **Review / acceptance**
 
-- [x] `.node-version` contains the exact selected Node release and matches the matrix; the exact pnpm release and its later F-01/F-06 enforcement locations are recorded.
+- [x] `.node-version` contains the exact selected Node release and matches the matrix; the exact pnpm release and its F-01/F-06 enforcement locations are recorded.
 - [x] No floating `latest`, unapproved canary, preview, prerelease, or mutable Action reference is selected.
 - [x] The intentional MUI v6 support exception, Next.js 15 maintenance status/re-evaluation trigger, TypeORM 0.3.31, PostgreSQL 18, and selected test families are explicit in the completed toolchain artifacts.
 - [x] Compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2id, and the supported Node/pnpm runtime intersection.
 - [x] Every pinned tool has a primary-source link and check date, owner, reviewed update path, rollback, and downstream enforcement task.
 - [x] The issue does not claim that package installation, lockfile resolution, application builds, runtime smoke tests, or CI parity passed before their owning downstream tasks exist.
 
-**Evidence:** `.node-version`, `docs/toolchain.md`, synchronized `docs/toolchain_ZH.md`, and the matrix/register contents required above. On 2026-08-02, exact file/heading parity, local Markdown links, authoritative-English language policy, full Action-SHA length, and whitespace checks passed; observed local Node/pnpm versions also matched the selections. Dependency installation and runtime/CI checks remain downstream evidence.
+**Evidence:** `.node-version`, `docs/toolchain.md`, synchronized `docs/toolchain_ZH.md`, and the matrix/register contents required above. On 2026-08-02, exact file/heading parity, local Markdown links, authoritative-English language policy, full Action-SHA length, and whitespace checks passed; observed local Node/pnpm versions also matched the selections. F-01 has since supplied dependency-installation, lockfile, and root-task evidence; application runtime and CI checks remain assigned downstream.
 
 **Non-goals:** installing dependencies, generating the lockfile, scaffolding applications, claiming downstream runtime/CI evidence, or selecting the final production container base.
 
 ### ISSUE-003 — [F-01] Create the pnpm/Turborepo monorepo root
 
-- **Status:** `TODO`
+- **Status:** `DONE`
+- **Remote state:** GitHub issue #3 remains open for the owner PR/review/closure workflow.
 - **Labels:** `type:task`, `area:foundation`, `priority:p0`
 - **Blocked by:** ISSUE-001, ISSUE-002
 - **PR boundary:** one root-workspace PR
@@ -236,18 +237,19 @@ Create the smallest root workspace that consistently discovers and orchestrates 
 
 **Work**
 
-- [ ] Add pnpm workspace/package-manager constraints, root scripts, ignore/editor conventions, and one root lockfile.
-- [ ] Add a Turbo task graph for `format`, `lint`, `typecheck`, `test`, and `build` with correct dependencies/outputs and local cache only.
-- [ ] Reserve the root `prepare` boundary for Husky without adding speculative packages.
+- [x] Add pnpm workspace/package-manager constraints, root scripts, ignore/editor conventions, and one root lockfile.
+- [x] Add a Turbo task graph for `format`, `lint`, `typecheck`, `test`, and `build` with correct dependencies/outputs and local cache only.
+- [x] Reserve the root `prepare` boundary for Husky without adding speculative packages.
 
 **Review / acceptance**
 
-- [ ] `apps/*` and `packages/*` are discovered from the root and internal packages use `workspace:` references.
-- [ ] Root tasks execute the intended package graph; cache hits cannot conceal missing outputs.
-- [ ] There is one pnpm lockfile, no npm/yarn lockfile, and no remote Turbo cache or secret-bearing cache configuration.
-- [ ] Clean checkout install and root task discovery are documented and repeatable.
+- [x] `apps/*` and `packages/*` are discovered from the root and internal packages use `workspace:` references.
+- [x] Root tasks execute the intended package graph; cache hits cannot conceal missing outputs.
+- [x] There is one pnpm lockfile, no npm/yarn lockfile, and no remote Turbo cache or secret-bearing cache configuration.
+- [x] Clean checkout install and root task discovery are documented and repeatable.
 
-**Evidence:** command transcript for workspace discovery and Turbo dry/run behavior.  
+**Evidence:** on 2026-08-02, local Node 24.18.0 and pnpm 11.18.0 matched the selected baseline. `pnpm install --frozen-lockfile` succeeded both in the working tree and in a disposable fresh candidate tree assembled from committed HEAD plus this change. The combined Turbo dry run and `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all succeeded; zero package tasks are expected until F-02/F-03 add applications. A disposable app/package fixture proved discovery through both workspace globs, `workspace:*` resolution, package dependency ordering, build-output restoration after cached outputs were moved outside the repository, and format cache bypass. Repository searches found exactly one dependency lockfile and no npm/yarn lockfile, remote-cache enablement, cache credentials, or speculative application/shared-package scaffold. The repeatable commands are documented in `README.md` and its synchronized follower.
+
 **Non-goals:** application scaffolding beyond the root boundary or speculative `common` packages.
 
 ### ISSUE-004 — [F-02] Scaffold the Next.js application

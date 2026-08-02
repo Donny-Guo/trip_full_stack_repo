@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；P-03 已在本地完成，下一项为 F-01**\
+状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；P-03 与 F-01 已在本地完成，下一步为 F-02 与 F-03**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
@@ -10,7 +10,7 @@
 
 授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。尚无已跟踪的应用脚手架、自动化、Hook、依赖、迁移、基础设施配置或业务代码。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、精确根 Toolchain Dependency、唯一 pnpm Lockfile、Editor/Ignore 约定与仅本地缓存的 Task Graph 已存在。尚无应用脚手架、自动化、Hook、迁移、基础设施配置或业务代码。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -247,16 +247,17 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 动作：从 Primary Source 验证 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 15、React/React DOM、MUI v6 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 0.3.31、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
 - 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
 - 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 Next.js 15/MUI v6 支持例外和 TypeORM 0.3.31 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称这些下游检查已经存在。
-- 完成证据（2026-08-02）：`.node-version` 选择 Node 24.18.0；[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版记录精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。File Parity、Local Markdown Link、权威英文 Language Policy、Action SHA Length 与 Whitespace Check 均通过。Installation、Lockfile、Build、Native-runtime、Database、SSR、E2E 与 CI Evidence 仍由下游任务负责。
+- 完成证据（2026-08-02）：`.node-version` 选择 Node 24.18.0；[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版记录精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。File Parity、Local Markdown Link、权威英文 Language Policy、Action SHA Length 与 Whitespace Check 均通过。P-03 关闭时，Installation、Lockfile、Build、Native-runtime、Database、SSR、E2E 与 CI Evidence 仍由下游任务负责；F-01 此后已提供 Root Installation、Lockfile 与 Task-graph Evidence。
 
 ### Phase 1 — Monorepo 与本地环境
 
-#### F-01 建立 pnpm Monorepo 根 — `TODO`
+#### F-01 建立 pnpm Monorepo 根 — `DONE`
 
 - 前置：P-02、P-03
 - 动作：创建 workspace 定义、根脚本、包管理器版本约束、共享 ignore/editor 约定、供后续 Husky 使用的根 `prepare` 边界和 Turbo 任务图；只启用本地缓存。
 - 产出：可发现 `apps/*`、`packages/*` 的根工作区。
 - 验收：单一根 lockfile；内部包只能使用 workspace protocol；根命令能定位各应用任务；Turbo 依赖和输出声明正确且未启用远程缓存。
+- 完成证据（2026-08-02）：`package.json`、`pnpm-workspace.yaml`、`turbo.json`、`.editorconfig`、`.gitignore` 与唯一 `pnpm-lock.yaml` 实现了精确的 Node 24.18.0、pnpm 11.18.0、Turborepo 2.10.8 与 TypeScript 5.9.3 选择；根任务与保留的 No-op `prepare` Boundary；`apps/*`/`packages/*` 发现；Strict Engine、Exact Dependency Saving 与 Workspace-protocol Saving；声明的 Build Output；不缓存 Format；以及显式禁用 Remote Cache。Frozen Install 在由 Committed HEAD 加本次变更组装的 Disposable Fresh Candidate Tree 中成功。Dry Graph 与五个根命令全部成功；应用脚手架尚未创建，因此零个 Package Task 符合预期。Disposable Two-package Fixture 进一步证明了两个 Workspace Glob、`workspace:*` Resolution、Dependency Ordering、Local Cache 对声明 Output 的恢复以及 Format Cache Bypass。未发现 npm/yarn Lockfile 或包含 Secret/Remote Cache 的配置。
 
 #### F-02 创建 Next.js 项目目录 — `TODO`
 
@@ -662,7 +663,7 @@ D-14 至 D-19 是已接受的审计建议：精确 JWT/Cookie 配置、Origin/Re
 
 D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo` 所有的 Public 仓库；绝不移除 Required CI 或允许通用 Bypass 的 Bootstrap Review Mode；快速 Husky/lint-staged/commitlint 本地检查与权威 CI；基于可信 Build-once Artifact、不可变 Digest Promotion、受保护 Environment、OIDC、Approval 和 Rollback 的后续 GitHub CD 模式；MIT License；以及手动请求、Provider-neutral 的辅助 AI Review Evaluation。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 也在本地完成了 `P-03`；下一个任务是 `F-01`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。下一步任务为 `F-02` 与 `F-03`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 

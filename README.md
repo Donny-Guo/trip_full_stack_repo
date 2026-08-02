@@ -1,10 +1,10 @@
 # Trip Agent Full Stack
 
-Production-oriented planning for a full-stack travel agent application. The repository will use a pnpm monorepo to manage a Next.js web application, a NestJS API, LangGraph agent orchestration, and shared engineering configuration, with PostgreSQL + pgvector as the transactional and future vector-data foundation.
+Production-oriented planning for a full-stack travel agent application. The repository now has a pnpm/Turborepo monorepo root for the planned Next.js Web application, NestJS API, LangGraph agent orchestration, and shared engineering configuration, with PostgreSQL + pgvector as the transactional and future vector-data foundation.
 
 Simplified Chinese translation: [`README_ZH.md`](./README_ZH.md). This English file is authoritative.
 
-> Status: **decisions D-01 through D-24 are confirmed, and the first local authentication slice was authorized for implementation on 2026-08-02**. `P-03`/`ISSUE-002` is complete locally and `F-01`/`ISSUE-003` is next. Remote issues [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) cover the approved path through the Sign Up and Login pages, but no application scaffolding, automation, hooks, or business code exists yet. A root MIT `LICENSE` predates this authorization and awaits F-08 notice alignment. Production deployment and public exposure remain unauthorized. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
+> Status: **decisions D-01 through D-24 are confirmed, and the first local authentication slice was authorized for implementation on 2026-08-02**. `P-03`/`ISSUE-002` and `F-01`/`ISSUE-003` are complete locally; `F-02`/`ISSUE-004` and `F-03`/`ISSUE-005` are next. Remote issue [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3) remains open for the owner-managed PR/review/closure workflow. The root workspace, exact toolchain dependencies, lockfile, and local-only Turbo graph now exist, but no application scaffolding, automation, hooks, or business code exists yet. A root MIT `LICENSE` predates this authorization and awaits F-08 notice alignment. Production deployment and public exposure remain unauthorized. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
 
 The first vertical slice is a milestone composed of several independently reviewable change sets, not a promise that production-quality foundation, API, Web, integration, and quality work all fit into one calendar day.
 
@@ -46,7 +46,7 @@ P-03 freezes the exact compatible baseline before scaffolding in [`docs/toolchai
 
 ## Planned repository structure
 
-The following is the target structure; it does not imply that these files exist today:
+The following target structure includes both current and planned files. The F-01 root artifacts shown near the bottom now exist; later paths remain planned unless their owning task is complete.
 
 ```text
 .
@@ -108,7 +108,6 @@ The following is the target structure; it does not imply that these files exist 
 ├── .editorconfig
 ├── .gitignore
 ├── .node-version                     # Exact Node line selected by P-03
-├── .npmrc                            # pnpm/install policy; never secrets
 ├── AGENTS.md
 ├── AGENTS_ZH.md
 ├── CONTRIBUTING.md
@@ -120,10 +119,10 @@ The following is the target structure; it does not imply that these files exist 
 ├── README.md
 ├── README_ZH.md
 ├── SECURITY.md
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-└── turbo.json
+├── package.json                       # Exact engines, dependencies, and root tasks
+├── pnpm-lock.yaml                     # The only dependency lockfile
+├── pnpm-workspace.yaml                # Workspace globs and pnpm/install policy
+└── turbo.json                         # Cross-package graph; local cache only
 ```
 
 ### Web boundaries
@@ -203,6 +202,22 @@ The first product UI is also English, but copy is not hard-coded in pages or com
 The first slice does not include a language switcher, Chinese product translations, or locale URLs. A later localization task adds at least `en` and `zh-CN` catalogs, fallback behavior, missing-key checks, preference persistence, and a switcher. Locale path strategy waits for public-page SEO and user-preference requirements.
 
 ## Local development and containerization
+
+Use Node.js 24.18.0 and pnpm 11.18.0 from the repository root. A clean checkout and the root task-discovery check are repeatable with:
+
+```sh
+node --version
+pnpm --version
+pnpm install --frozen-lockfile
+pnpm exec turbo run format lint typecheck test build --dry=json
+pnpm format
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+Until F-02 and F-03 add real workspace packages, Turbo correctly reports zero package tasks. The successful dry run still verifies the root graph and workspace discovery configuration. The root `prepare` script is an intentional no-op boundary reserved for F-07 Husky installation; internal workspace dependencies must use `workspace:` references.
 
 The plan deliberately uses host-run applications with containerized infrastructure:
 
