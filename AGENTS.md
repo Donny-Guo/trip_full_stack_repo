@@ -1,283 +1,169 @@
 # AGENTS.md
 
-This file defines the working rules for AI agents and engineering contributors in this repository. It applies to the repository root and every subdirectory. If a more specific `AGENTS.md` is added later, the file closest to the target path takes precedence.
+This file governs AI agents and contributors for the repository root and all descendants. A closer descendant `AGENTS.md` overrides it for that subtree. Simplified Chinese follower: [`AGENTS_ZH.md`](./AGENTS_ZH.md). This English file is authoritative.
 
-Chinese translation: [`AGENTS_ZH.md`](./AGENTS_ZH.md). This English file is authoritative.
+## 1. Objective, state, and authorized scope
 
-## 1. Project objective and current state
+Build a production-oriented travel-agent application with a pnpm/Turborepo monorepo; Next.js App Router, TypeScript, and MUI v6 on the Web; NestJS, TypeScript, and REST in the API; TypeScript LangGraph initially behind an extractable API boundary; and PostgreSQL with pgvector available for later vector work. The first authentication slice uses a 15-minute access JWT in a same-origin HttpOnly cookie. Refresh/rotation/revocation, Redis, Swagger/OpenAPI, observability, agent persistence, and travel-provider integrations come later.
 
-Build a production-oriented, full-stack travel agent application with:
+Decisions D-01 through D-24 are confirmed. On 2026-08-02, the owner authorized the planned first local authentication slice, closing `P-02`/`ISSUE-001`. The authorization covers planned code/scaffolding, dependencies and the root lockfile, hooks, MIT-license governance, first-slice GitHub CI/governance, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. Continue from `P-03`/`ISSUE-002` in dependency order and stay within that slice.
 
-- A pnpm workspace monorepo and Turborepo task orchestration with local caching.
-- Web: Next.js App Router, TypeScript, and Material UI v6.
-- API: NestJS, TypeScript, and REST.
-- Agent runtime: TypeScript LangGraph, initially inside the API with a boundary that can be extracted later.
-- Data: PostgreSQL with pgvector available for future vector workloads.
-- Initial authentication slice: a short-lived access JWT in a same-origin HttpOnly cookie; refresh tokens, Redis-backed revocation, and rotation come later.
-- Later capabilities: Swagger/OpenAPI, Redis, observability, agent persistence, and travel-provider integrations.
+That authorization excludes post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository-visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue. The owner separately authorized remote creation of `ISSUE-001` through `ISSUE-027` and their scoped metadata on 2026-07-30; those public-repository issues exist. Any other remote issue operation needs a separate explicit request.
 
-Decisions D-01 through D-24 are confirmed. On 2026-08-02, the repository owner explicitly authorized implementation of the first local authentication slice, closing `P-02`/`ISSUE-001`. That authority covers the planned code and scaffolding, dependencies and root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. Proceed from `P-03`/`ISSUE-002` in dependency order and remain within the approved first-slice scope.
+## 2. Authority, evidence, and documentation
 
-The 2026-08-02 authorization does not cover post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, or remote update/closure of any GitHub issue. On 2026-07-30, the owner separately authorized remote creation of `ISSUE-001` through `ISSUE-027` and their scoped metadata; those issues exist, but remote issue operations beyond that authorization still require a separate explicit request. The repository is public.
-
-## 2. Instruction, fact, and documentation authority
-
-Apply instructions in this order:
+Resolve conflicts in this order:
 
 1. The user's current explicit request.
-2. This file and any more specific descendant `AGENTS.md`.
-3. The approved `PLANS.md` and architecture decision records.
-4. `ISSUES.md`, as the implementation packaging derived from `PLANS.md`; it may add review detail or stricter sequencing but may not override the plan.
-5. `README.md` and other project documentation.
+2. This file and any closer `AGENTS.md`.
+3. Approved `PLANS.md` and architecture decision records (ADRs).
+4. `ISSUES.md`, which packages `PLANS.md` and may add review detail or stricter sequencing but not override the plan.
+5. `README.md` and other documentation.
 
-For claims about an implemented system, current code, migrations, tests, and verified runtime behavior are evidence. If they disagree with documentation, do not guess or silently preserve stale prose: report the mismatch and update the affected authoritative documents in the same change, or request a decision.
+Current code, migrations, tests, and verified runtime behavior are evidence for implemented-system claims. If evidence and documentation differ, report the mismatch and update the authoritative documents in the same change, or request a decision; do not guess or preserve stale prose.
 
-Documentation language rules:
+- Unsuffixed project documents are authoritative English. Existing `_ZH.md` files are Simplified Chinese followers and must identify their English source.
+- Material English changes require same-change follower updates. Keep decision/task/issue IDs, status, scope, paths, commands, and acceptance criteria aligned. English controls on conflict; fix the follower.
+- Code identifiers, APIs, schemas, ADRs, runbooks, commit-facing technical language, and initial UI copy are English unless a later localization task says otherwise.
+- Public content may identify `@Donny-Guo` as owner, assignee, `CODEOWNERS` identity, or copyright name. Never record private account plans/tiers, eligibility/subscription status, billing/usage allowances, maintainer-count profiles, or similar account metadata.
 
-- Primary project documentation is written in English and uses unsuffixed names such as `README.md`, `PLANS.md`, `ISSUES.md`, and `AGENTS.md`.
-- A Simplified Chinese follower may use the matching `_ZH.md` name. It must identify the English file as authoritative.
-- When an English document changes materially, update its `_ZH` follower in the same change when that follower exists. Decision IDs, task IDs, status, scope, paths, commands, and acceptance criteria must stay aligned.
-- If translations conflict, the English document controls. Fix the Chinese follower rather than maintaining two interpretations.
-- Code identifiers, API names, schema names, ADRs, operational runbooks, commit-facing technical language, and primary user-interface copy are English unless a later localization task explicitly says otherwise.
-- Public repository content may identify `@Donny-Guo` as the repository owner, assignee, `CODEOWNERS` identity, or copyright name. Do not record account plans or tiers, eligibility or subscription status, billing or usage allowances, maintainer-count profiles, or other private account metadata.
+## 3. Repository and architecture boundaries
 
-## 3. Planned repository boundaries
+Planned locations are `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`, `.husky/`, `apps/{web,api}`, `packages/{api-client,config-eslint,config-typescript,test-utils}`, `infra/docker`, `docs/{adr,api,agent}`, and root `AGENTS*`, `PLANS*`, `ISSUES*`, `README*`, `CONTRIBUTING.md`, `SECURITY.md`, and `LICENSE`. Workflows start with PR CI/security; deployment waits for R-09. Create `test-utils` only after real cross-application reuse. Generated `api-client` files are never maintained manually. `LICENSE` remains standard MIT text and changes require explicit owner authorization.
 
-```text
-.github/
-  workflows/             # PR CI/security first; deployment only after R-09 approval
-  CODEOWNERS
-  dependabot.yml
-  PULL_REQUEST_TEMPLATE.md
-  ISSUE_TEMPLATE/
-.husky/                  # Root pre-commit and commit-msg hooks once implementation begins
-apps/
-  web/                  # Next.js web application
-  api/                  # NestJS API; receives the agent boundary only when agent work begins
-packages/
-  api-client/           # Generated from OpenAPI; generated files are not maintained manually
-  config-eslint/        # Shared ESLint configuration
-  config-typescript/    # Shared TypeScript configuration
-  test-utils/           # Create only after real cross-application reuse exists
-infra/
-  docker/               # Local dependency services and later image-related configuration
-docs/
-  adr/                  # Important, hard-to-reverse architecture decisions
-  api/                  # API conventions and error-code documentation
-  agent/                # Agent graphs, tool contracts, evaluations, and safety guidance
-AGENTS.md
-AGENTS_ZH.md
-CONTRIBUTING.md
-ISSUES.md               # Ordered issue drafts derived from PLANS.md
-ISSUES_ZH.md
-LICENSE                  # Standard MIT text; changes require explicit owner authorization
-PLANS.md
-PLANS_ZH.md
-README.md
-README_ZH.md
-SECURITY.md
-```
-
-Boundary rules:
-
-- `apps/web` must not access PostgreSQL, Redis, model providers, or privileged agent tools directly.
-- `apps/api` is the authority for business rules, authentication, authorization, and data access.
-- Web and API must not import one another's source through relative paths.
-- Cross-application contracts should come from generated OpenAPI artifacts once available; do not maintain duplicate request and response models that can drift.
-- Extract a shared package only after at least two real consumers exist. Do not create speculative `common` or `utils` dumping grounds.
+- `apps/web` never accesses PostgreSQL, Redis, model providers, or privileged agent tools directly. `apps/api` owns business rules, authentication/authorization, and data access.
+- Web and API do not import one another's source by relative path. Once available, cross-application contracts come from generated OpenAPI artifacts; do not hand-maintain duplicate request/response models.
+- Extract a shared package only for at least two real consumers; never create speculative `common`/`utils` dumping grounds.
 - Do not scaffold an empty `AgentModule`, vector table, or generated API client in the authentication slice. Create each boundary with its first real use case.
-- LangGraph nodes must not depend directly on HTTP controllers. They call business capabilities through ports or services owned by the agent module.
+- LangGraph nodes do not depend on HTTP controllers; they call business capabilities through agent-owned ports/services.
 
-## 4. Engineering workflow
+## 4. Workflow and remote-operation controls
 
-For each change:
+For every change: read applicable rules/plans; inspect the worktree and preserve unrelated changes; confirm acceptance criteria, dependencies, and non-goals; deliver the smallest useful vertical slice; run risk-proportionate checks; synchronize contracts, migrations, environment examples, and docs; then report changed files, evidence, residual risks, and unresolved decisions.
 
-1. Read the applicable rules and the approved plan.
-2. Inspect worktree state and preserve unrelated user changes.
-3. Confirm acceptance criteria, dependencies, and non-goals.
-4. Deliver the smallest useful vertical slice before broad abstractions.
-5. Run checks proportional to the change's risk.
-6. Keep contracts, migrations, environment examples, and documentation synchronized.
-7. Report changed files, verification evidence, residual risks, and unresolved decisions.
+Without explicit authorization, do not replace/upgrade the framework, package manager, ORM, authentication approach, or deployment platform; write real secrets or commit `.env`; log passwords, tokens, model prompts, or private tool results; perform destructive database work or rewrite history; overwrite user changes; or put temporary mocks, hard-coded users, or auth bypasses on a production path.
 
-Without explicit authorization, do not:
+### User-controlled remote operations
 
-- Replace or upgrade the framework, package manager, ORM, authentication approach, or deployment platform.
-- Write real secrets, commit `.env`, or log passwords, tokens, model prompts, or private tool results.
-- Perform destructive database operations, rewrite Git history, or overwrite user changes.
-- Place temporary mocks, hard-coded users, or authentication bypasses on a production path.
+- Before every `git push`, report the remote, branch, and commits, then wait for the owner's explicit confirmation in the current conversation. Earlier or broad authorization never satisfies this gate.
+- Never authenticate or sign in to GitHub through a browser/UI or start interactive GitHub authentication.
+- Never create, submit, update, close, or merge a pull request through a browser, CLI, API, connector, or app. Put requested PR content only in an ignored, uncommitted, unpushed local `PR_ISSUE_<nnn>.md`; the owner submits it.
+- Do not provision, configure, or retain GitHub API, App/connector, or browser-session write access. If found, stop remote work and ask the owner to remove/restrict it. User-requested read-only inspection is allowed; push still needs the gate above.
+- These repository instructions govern behavior but cannot revoke tool, session, account, or connector capabilities. Actual capability removal is an owner/admin action in the relevant platform/account controls; never claim the repository rule performed it.
 
 ### GitHub collaboration and automation
 
-- GitHub is the source-control and automation platform. Changes to `main` go through pull requests; squash merge and linear history are the default.
-- The public repository is owned by `@Donny-Guo`. MIT is the confirmed license choice. A tracked root `LICENSE` already exists, but its current copyright notice does not match confirmed decision D-23; preserve it until F-08 aligns and verifies the artifact through a reviewable repository-governance change. During bootstrap, require pull requests, resolved conversations, and stable CI checks. Approval settings must remain satisfiable and must never permit a general bypass of required checks.
-- `CODEOWNERS` assigns `@Donny-Guo` to `.github/workflows/`, authentication/security boundaries, database migrations, and agent/tool code. Require at least one non-author approval and owned-path approval whenever eligible reviewers are available.
-- At most one advisory AI reviewer may be enabled initially. Request review manually only after a pull request is ready, deterministic CI passes, and self-review is complete; do not automatically review drafts, every pull request, or every push. Re-request only after material risk-bearing changes. Evaluate it on three representative pull requests and record useful findings, false positives, misses, and latency before revising the policy. AI-review comments never satisfy a human-approval requirement and are not merge-required; deterministic CI remains authoritative.
-- Do not enable overlapping AI reviewers during the evaluation. Consider a single replacement only if the current reviewer is unavailable or measured value is insufficient, after a separate permission, data-handling, retention, availability, and cost review. Manually inspect any change to AI/agent instructions because review instructions can be modified in the pull-request branch.
-- Root Git hooks use Husky. `pre-commit` runs lint-staged formatting and linting only on staged files; `commit-msg` runs commitlint with Conventional Commits. Hooks must support partial staging and must not run network calls, database work, full builds, or the full test suite.
-- Local hooks are bypassable convenience checks, never the merge or security authority. CI repeats every required invariant and validates the pull-request title because squash merge makes that title part of `main` history.
-- Pull-request CI uses GitHub-hosted ephemeral runners by default and runs on `pull_request`; trusted post-merge verification runs on pushes to `main`; add `merge_group` when merge queue is enabled. Never execute untrusted pull-request code with `pull_request_target`, expose repository/environment secrets to forked code, or let an untrusted cache feed a trusted release job.
-- Pin third-party GitHub Actions to full commit SHAs with human-readable version comments. Give workflows read-only top-level `GITHUB_TOKEN` permissions and grant the minimum extra permission per job. Set explicit timeouts and concurrency cancellation.
-- Keep required check names stable and provide an aggregate required result that always reports, including when path filters skip work. CI configuration changes receive the same review rigor as production code.
-- Use Dependabot for both the pnpm/npm and GitHub Actions ecosystems. For this public repository, enable dependency review, CodeQL/code scanning, secret scanning, and push protection; verify current availability during F-08 and document any unavailable control.
+- Changes to `main` use PRs; squash merge and linear history are the defaults. Bootstrap protection requires PRs, resolved conversations, stable CI checks, satisfiable approval settings, and no general required-check bypass.
+- The public repository belongs to `@Donny-Guo`; MIT is confirmed. The tracked root `LICENSE` notice conflicts with D-23: preserve it until F-08 aligns and verifies it in a reviewable governance change.
+- `CODEOWNERS` assigns `@Donny-Guo` to workflows, auth/security boundaries, migrations, and agent/tool code. When eligible reviewers exist, require one non-author approval and owned-path approval.
+- Enable at most one advisory AI reviewer initially. Request it manually only after a PR is ready, deterministic CI passes, and self-review completes; never auto-review drafts, every PR, or every push. Re-request only after material risk-bearing changes. Evaluate three representative PRs and record useful findings, false positives, misses, and latency before changing policy. AI comments never satisfy human approval or block merge; deterministic CI is authoritative.
+- Do not overlap AI reviewers. Consider one replacement only if the current reviewer is unavailable or measured value is insufficient, after a separate permission/data-handling/retention/availability/cost review. Manually inspect changes to AI/agent instructions.
+- Root Husky hooks: `pre-commit` runs lint-staged formatting/linting only on staged files; `commit-msg` runs commitlint with Conventional Commits. Hooks support partial staging and never run network calls, database work, full builds, or the full test suite. They are bypassable feedback, not merge/security authority; CI repeats required invariants and validates the PR title used by squash merge.
+- PR CI uses GitHub-hosted ephemeral runners on `pull_request`; trusted post-merge checks run on pushes to `main`; add `merge_group` only with merge queue. Never run untrusted PR code via `pull_request_target`, expose repository/environment secrets to forks, or feed untrusted caches into trusted release jobs.
+- Pin third-party Actions to full immutable SHAs with readable version comments. Default top-level `GITHUB_TOKEN` to read-only, grant minimum per-job additions, and set explicit timeouts and concurrency cancellation.
+- Keep required-check names stable and provide an aggregate result that always reports, including path-filter skips. Review CI changes like production code.
+- Dependabot covers pnpm/npm and Actions. For this public repo, enable dependency review, CodeQL/code scanning, secret scanning, and push protection; F-08 must verify current availability and document gaps.
 - Self-hosted runners, remote Turbo cache, automatic dependency merging, and privileged GitHub Apps require separate threat-model and trust-boundary review.
 
-## 5. Dependency and version policy
+## 5. Dependencies, TypeScript, and organization
 
-- Use pnpm only; the root lockfile is the sole dependency lockfile.
-- Use Turborepo for cross-package `lint`, `typecheck`, `test`, and `build` task graphs. Start with local cache only; remote cache requires a separate environment-variable and sensitive-log review.
-- Use the workspace protocol for internal packages.
-- Pin Node.js, pnpm, and critical framework versions in root configuration and validate them in CI.
-- Pin third-party Actions by immutable full SHA; let Dependabot propose reviewed updates for both package and workflow dependencies.
-- Explain every new runtime dependency. Prefer the standard library or an existing dependency where suitable.
-- Keep version upgrades separate from feature work and document migration and rollback impact.
-- Do not place unapproved preview or canary features on the production path.
+- Use pnpm only and one root lockfile. Turborepo owns cross-package `lint`, `typecheck`, `test`, and `build`; start with local cache. Remote cache requires separate environment-variable and sensitive-log review.
+- Use the workspace protocol internally. Pin Node.js, pnpm, and critical frameworks in root config and validate them in CI. Explain runtime dependencies; prefer the standard library or existing packages.
+- Keep version upgrades separate from features and document migration/rollback impact. No unapproved preview/canary production features.
+- Enable strict TypeScript. Avoid unjustified `any`, non-null assertions, and broad casts; validate all external input at runtime.
+- Organize by business capability. Keep controllers/pages/components thin and business rules independently testable. Use explicit domain names and meaningful boolean prefixes; minimize exports, circular dependencies, and cross-boundary deep imports. Comments explain reasons, constraints, or risks.
 
-## 6. TypeScript and code organization
+## 6. Web: Next.js and MUI v6
 
-- Enable strict type checking. Avoid unjustified `any`, non-null assertions, and broad casts.
-- Validate external input at runtime; TypeScript types are not runtime validation.
-- Organize files and modules by business capability, not by cross-project controller/service/helper buckets.
-- Keep controllers, pages, and components thin. Put business rules in independently testable services or use cases.
-- Use explicit domain names. Prefix booleans with `is`, `has`, `can`, or another meaningful predicate.
-- Minimize exports, prevent circular dependencies, and avoid deep imports across module boundaries.
-- Comments explain reasons, constraints, or risks rather than restating code.
+- Use App Router with `src/app` for routes and `src/features` for capabilities. Prefer Server Components; use Client Components only for browser APIs, interactive state, or client-side forms.
+- MUI is the default. Use theme tokens and deliberate wrappers/`sx`; configure official App Router SSR caching; avoid hydration/style flashes and scattered magic values.
+- Form/schema code owns validation; MUI fields present it. Client validation gives immediate feedback, while the API repeats validation and remains authoritative. Associate fields/help text, make submission errors focusable or announced, and never rely on color alone.
+- Navigation uses semantic links and supports keyboard access, active routes, mobile layouts, future permission filtering, and feature flags.
+- Read the API base URL from validated environment configuration; components do not assemble URLs. Browser calls use relative same-origin `/api/v1`; Server Components use a server-only internal API origin, forward incoming cookies explicitly when needed, and never expose that origin to the client bundle.
+- Authentication uses same-origin HttpOnly cookies; never put access/refresh tokens or session IDs in Web Storage.
+- Protect `(app)` in a server layout by calling no-store `/auth/me` before private rendering. Sanitize same-origin return paths, distinguish `401` from API outage, and prevent redirect loops.
+- Initial UI copy is English and comes from stable keys in a centralized catalog, including validation/navigation. Use locale-aware date/time/number/currency formatters. Establish only an i18n-ready boundary in this slice; no locale router/switcher. The first later locale includes at least `zh-CN`.
 
-## 7. Web rules: Next.js and MUI v6
+## 7. API: NestJS
 
-- Use App Router and a `src/` directory. Routes live in `src/app`; business capabilities live in `src/features`.
-- Prefer Server Components. Add a Client Component only for browser APIs, interactive state, or client-side forms.
-- MUI is the default component library. Use theme tokens and deliberate component wrappers or `sx`; avoid scattered magic colors and dimensions.
-- Configure MUI's official App Router SSR cache integration to prevent hydration mismatches and style flashes.
-- MUI `TextField` and related controls present validation state; a form/schema layer owns validation rules.
-- Client validation provides immediate feedback. The API repeats all validation and remains authoritative.
-- Make errors accessible: associate fields and helper text, make submission errors focusable or announced, and never rely on color alone.
-- Navigation uses semantic links and supports keyboard access, active-route state, mobile layouts, future permission filtering, and feature flags.
-- Read the API base URL from validated environment configuration. Components must not assemble endpoint URLs ad hoc.
-- Browser requests use relative same-origin `/api/v1` URLs. Server Components use a server-only internal API origin, explicitly forward the incoming cookie when required, and never expose that origin to the client bundle.
-- Browser authentication uses same-origin HttpOnly cookies. Never store access tokens, refresh tokens, or session IDs in Web Storage.
-- Protect the `(app)` route group in a server-side layout by calling `/auth/me` with explicit no-store semantics before rendering private content. Sanitize same-origin return paths, distinguish `401` from API outage, and prevent login redirect loops.
-- The first UI release is English. User-visible copy, validation messages, and navigation labels must come from stable message keys and a centralized English catalog rather than hard-coded component strings.
-- Use locale-aware date, time, number, and currency formatters. The first later locale is at least Simplified Chinese (`zh-CN`).
-- The first slice creates an i18n-ready boundary only; it does not add a locale router or language switcher.
-
-## 8. API rules: NestJS
-
-- Organize by domain modules such as `AuthModule`, `UsersModule`, and `AgentModule`; avoid a global catch-all module.
-- Controllers own transport concerns, services/use cases own business logic, and repositories own persistence.
-- External DTOs use concrete classes and a global ValidationPipe with planned `whitelist`, `forbidNonWhitelisted`, and `transform` settings.
-- Use a stable success/error contract and machine-readable error codes. HTTP status codes must preserve their semantics.
-- Never return ORM entities, password hashes, internal exceptions, SQL details, or stack traces.
-- Validate configuration at startup and fail fast when critical values are absent.
-- Version API routes under `/api/v1`.
-- Accept JSON only on JSON endpoints, reject unsupported media types and unknown fields, and set explicit request-body limits. Validation and logs must never echo password input.
-- Mark authentication and user-specific responses `Cache-Control: no-store`; a gateway or CDN must never cache a response that contains `Set-Cookie` or private user data.
-- Once Swagger/OpenAPI is the REST contract source, contract changes must regenerate the client and pass drift checks.
+- Organize domain modules such as `AuthModule`, `UsersModule`, and later `AgentModule`; no catch-all module. Controllers own transport, services/use cases own business rules, and repositories own persistence.
+- External DTOs are concrete classes. Configure a global `ValidationPipe` with `whitelist`, `forbidNonWhitelisted`, and `transform` as planned.
+- Use stable success/error contracts and machine-readable codes with semantic HTTP statuses. Never return ORM entities, password hashes, internal exceptions, SQL details, or stacks.
+- Validate configuration at startup and fail fast on missing critical values. Version routes under `/api/v1`.
+- JSON endpoints accept JSON only, reject unsupported media types/unknown fields, and enforce explicit body limits. Validation and logs never echo passwords.
+- Mark auth and user-specific responses `Cache-Control: no-store`; gateways/CDNs never cache responses with `Set-Cookie` or private user data.
+- Once Swagger/OpenAPI is the REST source, regenerate clients and enforce drift checks for contract changes.
 - Separate liveness from dependency-aware readiness, enable graceful shutdown, and use structured logs with request/correlation IDs.
 
-## 9. Authentication and security
+## 8. Authentication and security
 
-- Trim surrounding whitespace from email input, normalize it to the approved lowercase policy, and enforce the canonical stored form and uniqueness in PostgreSQL. The first slice accepts ASCII email addresses only; internationalized local parts and domains require an explicit later policy.
-- The confirmed initial password policy applies to sign-up and future password creation/change flows: 8–20 ASCII characters, limited to `A-Z`, `a-z`, `0-9`, `$`, `#`, `@`, and `%`; require at least one uppercase letter, one lowercase letter, one digit, and one of `$#@%`. Never trim or otherwise rewrite a password.
-- Permit paste and password-manager autofill. Show a concise checklist before submission and specific field errors after validation.
-- Keep password rules in one testable `PasswordPolicy` boundary shared by intent, not by importing a Nest runtime DTO into Web. Do not duplicate regexes across components and controllers.
-- Login must not reapply the current sign-up composition policy. It accepts the stored user's password input and verifies the hash, so later policy changes do not lock out existing users.
-- Relaxing length or allowed characters later requires policy, UI-copy, contract, and boundary-test changes, but no user-table migration. A stricter future policy applies to new/reset passwords unless a separately approved re-enrollment plan says otherwise.
-- Reject known common or compromised whole passwords through a pinned, licensed, checksummed, local server-side blocklist and return an actionable, non-sensitive error. Document its source, update cadence, and fail-closed behavior for password creation; never send a candidate password or derived hash to a remote lookup service.
-- Store only salted Argon2id hashes. Parameters must meet the then-current OWASP floor and be benchmarked in the target runtime. Never use plaintext or reversible encryption and never log passwords or hashes. An optional pepper belongs outside PostgreSQL in a managed secret system.
-- Handle concurrent duplicate registration through the database unique constraint, not only a pre-insert lookup.
-- Login returns the same external `INVALID_CREDENTIALS` response for an unknown email and a wrong password to reduce account enumeration.
-- The unknown-account path performs one verification against a fixed dummy Argon2id hash so both paths do comparable expensive work. Do not assert exact timing in tests; test that the dummy path executes and that public shapes match. Apply a generous login transport cap, independent of the password-creation policy, to bound resource use.
-- Never return `passwordHash`; ordinary queries must not select it by default.
-- The first slice signs access JWTs with allowlisted `HS256` using at least 256 bits of secret material supplied by the deployment secret store. The lifetime is 15 minutes; `sub` is the User UUID, `iss` is `trip-api`, `aud` is `trip-web`, `iat` and `exp` are required, and clock tolerance is at most 30 seconds. Rotation and previous-key overlap require a runbook before public release.
-- Production uses `__Host-trip_access` with `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, no `Domain`, and `Max-Age=900`. Local HTTP uses the visibly distinct `trip_access_dev` name with `Secure=false` only in the development configuration and the same 900-second lifetime. Logout sends `Max-Age=0` with the same cookie name/path/security tuple.
-- Sign-up and login reuse one token-issuance boundary. Successful sign-up creates a real authenticated session and redirects to Dashboard.
-- For the first browser-only, same-origin authentication slice, every unsafe method is JSON-only and must match an exact trusted `Origin`; a valid same-origin `Referer` is the fallback, and missing/`null` provenance is rejected. Use Fetch Metadata as defense in depth when present and never mutate state through `GET`. Under this narrow topology, the `__Host-`/SameSite/origin controls are the accepted CSRF baseline; add a synchronizer token or signed double-submit token before the first protected state-changing business endpoint unrelated to authentication, or earlier if the topology broadens.
-- The first slice provides current-user and logout endpoints. Logout clears the cookie. Refresh rotation, server-side revocation, and Redis come later, so a stolen access token cannot be actively revoked before expiry; keep its TTL short.
-- Validate JWT signature, allowed algorithm, `iss`, `aud`, `exp`, and other required claims. Secrets come from controlled configuration and never enter the repository.
-- All authentication and `/auth/me` responses use `Cache-Control: no-store`; shared caches must not store responses with `Set-Cookie` or authenticated content.
-- Before any public or shared-environment release, authentication endpoints require Redis-backed distributed rate limits, security headers, safe audit events, proxy-trust validation, and tested outage behavior. Completing the local slice is not public-release approval.
-- Use an explicit CORS allowlist; never combine credentialed production requests with wildcard origins.
+- Trim email surroundings, normalize to lowercase ASCII, cap at 254 characters, and enforce canonical storage plus uniqueness in PostgreSQL. Internationalized local parts/domains need a later explicit policy.
+- Password creation accepts exactly 8-20 ASCII characters from `A-Z`, `a-z`, `0-9`, `$#@%`, with at least one uppercase, lowercase, digit, and `$#@%`. Never trim/rewrite passwords. Permit paste/autofill; show a concise pre-submit checklist and specific post-validation errors.
+- Keep rules in one testable `PasswordPolicy` boundary shared by intent, not by importing a Nest runtime DTO into Web; never duplicate regexes across components/controllers. Login does not reapply current creation composition rules: verify the stored user's submitted value unchanged.
+- Relaxing length/characters later changes policy, UI copy, contract, and boundary tests but not the user table. A stricter policy affects new/reset passwords unless a separately approved re-enrollment plan says otherwise.
+- Reject known common/compromised whole passwords with a pinned, licensed, checksummed, local server-side blocklist. Document source, update cadence, and fail-closed creation behavior; never send a candidate or derived hash to a remote lookup.
+- Store only salted Argon2id hashes. Parameters meet the then-current OWASP floor and are benchmarked in the target runtime. Never store plaintext/reversible encryption or log passwords/hashes. Any pepper stays outside PostgreSQL in managed secrets.
+- Database uniqueness is the concurrent duplicate-registration boundary; a precheck is only UX.
+- Unknown-email and wrong-password login return identical `INVALID_CREDENTIALS`. The unknown-account path performs one verification against a fixed dummy Argon2id hash. Tests assert dummy execution and matching public shapes, never exact timing. Apply a generous login transport cap independent of creation policy.
+- Never return `passwordHash`; ordinary queries do not select it by default.
+- Sign first-slice access JWTs only with allowlisted `HS256` and a deployment-provided secret of at least 256 bits. TTL is 15 minutes; `sub` is User UUID; `iss=trip-api`; `aud=trip-web`; `iat` and `exp` are required; clock tolerance is at most 30 seconds. Validate signature, algorithm, issuer, audience, expiry, and required claims. Secrets never enter the repo; rotation/previous-key overlap need a runbook before public release.
+- Production cookie: `__Host-trip_access`, `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, no `Domain`, `Max-Age=900`. Local HTTP development only: visibly distinct `trip_access_dev`, `Secure=false`, same TTL. Logout sends `Max-Age=0` with the identical name/path/security tuple.
+- Sign-up and login share one token-issuance boundary. Successful sign-up creates a real session and redirects to Dashboard.
+- In the first browser-only same-origin slice, every unsafe method is JSON-only and requires an exact trusted `Origin`; accept a valid same-origin `Referer` only as fallback, and reject missing/`null` provenance. Use Fetch Metadata as defense in depth and never mutate through `GET`. `__Host-`/SameSite/origin is the accepted narrow-topology CSRF baseline; add a synchronizer or signed double-submit token before the first unrelated protected business mutation, or earlier if topology broadens.
+- Provide `/auth/me` and logout; logout clears the cookie. Refresh, rotation, revocation, and Redis come later, so stolen access tokens remain active until short expiry.
+- All auth and `/auth/me` responses are no-store; shared caches never store `Set-Cookie` or authenticated content.
+- Before any public/shared release, add Redis-backed distributed rate limits, security headers, safe audit events, proxy-trust validation, and tested outage behavior. Local-slice completion is not release approval. Use explicit CORS allowlists; never combine credentialed production requests with wildcard origins.
 
-## 10. Database rules: PostgreSQL and pgvector
+## 9. PostgreSQL and pgvector
 
-- TypeORM is approved. Use reviewable migrations only and keep `synchronize` disabled in production.
-- Every schema change uses a reviewable, forward-compatible migration. ORM automatic schema synchronization is forbidden in production.
-- Follow a single naming convention for tables, columns, and indexes. Store time as UTC `timestamptz`.
-- User IDs are UUIDs. The physical table is `users`; normalized email is unique; include `created_at` and `updated_at`.
-- The canonical email is trimmed, lowercased ASCII with a 254-character maximum. Enforce canonical storage with a database check plus a unique constraint; application prechecks improve feedback but are not the race-safety boundary.
-- The first migration does not add email verification, account status, or roles. Add them later through forward migrations after their workflow and authorization semantics are approved.
-- Consider locks, backfills, rollback/repair paths, and zero-downtime compatibility windows for migrations.
-- Distinguish a pgvector-capable image from a database where `CREATE EXTENSION vector` has run. A privileged infrastructure/provisioning role owns extension enablement; application startup and the runtime role never do. Local bootstrap enables and verifies the extension for repeatability, while production enables it only before an approved vector migration.
-- Separate database roles: a provisioner may manage extensions/roles, a migrator owns approved DDL, and the runtime application role receives only required DML. Run migrations as an explicit deployment job, not implicitly on every application startup.
-- Decide vector dimension, distance function, index type, embedding model/version, and re-embedding strategy together in an ADR before creating vector columns.
-- Do not create unused vector tables or indexes only because they may be useful later.
-- Repository integration tests use real PostgreSQL, not a behaviorally different in-memory substitute.
+- TypeORM is approved. Every schema change uses a reviewable, forward-compatible migration; production `synchronize` is always off. Use consistent table/column/index naming and UTC `timestamptz`.
+- `users` has UUID IDs, canonical unique email, `created_at`, and `updated_at`. Enforce trimmed lowercase ASCII email (maximum 254) with a database check and unique constraint; application prechecks are not race safety.
+- The first migration has no email-verification, account-status, or role fields. Add them by forward migration only after workflow/authorization semantics are approved.
+- Plan locks, backfills, repair/rollback paths, and zero-downtime compatibility windows.
+- Distinguish a pgvector-capable image from an enabled `vector` extension. A privileged provisioner owns extensions/roles; application startup and the runtime role never execute `CREATE EXTENSION`. Local bootstrap enables/verifies it; production does so only before an approved vector migration.
+- Separate provisioner, migrator, and runtime roles: the migrator owns approved DDL; runtime gets only required DML. Run migrations as an explicit deployment job, never implicitly at application startup.
+- Before vector columns, an ADR jointly decides dimension, distance function, index type, embedding model/version, and re-embedding strategy. Do not create unused vector tables/indexes.
+- Repository integration tests use real PostgreSQL, not an in-memory substitute.
 
-## 11. Agent and tool rules: LangGraph
+## 10. LangGraph agents and tools
 
-- Start with TypeScript `@langchain/langgraph` under `apps/api/src/modules/agent`; extracting it into another service requires an ADR.
-- Graphs, model credentials, and privileged tools run only on the backend. Web may later consume streaming events through a React/SDK client, but it must not run the graph, hold model keys, or bypass NestJS authentication.
-- Explicitly type graph state, node inputs/outputs, routing conditions, and termination conditions.
-- Tool definitions use strict input schemas, timeouts, cancellation, bounded retries, and stable error types.
-- Side-effecting tools must be idempotent or use idempotency keys and compensation; never retry without a bound.
-- Treat travel-provider responses as untrusted input and validate and normalize them before they enter the domain layer.
-- Separate system instructions, user content, and tool results to reduce prompt-injection and tool-authorization risk.
-- Carry `userId`, `threadId`, `runId`, and correlation ID through every run. Logs and traces must not contain secrets or full private data.
-- Define persistence, streaming, human-in-the-loop, and long-running recovery semantics before implementation; do not rely only on process memory.
-- Agent releases require deterministic unit tests, recorded or mocked tool-contract tests, and an independent evaluation set. Manual chat alone is not acceptance evidence.
+- Start TypeScript `@langchain/langgraph` in `apps/api/src/modules/agent`; extraction requires an ADR. Graphs, model credentials, and privileged tools stay backend-only; Web may later consume streams but never run graphs, hold model keys, or bypass NestJS auth.
+- Explicitly type graph state, node inputs/outputs, routing, and termination. Tools use strict input schemas, timeouts, cancellation, bounded retries, and stable errors.
+- Side-effecting tools are idempotent or use idempotency keys and compensation; never retry without a bound. Validate/normalize untrusted provider responses before the domain layer.
+- Separate system instructions, user content, and tool results. Carry `userId`, `threadId`, `runId`, and correlation ID; logs/traces omit secrets and full private data.
+- Define persistence, streaming, human-in-the-loop, and recovery before implementation; do not rely only on process memory.
+- Releases require deterministic unit tests, recorded/mocked tool-contract tests, and an independent evaluation set; manual chat is insufficient.
 
-## 12. Local development and deployment rules
+## 11. Local development, CI, and deployment
 
-- Keep Next.js and NestJS independently buildable, deployable, scalable, and reversible.
-- The default local inner loop runs Next.js and NestJS on the host through pnpm/Turborepo for fast HMR, debugging, and type feedback.
-- Run stateful local infrastructure such as PostgreSQL + pgvector through fixed-version container orchestration. Add Redis and a local mail-capture service only in the phases that need them.
-- CI runs application tasks on the runner and starts an isolated, ephemeral PostgreSQL/pgvector service for integration tests; tests must not depend on a developer volume.
-- Use a versioned standard GitHub-hosted Ubuntu runner for normal CI; do not put routine Node.js checks inside an Alpine application container merely to make CI appear smaller. A lightweight runner may host short documentation/metadata jobs only after its CPU, timeout, and feature limits are verified.
-- After the first local vertical slice is stable, add separate multi-stage, non-root OCI images and a full-stack container smoke test. Prefer managed PostgreSQL/Redis in production and do not bind state data to an application-container lifecycle.
-- Select application base images with evidence. Start evaluation from a pinned LTS Debian slim image because native dependencies and `glibc` compatibility are less surprising; accept Alpine only after `musl`, native-addon, multi-architecture, security-update latency, build-time, startup, and smoke tests prove a net benefit. Small size alone is not acceptance.
-- Optimize container builds through a small build context, stable layer order, multi-stage output, filtered monorepo artifacts, frozen installs, `pnpm fetch` or BuildKit cache mounts, and strict trusted/untrusted cache separation. Pin base and service images by digest for releases.
-- Continuous deployment stays disabled until R-09 has an approved target, registry, environments, migration policy, observability, and rollback evidence. When enabled, a trusted commit builds each image once; the same immutable digest is promoted through protected `staging` and `production` GitHub Environments.
-- Deployment jobs use OIDC federation instead of long-lived cloud credentials. Production requires an eligible reviewer with self-review disabled, environment-specific branch/tag restrictions, serialized deployments, a separately controlled migration job, provenance/SBOM evidence, smoke checks, and rollback to a previously verified digest.
-- Keep the browser's production entry point same-origin: pages at `https://<host>/` and API routes at `/api/v1`, routed by a gateway, ingress, or reverse proxy to NestJS.
-- Next.js proxy or middleware may improve user experience but never replaces server authorization; NestJS guards are the final API boundary.
-- A future mobile or partner API domain needs separate CORS, token transport, rate limiting, and client-identity design. Do not widen the browser cookie domain.
-- Use an explicit local proxy to simulate same-origin behavior. Any direct API port is restricted to approved development origins.
-- Route only `/api/v1/*` to NestJS. Configure trusted proxy hops explicitly before relying on forwarded IP/protocol values for secure cookies, redirects, logs, or rate limits.
+- Keep Next.js and NestJS independently buildable, deployable, scalable, and reversible. Run them on the host through pnpm/Turbo for the default inner loop; run fixed-version PostgreSQL/pgvector containers. Add Redis/mail capture only when required.
+- CI runs application tasks on the runner with isolated ephemeral PostgreSQL/pgvector; tests never depend on developer volumes. Use a versioned standard GitHub-hosted Ubuntu runner. Lightweight runners may host short docs/metadata jobs only after verifying CPU/timeouts/features; do not put routine Node checks in Alpine merely for appearance.
+- After the first local vertical slice is stable, add separate multi-stage non-root OCI images and a full-stack container smoke test. Prefer managed production data services; never bind state to application-container lifecycles.
+- Evaluate base images with evidence, starting from pinned LTS Debian slim. Accept Alpine only if musl, native addons, multi-architecture, security-update latency, build/start time, and smoke tests show net benefit; size alone is insufficient.
+- Optimize with a small context, stable layers, multi-stage output, filtered monorepo artifacts, frozen installs, `pnpm fetch` or BuildKit cache mounts, and strict trusted/untrusted cache separation. Pin release base/service images by digest.
+- CD stays disabled until R-09 approves target, registry, environments, migration policy, observability, and rollback evidence. Then build each image once from a trusted commit and promote the same digest through protected `staging` and `production` environments.
+- Deployment uses OIDC, not long-lived cloud credentials. Production requires an eligible non-self reviewer, branch/tag restrictions, serialized deployments, a separately controlled migration job, provenance/SBOM, smoke checks, and rollback to a verified digest.
+- Keep the browser production entry same-origin: `https://<host>/` and `/api/v1` routed by gateway/ingress/reverse proxy to NestJS. Next.js proxy/middleware never replaces NestJS guards.
+- A future mobile/partner domain needs separate CORS, token transport, rate limiting, and client-identity design; never widen the browser-cookie domain.
+- Use an explicit local same-origin proxy and restrict direct API ports to approved development origins. Route only `/api/v1/*` to NestJS. Configure trusted proxy hops before relying on forwarded IP/protocol for cookies, redirects, logs, or limits.
 
-## 13. Testing and quality gates
+## 12. Tests, documentation, and completion
 
-At minimum, cover:
+Minimum coverage:
 
-- Unit tests: validation schemas, password-policy boundaries, domain rules, services, error mapping, and agent routing.
-- Integration tests: NestJS with real PostgreSQL, migrations, repositories, and authentication endpoints.
-- Component tests: form states, accessible errors, API error mapping, and responsive navigation.
-- End-to-end tests: automatic sign-in after registration, duplicate registration, session restore, logout, login, invalid credentials, protected routes, and the primary navigation path.
-- Security contract tests: cookie set/delete parity, exact Origin/Referer policy, JSON-only/body-size rejection, no-store headers, private-response gateway behavior, JWT claim/expiry handling, dummy-hash login path, and sensitive-value redaction.
+- Unit: validation schemas, `PasswordPolicy`, domain rules, services, error mapping, and agent routing.
+- Integration: NestJS with real PostgreSQL, migrations, repositories, and auth endpoints.
+- Component: form states, accessible errors, API-error mapping, and responsive navigation.
+- E2E: sign-up auto-login, duplicate registration, restore, logout/login, invalid credentials, protected routes, and primary navigation.
+- Security contracts: cookie set/delete parity, exact Origin/Referer, JSON/body limits, no-store, gateway private-response behavior, JWT claims/expiry, dummy-hash path, and sensitive-value redaction.
 
-Before merge, the planned gates are documentation policy checks, dependency review, lint, type checking, unit/integration tests, production builds, and applicable end-to-end tests. CodeQL and secret-scanning gates apply when available. Tests must not depend on execution order, real third-party APIs, or shared production data. Pre-commit success never substitutes for these CI results.
+Before merge, pass documentation-policy checks, dependency review, lint, typecheck, unit/integration tests, production builds, applicable E2E, and available CodeQL/secret-scanning gates. Tests are order-independent and use neither real third-party APIs nor shared production data. Hooks never substitute for CI.
 
-## 14. Documentation and decision records
+Documentation duties:
 
-- Primary documentation is English. Keep an existing `_ZH.md` follower synchronized in the same change; English wins on conflict.
-- Update `README.md` and `.env.example` when environment variables, ports, startup commands, or local dependencies change.
-- Update OpenAPI and `docs/api` when API contracts or error codes change.
-- Attach migration notes to data-model changes.
-- Add an ADR for consequential changes to service boundaries, ORM, authentication storage, agent runtime placement, or deployment topology.
-- Update `PLANS.md` when scope or status changes; do not leave completed or superseded plans presented as current.
-- Update `ISSUES.md` when implementation order, dependencies, issue scope, pull-request boundaries, or acceptance evidence changes; keep it derived from `PLANS.md`.
-- CI must compare decision/task/issue IDs and statuses across English documents and existing `_ZH` followers, validate local Markdown links, and reject Han characters in authoritative English documents except where explicitly required by a technical value.
+- Update `README.md` and `.env.example` for environment variables, ports, commands, or local dependencies; OpenAPI and `docs/api` for contracts/error codes; and migration notes for data-model changes.
+- Add ADRs for consequential service-boundary, ORM, auth-storage, agent-placement, or deployment-topology changes.
+- Update `PLANS.md` for scope/status. Update derived `ISSUES.md` for order, dependencies, issue scope, PR boundaries, or acceptance evidence.
+- CI compares IDs/statuses across English docs and existing followers, validates local Markdown links, and rejects Han characters in authoritative English except required technical values.
 
-## 15. Definition of done
-
-A task is complete only when:
-
-- Every acceptance criterion has evidence.
-- Relevant tests have been added and pass.
-- Lint, type checking, and applicable builds pass.
-- Required GitHub checks report success; required reviews and owned-file approvals are complete; conversations are resolved.
-- Security, privacy, accessibility, and failure paths have been reviewed.
-- Workflow dependencies, permissions, secret exposure, cache trust, and release provenance have been reviewed when automation changes.
-- API contracts, migrations, environment examples, and English documentation agree.
-- Existing Chinese followers have been synchronized or explicitly marked pending with a reason.
-- There are no hidden TODOs, hard-coded secrets, skipped tests, or unexplained out-of-scope modifications.
+Done means every acceptance criterion has evidence; relevant tests and lint/typecheck/build pass; required GitHub checks, reviews, owned-file approvals, and conversations are complete; security/privacy/accessibility/failure paths are reviewed; automation reviews cover dependencies, permissions, secret exposure, cache trust, and provenance; contracts/migrations/environment/docs agree; followers are synchronized or explicitly pending with reason; and there are no hidden TODOs, hard-coded secrets, skipped tests, or unexplained out-of-scope changes.
