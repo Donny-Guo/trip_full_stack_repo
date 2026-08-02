@@ -16,9 +16,9 @@
 - 首个认证切片：短期 Access JWT + 同源 HttpOnly Cookie；后续增加 Refresh Token、Redis、撤销与轮换。
 - 后续能力：Swagger/OpenAPI、Redis、可观测性和 Agent 持久化。
 
-当前仓库处于规划阶段。D-01 至 D-24 已确认，但用户尚未授权实施。在用户另行明确要求开始实施前，不得创建脚手架、业务源文件、依赖、锁文件、License Artifact、数据库迁移、GitHub 自动化、Hook 或基础设施配置。
+D-01 至 D-24 已确认。2026-08-02，Repository Owner 明确授权实施首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。该授权覆盖计划内代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。从 `P-03`/`ISSUE-002` 开始，按依赖顺序推进，且不得超出已批准的首切片范围。
 
-2026-07-30，用户只授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定范围的 Issue Metadata。这些 Issue 现已存在，但 `P-02`/`ISSUE-001` 仍为 Blocked；创建 Issue 不产生实施权限。仓库当前为 Public；没有另行明确请求时不得改变其 Visibility。
+2026-08-02 的授权不覆盖 Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。2026-07-30，Owner 曾单独授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata；这些 Issue 已存在，但超出该授权的远程 Issue 操作仍需另行明确请求。仓库当前为 Public。
 
 ## 2. 指令与事实优先级
 
@@ -110,7 +110,7 @@ SECURITY.md
 ### GitHub 协作与自动化
 
 - GitHub 是源码与自动化平台。`main` 的变更必须经过 Pull Request；默认使用 Squash Merge 和线性历史。
-- Public 仓库由 `@Donny-Guo` 所有。MIT 是已确认的 License 选择；根 License Artifact 只能通过已授权的仓库治理变更创建。Bootstrap 期间强制 Pull Request、已解决对话和稳定 CI Check。Approval Setting 必须可满足，且绝不允许通用绕过 Required Check。
+- Public 仓库由 `@Donny-Guo` 所有，MIT 是已确认的 License 选择。当前已跟踪根 `LICENSE`，但其 Copyright Notice 与已确认的 D-23 不一致；F-08 通过可审核的仓库治理变更对齐并验证该 Artifact 之前，必须保留它。Bootstrap 期间强制 Pull Request、已解决对话和稳定 CI Check。Approval Setting 必须可满足，且绝不允许通用绕过 Required Check。
 - `CODEOWNERS` 将 `.github/workflows/`、认证/安全边界、数据库迁移和 Agent/Tool 代码分配给 `@Donny-Guo`。存在合格 Reviewer 时，至少要求一个非作者 Approval，并启用 Owned-path Approval。
 - 初始最多启用一个辅助 AI Reviewer。只有在 Pull Request 已 Ready、确定性 CI 通过且完成 Self-review 后才手动请求 Review；不自动 Review Draft、每个 Pull Request 或每次 Push。只有出现影响风险的实质变更时才重新请求。用三个代表性 Pull Request 评估它，并在调整 Policy 前记录有效发现、False Positive、漏检与 Latency。AI-review Comment 永远不能满足 Human Approval，也不是 Merge-required；确定性 CI 才是权威。
 - Evaluation 期间不启用重叠 AI Reviewer。只有当前 Reviewer 不可用或实测价值不足时，才可在单独审查 Permission、Data Handling、Retention、Availability 和 Cost 后考虑一个替代品。AI/Agent Instruction 可在 Pull Request Branch 中被修改，因此相关变更必须人工检查。

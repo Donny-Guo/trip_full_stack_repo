@@ -2,14 +2,14 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**规划文档；仅授权远程创建 ISSUE-001 至 ISSUE-027，实施仍未授权**  
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-001 已在本地完成，下一项为 ISSUE-002**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
 
 ## 1. 目的、权威性与使用方式
 
-本清单把已批准计划转换为可直接用于实施的 GitHub Issue Body。下方 Registry 是草案已远程创建的证据；没有登记 URL 的条目仍只是本地草案。远程创建 Issue 不授权代码、脚手架、依赖、Hook、License Artifact、超出本次 Issue Metadata 范围的 Repository Setting、迁移、基础设施、部署或公开暴露。
+本清单把已批准计划转换为可直接用于实施的 GitHub Issue Body。下方 Registry 是草案已远程创建的证据；没有登记 URL 的条目仍只是本地草案。2026-07-30 的远程 Issue 授权不包含实施权限。Owner 已于 2026-08-02 另行授权计划内的首个本地认证切片。Post-MVP 工作、部署、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍不在该授权范围内。
 
 权威性与同步规则：
 
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。只有用户明确满足 `P-02` 后，`ISSUE-001` 才可解除阻塞。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，因此 `ISSUE-001` 在本地为 `DONE`，下一个任务是 `ISSUE-002`。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -156,9 +156,9 @@
 
 ### ISSUE-001 — [P-02] 授权实施
 
-- **状态：** `BLOCKED`
+- **状态：** `DONE`
 - **Labels：** `type:governance`、`priority:p0`、`scope:first-slice`
-- **Blocked by：** P-01 已完成；仍需用户明确决策
+- **Blocked by：** 无；P-01 已完成，Owner 授权已于 2026-08-02 记录
 - **PR Boundary：** 无
 
 **目标**
@@ -167,17 +167,18 @@
 
 **工作**
 
-- [ ] 获得明确授权首个切片范围的指令。
-- [ ] 记录授权是否覆盖代码、脚手架、依赖、Hook、MIT `LICENSE`、GitHub Setting、迁移和本地基础设施。
-- [ ] 实施前把授权日期与排除项同步到 `PLANS.md` 及中文跟随版。
+- [x] 获得明确授权首个切片范围的指令。
+- [x] 记录授权是否覆盖代码、脚手架、依赖、Hook、MIT `LICENSE` 治理、首切片 GitHub CI/治理 Setting、迁移和本地基础设施。
+- [x] 实施前把 2026-08-02 授权日期与排除项同步到 `PLANS.md` 及中文跟随版。
 
 **审核/验收**
 
-- [ ] 指令无歧义且来自 Repository Owner。
-- [ ] 范围和排除项与 D-01 至 D-24 一致。
-- [ ] Gate 关闭前未修改实施 Artifact 或远程 Setting。
+- [x] 指令无歧义且来自 Repository Owner。
+- [x] 范围和排除项与 D-01 至 D-24 一致。
+- [x] 在记录授权之前，未为关闭本 Gate 而修改实施 Artifact 或远程 Setting。
 
-**证据：** Owner 指令与同步后的 Plan Status。  
+**证据：** 2026-08-02 的 Owner 指令与同步后的中英文 Plan Status。已跟踪的 MIT `LICENSE` 早于本次授权存在，由 F-08 处理；关闭本地 Gate 时未修改任何远程 GitHub 状态。
+
 **非目标：** 技术实施、创建 GitHub Issue 或授权公开发布。
 
 ### ISSUE-002 — [P-03] 冻结兼容版本矩阵

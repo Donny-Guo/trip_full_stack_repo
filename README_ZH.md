@@ -4,7 +4,7 @@
 
 面向生产环境的旅游 Agent 全栈应用。项目计划使用 pnpm Monorepo 管理 Next.js Web、NestJS API、LangGraph Agent 编排以及共享工程配置，并以 PostgreSQL + pgvector 作为业务数据与向量检索基础。
 
-> 当前状态：**规划中；D-01 至 D-24 已确认，且尚未授权实施**。远程 Issue [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) 已覆盖到 Sign Up/Login 页面为止的批准路径，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。仓库当前为 Public。权威状态见英文 [`PLANS.md`](./PLANS.md)。
+> 当前状态：**D-01 至 D-24 已确认，首个本地认证切片已于 2026-08-02 获得实施授权**。`P-02`/`ISSUE-001` 已完成，下一项为 `P-03`/`ISSUE-002`。远程 Issue [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) 已覆盖到 Sign Up/Login 页面为止的批准路径，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。根 MIT `LICENSE` 早于本次授权已存在，其 Notice 待 F-08 对齐。生产部署和公开暴露仍未授权。权威状态见英文 [`PLANS.md`](./PLANS.md)。
 
 首个纵向切片由多个可独立 Review 的变更集组成；它是里程碑和执行顺序，不承诺生产级基础、API、Web、集成与质量工作全部在一个自然日内完成。
 
@@ -111,7 +111,7 @@ Agent、航班供应商接入、向量检索、Swagger、Refresh Token/轮换/�
 ├── CONTRIBUTING.md
 ├── ISSUES.md
 ├── ISSUES_ZH.md
-├── LICENSE                            # MIT 正文；获得实施授权后在 F-08 创建
+├── LICENSE                            # 已存在的 MIT 正文；F-08 验证并对齐 Notice
 ├── PLANS.md
 ├── PLANS_ZH.md
 ├── README.md
@@ -213,7 +213,7 @@ Agent、航班供应商接入、向量检索、Swagger、Refresh Token/轮换/�
 
 首个切片包含仓库治理与 Continuous Integration，但不包含真实生产部署：
 
-- Public 仓库由 `@Donny-Guo` 所有。MIT 是已确认的 Open-source License 选择；根 License Artifact 与应用实施分开治理。全部变更仍通过 Pull Request 进入 `main`，默认使用 Squash Merge 与线性历史；Ruleset 禁止删除和 Force Push，并要求对话已解决和稳定的聚合 CI Check。
+- Public 仓库由 `@Donny-Guo` 所有，MIT 是已确认的 Open-source License 选择。根 `LICENSE` 已存在，但当前 `Copyright (c) 2026 Dongping Guo (Donny)` Notice 与已确认的 D-23 不一致；F-08 必须通过可审核的治理变更对齐并验证该 Artifact。全部变更仍通过 Pull Request 进入 `main`，默认使用 Squash Merge 与线性历史；Ruleset 禁止删除和 Force Push，并要求对话已解决和稳定的聚合 CI Check。
 - 标准根 MIT `LICENSE` 必须使用 `Copyright (c) 2026 Donny-Guo`；F-08 验证 GitHub 能正确识别它，并保持 Source-file Header 可选。
 - Bootstrap 阶段的 Approval Requirement 必须可满足，且不得削弱 CI。`CODEOWNERS` 仍记录 Workflow、认证/安全、迁移和 Agent/Tool Ownership；存在合格 Reviewer 时，至少要求一个非作者 Approval 和 Owned-path Review。
 - 根 Husky Hook 通过 lint-staged 对 Staged Files 执行格式化/lint，并通过 commitlint 校验 Commit Message。Hook 保持快速、兼容部分暂存，不执行网络、数据库、构建或全量测试。Hook 可被绕过，因此 CI 会重复合并约束，并校验用于 Squash Merge 的 Pull Request Title。

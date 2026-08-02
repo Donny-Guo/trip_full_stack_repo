@@ -2,11 +2,15 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-24 已确认；尚未授权实施**  
+状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；下一项为 P-03**\
 计划日期：2026-07-30  
+实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
-约束：最初规划轮次只产出文档。后续 2026-07-30 请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖；它不授权代码、脚手架、依赖、Hook、License Artifact、其他 GitHub Setting、迁移或基础设施文件。  
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。远程 Issue 创建和仓库 Visibility 均不授权实施。
+授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。
+
+授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
+
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。尚无已跟踪的应用脚手架、自动化、Hook、依赖、迁移、基础设施配置或业务代码。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -229,12 +233,12 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 产出：英文权威 `PLANS.md` 和同步的 `PLANS_ZH.md` 跟随版。
 - 验收：已于 2026-07-30 满足——用户明确接受 D-14 至 D-19，要求加入 GitHub 治理、CI/CD 规划和 Pre-commit 行业规范，随后确认 `@Donny-Guo`、MIT License 与 Manual、Non-blocking 的辅助 AI Review Policy；全部决策只有一个答案；规划内容未写成已实现事实。
 
-#### P-02 授权实施 — `BLOCKED`
+#### P-02 授权实施 — `DONE`
 
 - 前置：P-01
-- 动作：等待用户明确要求开始实施；Review 意见和规划文档修改不等于开工授权。
-- 产出：无歧义的实施开始指令。
-- 验收：用户明确授权代码、脚手架、依赖、Hook、License Artifact、GitHub 配置、迁移和基础设施工作，并确认首个切片范围。
+- 动作：获取用户明确要求开始实施的指令；Review 意见和规划文档修改不等于开工授权。
+- 产出：Owner 于 2026-08-02 发出的无歧义实施开始指令。
+- 验收：已于 2026-08-02 满足——Owner 明确授权计划内的首个本地认证切片，覆盖代码、脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。Post-MVP 工作、生产部署/CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍为排除项。
 
 #### P-03 冻结兼容版本矩阵 — `TODO`
 
@@ -648,7 +652,7 @@ F-01..F-08 + B-01..B-10 + W-01..W-08 + I/E2E → Q-01 → H-01
 | 把本地完成误当作上线就绪 | 公开系统缺少滥用、运维或隐私控制 | D-19 与阻塞的 R-14 要求 R-02/R-09/R-10 证据及明确授权 |
 | 中英文文档漂移 | 产生互相冲突的工程指令 | 英文为权威；同步 `_ZH` 是完成定义的一部分 |
 
-## 13. 已确认结论与剩余实施门
+## 13. 已确认结论与下一道门
 
 D-01 至 D-13 已确认：Access JWT + 同源 HttpOnly Cookie、注册自动登录、通用凭据错误、TypeORM、pnpm workspace + Turborepo、公开同源/服务独立部署、首个真实用例才创建可拆分的后端 TypeScript LangGraph、UUID + `users` + 规范唯一邮箱、首版英文/i18n-ready/后续简中、首迁移不加入验证/状态/角色、宿主机应用 + 容器化基础设施、首版 8–20 组合密码策略，以及英文权威/`_ZH` 跟随文档体系。
 
@@ -656,7 +660,7 @@ D-14 至 D-19 是已接受的审计建议：精确 JWT/Cookie 配置、Origin/Re
 
 D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo` 所有的 Public 仓库；绝不移除 Required CI 或允许通用 Bypass 的 Bootstrap Review Mode；快速 Husky/lint-staged/commitlint 本地检查与权威 CI；基于可信 Build-once Artifact、不可变 Digest Promotion、受保护 Environment、OIDC、Approval 和 Rollback 的后续 GitHub CD 模式；MIT License；以及手动请求、Provider-neutral 的辅助 AI Review Evaluation。
 
-没有剩余的基础产品问题或 Review 门。只剩独立实施门：用户必须明确要求开始代码、脚手架、依赖、Hook、GitHub 配置、迁移或基础设施工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`；下一个任务是 `P-03`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 
@@ -670,13 +674,13 @@ D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo`
 - D-20 至 D-24 的 GitHub Identity/治理、Hook/CI 权威、受控 CD 边界、MIT License 与辅助 AI Review Policy 已接受。
 - 英文权威和 `_ZH` 跟随规则已接受。
 
-只有用户另行明确发出开始实施指令后，才授权实施。Review 意见、文档编辑或“先用这个策略”本身不等于开工授权。
+Owner 已于 2026-08-02 发出独立的实施开始指令。该指令只授权计划内的首个本地认证切片及其列明的仓库治理工作，不授权 Post-MVP 范围、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。
 
 ## 15. 实施阶段待提供信息
 
 以下信息不会重新打开已接受的架构决策；当前处理状态如下：
 
-1. **F-08 Repository Profile — 已解决：** Public 仓库由 `@Donny-Guo` 所有，MIT 是已确认的 Open-source License 选择。F-08 验证并维护带 `Copyright (c) 2026 Donny-Guo` 的标准 License，并将初始敏感路径 Ownership 分配给 `@Donny-Guo`。
+1. **F-08 Repository Profile — Policy 已解决，Artifact 对齐待完成：** Public 仓库由 `@Donny-Guo` 所有，MIT 是已确认的 Open-source License 选择。当前已跟踪的根 `LICENSE` 使用 `Copyright (c) 2026 Dongping Guo (Donny)`，与 D-23 已确认的 `Copyright (c) 2026 Donny-Guo` Notice 不一致。F-08 必须通过可审核的治理变更对齐并验证该 Artifact，并将初始敏感路径 Ownership 分配给 `@Donny-Guo`；不得在 P-02 Gate 中静默重写它。
 2. **F-08 Review Policy — 已解决：** Bootstrap Approval Requirement 必须可满足，且不允许 Owner 通用绕过 Required CI；作者完成 Self-review，并只针对选定的风险 Pull Request 在 CI 全绿后手动请求 Non-required 辅助 AI Review。用三个有代表性的 Pull Request 进行评估，不启用重叠 Reviewer，并在调整 Policy 前记录有效发现、False Positive、漏检和 Latency。Provider 与 Account Detail 不进入 Public Repository。存在合格 Reviewer 时，至少要求一个非作者 Owned-path Approval。
 3. **R-09 Delivery Target — 用户决定后置：** Hosting Platform、Region、Image Registry、`staging`/`production` Domain 和 OIDC Provider 后续决定。Image Evaluation Method 已明确，但尚未选择 Base Image 或 Platform。
 4. **R-09/R-14 Operations — 用户决定后置：** Production Approver、RPO、RTO、SLO、Alerting/On-call、Data Residency 和 Rollback Target 后续决定。
