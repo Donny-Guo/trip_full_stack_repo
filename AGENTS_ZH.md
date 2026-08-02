@@ -4,9 +4,11 @@
 
 ## 1. 项目目标、状态与授权范围
 
-构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js App Router、TypeScript、MUI v6；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；PostgreSQL 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
+构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 15 App Router、TypeScript、MUI v6；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 0.3.31；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
 
-D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。从 `P-03`/`ISSUE-002` 开始按依赖顺序推进，不得超出该切片。
+D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002` 已在本地完成；从 `F-01`/`ISSUE-003` 开始按依赖顺序推进，不得超出该切片。
+
+2026-08-02，Owner 还确认 `P-03` 必须保留 Next.js 15 + MUI v6 组合，使用 TypeORM 0.3.31 与 PostgreSQL 18，并选择 Jest/Supertest 进行 API 测试、Vitest/React Testing Library 进行 Web Unit/Component 测试、Playwright 进行 Browser E2E。将这些视为明确约束，不得静默替换其他 Major 或测试系列。由于上游当前将 MUI v6 列为不再支持，而 Next.js 15 处于 Maintenance LTS，必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权 Major-version 变更；变更仍需 Owner 明确批准。
 
 该授权不包含 Post-MVP、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata；这些 Public Repository Issue 已存在。其他远程 Issue 操作都需单独明确请求。
 
@@ -29,7 +31,7 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 
 ## 3. 仓库与架构边界
 
-计划路径为 `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`、`.husky/`、`apps/{web,api}`、`packages/{api-client,config-eslint,config-typescript,test-utils}`、`infra/docker`、`docs/{adr,api,agent}`，以及根 `AGENTS*`、`PLANS*`、`ISSUES*`、`README*`、`CONTRIBUTING.md`、`SECURITY.md`、`LICENSE`。Workflow 先实现 PR CI/安全；部署等待 R-09。`test-utils` 仅在真实跨应用复用后创建。生成的 `api-client` 文件绝不手工维护。`LICENSE` 保持标准 MIT 正文，修改需 Owner 明确授权。
+计划路径为 `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`、`.husky/`、`apps/{web,api}`、`packages/{api-client,config-eslint,config-typescript,test-utils}`、`infra/docker`、`docs/{adr,api,agent}`、`docs/toolchain*.md`，以及根 `AGENTS*`、`PLANS*`、`ISSUES*`、`README*`、`CONTRIBUTING.md`、`SECURITY.md`、`LICENSE`。Workflow 先实现 PR CI/安全；部署等待 R-09。`test-utils` 仅在真实跨应用复用后创建。生成的 `api-client` 文件绝不手工维护。`LICENSE` 保持标准 MIT 正文，修改需 Owner 明确授权。
 
 - `apps/web` 不得直接访问 PostgreSQL、Redis、Model Provider 或高权限 Agent Tool；`apps/api` 是业务规则、认证/授权和数据访问的权威入口。
 - Web 与 API 不通过相对路径互相导入源码。OpenAPI 生成物可用后，跨应用契约从其产生；不得手工维护会漂移的重复请求/响应 Model。

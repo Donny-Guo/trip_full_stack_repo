@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；下一项为 P-03**\
+状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；P-03 已在本地完成，下一项为 F-01**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
@@ -240,12 +240,14 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 产出：Owner 于 2026-08-02 发出的无歧义实施开始指令。
 - 验收：已于 2026-08-02 满足——Owner 明确授权计划内的首个本地认证切片，覆盖代码、脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。Post-MVP 工作、生产部署/CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍为排除项。
 
-#### P-03 冻结兼容版本矩阵 — `TODO`
+#### P-03 冻结兼容版本矩阵 — `DONE`
 
 - 前置：P-02
-- 动作：确认 Node.js LTS、pnpm、Next.js、React、MUI v6、NestJS、TypeORM、PostgreSQL、pgvector、Prettier、Husky、lint-staged 和 commitlint 的兼容版本；选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，并使用完整 Commit SHA + 版本注释固定每个第三方 Action；记录升级策略。
-- 产出：根版本约束、Toolchain Matrix 和不可变 Action 引用记录。
-- 验收：本地与 CI 使用相同 Node/pnpm；不依赖浮动 `latest` 或 canary/preview；每个 Workflow Dependency 有 Owner 和经 Review 的升级路径。
+- 已确认的 Owner 约束（2026-08-02）：保留 Next.js 15 与 MUI v6；使用 TypeORM 0.3.31 与 PostgreSQL 18；API 测试使用 Jest/Supertest，Web Unit/Component 测试使用 Vitest/React Testing Library，Browser E2E 使用 Playwright。不得静默替换这些 Major 或测试系列。MUI v6 是明确接受的上游支持例外，Next.js 15 处于 Maintenance LTS；必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级。
+- 动作：从 Primary Source 验证 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 15、React/React DOM、MUI v6 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 0.3.31、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
+- 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
+- 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 Next.js 15/MUI v6 支持例外和 TypeORM 0.3.31 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称这些下游检查已经存在。
+- 完成证据（2026-08-02）：`.node-version` 选择 Node 24.18.0；[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版记录精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。File Parity、Local Markdown Link、权威英文 Language Policy、Action SHA Length 与 Whitespace Check 均通过。Installation、Lockfile、Build、Native-runtime、Database、SSR、E2E 与 CI Evidence 仍由下游任务负责。
 
 ### Phase 1 — Monorepo 与本地环境
 
@@ -660,7 +662,7 @@ D-14 至 D-19 是已接受的审计建议：精确 JWT/Cookie 配置、Origin/Re
 
 D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo` 所有的 Public 仓库；绝不移除 Required CI 或允许通用 Bypass 的 Bootstrap Review Mode；快速 Husky/lint-staged/commitlint 本地检查与权威 CI；基于可信 Build-once Artifact、不可变 Digest Promotion、受保护 Environment、OIDC、Approval 和 Rollback 的后续 GitHub CD 模式；MIT License；以及手动请求、Provider-neutral 的辅助 AI Review Evaluation。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`；下一个任务是 `P-03`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 也在本地完成了 `P-03`；下一个任务是 `F-01`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 

@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-001 已在本地完成，下一项为 ISSUE-002**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 已在本地完成，下一项为 ISSUE-003**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，因此 `ISSUE-001` 在本地为 `DONE`，下一个任务是 `ISSUE-002`。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 同日完成 `P-03`；因此 `ISSUE-001` 与 `ISSUE-002` 在本地为 `DONE`，下一个任务是 `ISSUE-003`。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -183,30 +183,45 @@
 
 ### ISSUE-002 — [P-03] 冻结兼容版本矩阵
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** GitHub Issue #2 保持 Open，等待 Owner 的 PR/Review/Close Workflow。
 - **Labels：** `type:task`、`area:foundation`、`area:ci`、`priority:p0`
 - **Blocked by：** ISSUE-001
 - **PR Boundary：** 一个 Version-policy Change
 
 **目标**
 
-在创建脚手架前产出唯一可复现、可支持的 Toolchain 基线。
+在创建脚手架前产出唯一可复现的 Toolchain 基线，使受支持组件和明确接受的支持例外都可审计。
+
+**已确认的 Owner 约束（2026-08-02）**
+
+- 保留 Next.js 15 与 MUI v6；不得静默替换其他 Major。
+- 使用 TypeORM 0.3.31。
+- 使用 PostgreSQL 18。
+- API 测试使用 Jest/Supertest，Web Unit/Component 测试使用 Vitest/React Testing Library，Browser E2E 使用 Playwright。
+- 将 MUI v6 视为明确接受的上游支持例外，并记录 Next.js 15 的 Maintenance LTS 状态。必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级。
 
 **工作**
 
-- [ ] 从 Primary Source 验证兼容的 Node.js LTS、pnpm、Next.js、React、MUI v6、NestJS、TypeORM、PostgreSQL、pgvector、测试、格式化和 Hook 版本。
-- [ ] 选择有明确版本的标准 GitHub-hosted Ubuntu Runner，并记录后续镜像 Benchmark 的 Debian-slim/Alpine 候选。
-- [ ] 定义精确 Pin/Range、升级周期和回滚 Owner；第三方 Action 使用完整 SHA 并附可读版本注释。
+- [x] 从 Primary Source 选择 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 15、React/React DOM、MUI v6 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 0.3.31、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容版本。
+- [x] 记录 Owner 选择的测试栈、PostgreSQL Major 与 Next.js 15/MUI v6 重新评估条件，不保留笼统占位符。
+- [x] 创建权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。每个选择都记录精确版本或有版本的 Image Candidate、Compatible/Supported Intersection、Primary-source Link 与检查日期、Support Status 或 Exception、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target 及下游 Verification Task。
+- [x] 除非 Primary-source 证据否决，否则选择 `ubuntu-24.04`；记录后续镜像 Benchmark 的有版本 Debian-slim/Alpine 候选，但不选择最终生产 Base。
+- [x] 定义精确 Pin/Range、升级周期、回滚 Owner 和 Enforcement-owner Map。P-03 选择策略；F-01 实现根 Package-manager/Engine Enforcement，F-05 固定数据库镜像，B-04 证明 Argon2，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register。
+- [x] 为已知 CI/Security Action 建立初始 Action Register；每个计划引用使用完整 Commit SHA 并附可读版本注释。F-06/F-08 在真实 Workflow 建立完整集合后更新该 Register。
 
 **审核/验收**
 
-- [ ] Local 与 CI 的 Node/pnpm 版本相同且由机器校验。
-- [ ] 不存在浮动 `latest`、未批准 Canary/Preview 或可变 Action Reference。
-- [ ] 兼容证据覆盖 MUI/Next SSR、TypeORM/pgvector、Native Argon2id 及受支持 Runtime。
-- [ ] 每个固定工具都有 Owner 和经 Review 的升级路径。
+- [x] `.node-version` 包含精确的已选 Node Release 并与矩阵一致；记录精确 pnpm Release 及其后续 F-01/F-06 Enforcement Location。
+- [x] 不选择浮动 `latest`、未批准 Canary、Preview、Prerelease 或可变 Action Reference。
+- [x] 在完成的 Toolchain Artifact 中明确记录 MUI v6 支持例外、Next.js 15 Maintenance Status/重新评估触发条件、TypeORM 0.3.31、PostgreSQL 18 及所选测试系列。
+- [x] 兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2id 及受支持的 Node/pnpm Runtime 交集。
+- [x] 每个固定工具都有 Primary-source Link 与检查日期、Owner、经 Review 的升级路径、回滚及下游 Enforcement Task。
+- [x] Issue 不声称在其对应下游任务存在前，Package Installation、Lockfile Resolution、Application Build、Runtime Smoke Test 或 CI 一致性已经通过。
 
-**证据：** Version Matrix、Primary-source Link、Compatibility Note、Action Reference Register。  
-**非目标：** 安装依赖或选择最终生产 Container Base。
+**证据：** `.node-version`、`docs/toolchain.md`、同步的 `docs/toolchain_ZH.md`，以及上述要求的 Matrix/Register 内容。2026-08-02，Exact File/Heading Parity、Local Markdown Link、权威英文 Language Policy、Full Action-SHA Length 与 Whitespace Check 均通过；本地观察到的 Node/pnpm 版本也与选择一致。Dependency Installation 与 Runtime/CI Check 仍是下游证据。
+
+**非目标：** 安装依赖、生成 Lockfile、创建应用脚手架、声称下游 Runtime/CI Evidence 已存在，或选择最终生产 Container Base。
 
 ### ISSUE-003 — [F-01] 创建 pnpm/Turborepo Monorepo 根
 

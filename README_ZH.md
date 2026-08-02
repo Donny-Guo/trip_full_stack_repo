@@ -4,7 +4,7 @@
 
 面向生产环境的旅游 Agent 全栈应用。项目计划使用 pnpm Monorepo 管理 Next.js Web、NestJS API、LangGraph Agent 编排以及共享工程配置，并以 PostgreSQL + pgvector 作为业务数据与向量检索基础。
 
-> 当前状态：**D-01 至 D-24 已确认，首个本地认证切片已于 2026-08-02 获得实施授权**。`P-02`/`ISSUE-001` 已完成，下一项为 `P-03`/`ISSUE-002`。远程 Issue [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) 已覆盖到 Sign Up/Login 页面为止的批准路径，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。根 MIT `LICENSE` 早于本次授权已存在，其 Notice 待 F-08 对齐。生产部署和公开暴露仍未授权。权威状态见英文 [`PLANS.md`](./PLANS.md)。
+> 当前状态：**D-01 至 D-24 已确认，首个本地认证切片已于 2026-08-02 获得实施授权**。`P-03`/`ISSUE-002` 已在本地完成，下一项为 `F-01`/`ISSUE-003`。远程 Issue [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) 已覆盖到 Sign Up/Login 页面为止的批准路径，但仓库仍未创建应用脚手架、自动化、Hook 或业务代码。根 MIT `LICENSE` 早于本次授权已存在，其 Notice 待 F-08 对齐。生产部署和公开暴露仍未授权。权威状态见英文 [`PLANS.md`](./PLANS.md)。
 
 首个纵向切片由多个可独立 Review 的变更集组成；它是里程碑和执行顺序，不承诺生产级基础、API、Web、集成与质量工作全部在一个自然日内完成。
 
@@ -27,21 +27,22 @@ Agent、航班供应商接入、向量检索、Swagger、Refresh Token/轮换/�
 | --- | --- | --- |
 | Monorepo | pnpm workspace | 单一根锁文件，内部依赖使用 workspace protocol |
 | 任务编排 | Turborepo | 负责跨包任务依赖和本地缓存；远程缓存待 CI 与敏感信息审计后启用 |
-| Web | Next.js App Router + TypeScript | 默认 Server Component，需要交互时才下沉客户端边界 |
+| Web | Next.js 15 App Router + TypeScript | 默认 Server Component，需要交互时才下沉客户端边界 |
 | UI | Material UI v6 | 统一 Theme、SSR 样式集成、响应式与可访问性 |
 | Language | English first，i18n-ready | 首版英文；文案从第一天集中管理，后续至少增加简体中文 `zh-CN`；项目文档也以英文无后缀文件为权威 |
 | API | NestJS REST + TypeScript | 领域模块化、DTO 校验、统一异常契约 |
 | Agent | LangGraph.js | 初期位于 NestJS AgentModule，保留独立服务化边界 |
-| Database | PostgreSQL + pgvector | 事务数据与向量数据同库起步 |
-| ORM | TypeORM | 与 NestJS 集成成熟并原生映射 pgvector；生产禁用 schema sync |
+| Database | PostgreSQL 18 + pgvector | 事务数据与向量数据同库起步 |
+| ORM | TypeORM 0.3.31 | 首切片已确认的兼容版本线；原生向量列映射在向量设计获批前保持不用；生产禁用 schema sync |
 | API contract | Swagger/OpenAPI（后续） | 由 OpenAPI 生成 Web 客户端，避免类型漂移 |
 | Auth | Email/password + Access JWT | JWT 放入同源 HttpOnly Cookie；Refresh、轮换和 Redis 后续加入 |
 | Cache/coordination | Redis（后续） | 缓存、限流、短生命周期协调；不作为主数据源 |
 | Source/automation | GitHub + GitHub Actions | Pull Request CI、Repository Ruleset、安全自动化及后续 Environment-gated Delivery |
 | Repository license | MIT | 由 `@Donny-Guo` 所有的 Public Open-source Repo；根 License Artifact 使用标准 MIT 正文与已批准 Notice |
 | Local commit checks | Husky + lint-staged + commitlint | 快速 Staged-file 检查与 Conventional Commits；CI 仍是权威 |
+| Tests | Jest + Supertest；Vitest + React Testing Library；Playwright | 分别用于 API Unit/Integration、Web Unit/Component 与 Browser E2E |
 
-正式创建脚手架时再锁定经过兼容性验证的精确版本，不使用 `latest` 漂移安装。
+P-03 在创建脚手架前通过 [`docs/toolchain_ZH.md`](./docs/toolchain_ZH.md) 冻结经过兼容性验证的精确基线。Owner 于 2026-08-02 确认 Next.js 15 + MUI v6、TypeORM 0.3.31、PostgreSQL 18 及表中测试栈。由于 MUI v6 已不再获得上游支持，而 Next.js 15 处于 Maintenance LTS，必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级。不得默认安装浮动 `latest` 或 Preview Release。
 
 ## 计划中的仓库结构
 
@@ -94,7 +95,9 @@ Agent、航班供应商接入、向量检索、Swagger、Refresh Token/轮换/�
 ├── docs/
 │   ├── adr/
 │   ├── agent/
-│   └── api/
+│   ├── api/
+│   ├── toolchain.md                # P-03 版本矩阵、策略与 Action Register
+│   └── toolchain_ZH.md             # 简体中文跟随版
 ├── .github/
 │   ├── workflows/                    # 首个切片加入 CI/安全；R-09 后加入部署
 │   ├── CODEOWNERS
