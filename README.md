@@ -4,7 +4,7 @@ Production-oriented planning for a full-stack travel agent application. The repo
 
 Simplified Chinese translation: [`README_ZH.md`](./README_ZH.md). This English file is authoritative.
 
-> Status: **decisions D-01 through D-24 are confirmed, and the first local authentication slice was authorized for implementation on 2026-08-02**. `P-02`/`ISSUE-001` is complete and `P-03`/`ISSUE-002` is next. Remote issues [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) cover the approved path through the Sign Up and Login pages, but no application scaffolding, automation, hooks, or business code exists yet. A root MIT `LICENSE` predates this authorization and awaits F-08 notice alignment. Production deployment and public exposure remain unauthorized. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
+> Status: **decisions D-01 through D-24 are confirmed, and the first local authentication slice was authorized for implementation on 2026-08-02**. `P-03`/`ISSUE-002` is complete locally and `F-01`/`ISSUE-003` is next. Remote issues [#1–#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues) cover the approved path through the Sign Up and Login pages, but no application scaffolding, automation, hooks, or business code exists yet. A root MIT `LICENSE` predates this authorization and awaits F-08 notice alignment. Production deployment and public exposure remain unauthorized. See [`PLANS.md`](./PLANS.md) for authoritative scope and task status.
 
 The first vertical slice is a milestone composed of several independently reviewable change sets, not a promise that production-quality foundation, API, Web, integration, and quality work all fit into one calendar day.
 
@@ -27,21 +27,22 @@ Agent graphs, travel-provider integration, vector retrieval, Swagger-generated c
 | --- | --- | --- |
 | Monorepo | pnpm workspace | One root lockfile; internal dependencies use the workspace protocol |
 | Task orchestration | Turborepo | Cross-package task graph and local cache; remote cache only after CI and sensitive-log review |
-| Web | Next.js App Router + TypeScript | Server Components by default; client boundaries only for interaction |
+| Web | Next.js 15 App Router + TypeScript | Server Components by default; client boundaries only for interaction |
 | UI | Material UI v6 | Central theme, official SSR integration, responsive behavior, and accessibility |
 | Product language | English first, i18n-ready | Centralized English messages from the first slice; later add at least Simplified Chinese (`zh-CN`) |
 | API | NestJS REST + TypeScript | Domain modules, DTO validation, and a stable error contract |
 | Agent | LangGraph.js | Initially inside NestJS `AgentModule`, with an extractable boundary |
-| Database | PostgreSQL + pgvector | Begin with transactional data and retain vector capability in the same database |
-| ORM | TypeORM | Mature NestJS integration and native vector-column mapping; schema sync disabled in production |
+| Database | PostgreSQL 18 + pgvector | Begin with transactional data and retain vector capability in the same database |
+| ORM | TypeORM 0.3.31 | Confirmed compatibility line for the first slice; native vector-column mapping remains unused until an approved vector design; schema sync is disabled in production |
 | API contract | Swagger/OpenAPI later | Generate the Web client and prevent contract drift |
 | Auth | Email/password + access JWT | JWT in a same-origin HttpOnly cookie; refresh rotation and Redis later |
 | Cache/coordination | Redis later | Cache, rate limiting, and short-lived coordination; never the User source of truth |
 | Source and automation | GitHub + GitHub Actions | Pull-request CI, repository rulesets, security automation, and later environment-gated delivery |
 | Repository license | MIT | Public open-source repository owned by `@Donny-Guo`; the root license artifact uses the standard MIT text and approved notice |
 | Local commit checks | Husky + lint-staged + commitlint | Fast staged-file checks and Conventional Commits; CI remains authoritative |
+| Tests | Jest + Supertest; Vitest + React Testing Library; Playwright | API unit/integration, Web unit/component, and browser E2E respectively |
 
-Exact compatible versions will be pinned only when scaffolding begins. Do not install floating `latest` or preview releases by default.
+P-03 freezes the exact compatible baseline before scaffolding in [`docs/toolchain.md`](./docs/toolchain.md). The owner confirmed Next.js 15 + MUI v6, TypeORM 0.3.31, PostgreSQL 18, and the listed test stack on 2026-08-02. Because MUI v6 is no longer upstream-supported and Next.js 15 is in Maintenance LTS, re-evaluate the pairing by 2026-09-21 or before public exposure, whichever comes first, and immediately upon a critical unpatched security or compatibility blocker. A review does not authorize an upgrade. Do not install floating `latest` or preview releases by default.
 
 ## Planned repository structure
 
@@ -94,7 +95,9 @@ The following is the target structure; it does not imply that these files exist 
 ├── docs/
 │   ├── adr/
 │   ├── agent/
-│   └── api/
+│   ├── api/
+│   ├── toolchain.md                # P-03 version matrix, policy, and Action register
+│   └── toolchain_ZH.md             # Simplified Chinese follower
 ├── .github/
 │   ├── workflows/                    # CI/security first; deployment after R-09
 │   ├── CODEOWNERS

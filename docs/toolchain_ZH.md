@@ -1,0 +1,139 @@
+# Toolchain 基线
+
+本文件是 `P-03`/`ISSUE-002` 权威英文产出 [`toolchain.md`](./toolchain.md) 的简体中文跟随版。两者冲突时以英文为准并修正本文件。
+
+- 状态：**首个本地认证切片已冻结**
+- 证据检查日期：**2026-08-02**
+- Owner：**`@Donny-Guo`**
+- Runtime 版本线：**Node.js 24.18.0 + pnpm 11.18.0**
+- 明确约束：**Next.js 15 + MUI v6、TypeORM 0.3.31、PostgreSQL 18**
+
+“已冻结”表示下游任务必须使用这些精确 Direct Selection；只有经 Review 的同一变更更新本矩阵后才能改动。它不表示依赖已经安装、Lockfile 已存在、应用可以 Build、Native Module 可以加载、数据库镜像已经 Pull 或 CI 已通过。那些事实必须由下文指定的 Downstream Enforcement Task 证明。
+
+## 已确认选择与支持例外
+
+- Web Unit/Component 测试使用 Vitest 与 React Testing Library；Browser E2E 使用 Playwright。
+- API Unit/Integration 测试使用 Jest 与 Supertest。
+- PostgreSQL 使用 Major 18，本基线选择当前 Minor 18.4。
+- Next.js 暂时保留在维护中的 15.x Backport 版本线，MUI 暂时保留 v6。
+- MUI v6 已不在上游支持范围。Next.js 15 处于 Maintenance LTS，只接收 Critical Fix 与必要 Security Update。必须在 **2026-09-21** 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级；Major 变更仍需 Owner 明确批准。
+
+## Pin 与更新策略
+
+1. F-01 设置 `save-exact=true`、`engine-strict=true`、根 `packageManager: "pnpm@11.18.0"`、精确 Node/pnpm Engine Constraint 及唯一 Frozen Root Lockfile。所有 Direct Runtime/Development Dependency 使用精确版本；内部依赖使用 `workspace:`。Transitive Version 由 Lockfile 控制。
+2. `.node-version` 精确为 `24.18.0`。Local Setup 与 F-06 CI 读取同一文件，并在执行任务前断言实际 `node --version` 与 `pnpm --version`。
+3. Install Command 不得使用未限定 Package、`latest`、Wildcard、Canary、Preview、RC、Beta 或其他 Prerelease。Scaffold Generator 的产出必须先归一化至本矩阵才能验收。
+4. GitHub Action 使用完整 40 字符 Commit SHA，并附可读 Release Comment。Mutable Tag 只能作为 Review/Source Metadata，绝不作为可执行 `uses:` Reference。
+5. 本文中的 Versioned Container Tag 是 Candidate，不是 Immutable Deployment Reference。F-05 将数据库镜像解析为 Multi-architecture Digest 并验证 `server_version` 与 `extversion`；R-09 后续选择并以 Digest 固定最终应用镜像。
+6. 常规 Direct-dependency 每月 Review；受支持 Runtime/Framework/Database 版本线每季度复核；Security Advisory 立即处理，不等待常规周期。Dependabot 可以提出更新，但不得自动 Merge。
+7. Package-family Update 与 Feature Work 分离。更新须记录 Source Evidence、Lockfile Diff、相关 Migration Note、Downstream Check 与 Rollback Target。
+
+## Rollback Class
+
+每个 Matrix Row 均由 `@Donny-Guo` 负责，并使用以下一种经 Review 的 Rollback Class。
+
+| Class | 更新周期 | Rollback Target 与约束 |
+| --- | --- | --- |
+| R1 — Runtime/Package Manager | Security 立即处理；每月 Patch Review；每季度 Support Review | 将 `.node-version`、根 Engine/Package-manager Pin 与 Lockfile 回退至最后一个 Green 且经 Review 的 Commit。Runtime Rollback 不与 Feature Change 混合。 |
+| R2 — Application/Framework Package | Security 立即处理；每月 Patch Review；Major/Minor 仅通过独立 Compatibility Change | 将精确 Direct Pin 与 Lockfile 回退至最后一个 Green Package-family Commit，再重复所属 Build/Test Task。Database Migration 保持 Forward-compatible，不重写历史。 |
+| R3 — Developer/Test Tool | 每月或 Security 立即处理 | 将 Tool/Config Pin 与 Lockfile 回退至最后一个 Green Engineering-config Commit；重复 Format、Lint、Typecheck 及受影响 Test Task。 |
+| R4 — Database/Container Candidate | Security 立即处理；每月 Image/Extension Review；每次上游 PostgreSQL Minor Release 都 Review | F-05 只有在 Clean Local-data Recreation 或已测试 Backup/Restore Path 下才能回退 Image Digest。绝不让更旧 PostgreSQL Major 启动更新版本的数据目录。Production Rollback Design 等待 R-09。 |
+| R5 — GitHub Action | Security 立即处理；每月 Tag-to-SHA Review | 将 Action SHA 与 Register Entry 一起回退至最后一个经 Review Workflow Commit。绝不退回 Mutable Tag。 |
+
+## 精确版本矩阵
+
+本节全部 Source Link 均于 2026-08-02 检查。npm Link 指向 Publisher 控制的 Registry Record；Project Documentation 与 Release-policy Link 提供 Compatibility/Support Context。
+
+### Runtime 与 Orchestration
+
+| Component | 精确选择 | Compatibility 与 Support Evidence | Pin / Downstream Enforcement | Class | Primary Source |
+| --- | --- | --- | --- | --- | --- |
+| Node.js | `24.18.0` | Node 24 是 LTS，EOL 为 2028-04-30，并满足最严格的已选 Engine Floor：pnpm `>=22.13`、lint-staged `>=22.22.1`、jsdom `^24.15.0`。 | 当前 `.node-version`；F-01 Root Engine/Package Manager；F-06 CI Assertion | R1 | [Node Releases](https://nodejs.org/en/about/previous-releases) |
+| pnpm | `11.18.0` | 要求 Node `>=22.13`；已选 Node 满足。必须只有一个 Root Lockfile，并使用 `workspace:`。 | F-01 `packageManager`、Engine 与 `.npmrc`；F-06 Frozen Install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
+| TypeScript | `5.9.3` | 与当前 Nest 11 Starter 一致，且位于 `typescript-eslint` `>=4.8.4 <6.1.0` 与 `ts-jest` `>=4.3 <7` 范围内。明确排除 TypeScript 7.0.2，因为所选 Lint Transformer 尚不支持。 | F-01 Root Pin；F-02/F-03 App Config；F-04 Shared Strict Config | R2 | [TypeScript 5.9.3](https://www.npmjs.com/package/typescript/v/5.9.3)、[Nest Starter](https://github.com/nestjs/typescript-starter) |
+| Turborepo | `2.10.8` | Stable 2.x Task Orchestrator；Remote Cache 保持禁用。 | F-01 Root Dependency 与 `turbo.json`；F-06 Task Invocation | R3 | [turbo 2.10.8](https://www.npmjs.com/package/turbo/v/2.10.8) |
+| GitHub Runner | `ubuntu-24.04` | Stable Standard x64 VM Label，支持 Docker/Service Container；`ubuntu-26.04` 是 Preview，`ubuntu-slim` 无法承载常规 Docker CI Workload。 | F-06 全部常规 Node/Database Job | R5 | [GitHub-hosted Runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)、[Runner Images](https://github.com/actions/runner-images) |
+
+### Web Runtime 与 UI
+
+| Component | 精确选择 | Compatibility 与 Support Evidence | Pin / Downstream Enforcement | Class | Primary Source |
+| --- | --- | --- | --- | --- | --- |
+| Next.js | `next@15.5.22`、`eslint-config-next@15.5.22` | `15.5.22` 是当前 Stable 15.x Backport；接受 Node `>=20`、React/React DOM `^19.0.0` 与最高 ESLint 9.x。该 Major 处于 Maintenance LTS，每次更新都需 Compatibility Review。 | F-02 Web Manifest/Build；F-04 Lint Config；F-06 Production Build | R2 | [next 15.5.22](https://www.npmjs.com/package/next/v/15.5.22)、[eslint-config-next 15.5.22](https://www.npmjs.com/package/eslint-config-next/v/15.5.22)、[Support Policy](https://nextjs.org/support-policy) |
+| React | `react@19.2.8`、`react-dom@19.2.8`、`@types/react@19.2.18`、`@types/react-dom@19.2.4` | Next 15.5.22 与 MUI 6.5.0 均接受 React 19；React DOM 要求匹配的 `^19.2.8` Runtime。 | F-02 Web Manifest；F-06 Build/Test | R2 | [react 19.2.8](https://www.npmjs.com/package/react/v/19.2.8)、[react-dom 19.2.8](https://www.npmjs.com/package/react-dom/v/19.2.8)、[React Types](https://www.npmjs.com/package/@types/react/v/19.2.18)、[React DOM Types](https://www.npmjs.com/package/@types/react-dom/v/19.2.4) |
+| MUI | `@mui/material@6.5.0`、`@mui/icons-material@6.5.0`、`@mui/material-nextjs@6.5.0` | 最后一个 v6 Integration Package 接受 Next `^15`、React `^19`，并暴露 `v15-appRouter`。MUI v6 是明确接受的 Unsupported Major。 | W-01 Manifest、`AppRouterCacheProvider`、Theme 与 SSR Proof | R2 | [Material 6.5.0](https://www.npmjs.com/package/@mui/material/v/6.5.0)、[Icons 6.5.0](https://www.npmjs.com/package/@mui/icons-material/v/6.5.0)、[Next Integration 6.5.0](https://www.npmjs.com/package/@mui/material-nextjs/v/6.5.0)、[MUI Support](https://mui.com/material-ui/getting-started/support/)、[App Router Guide](https://mui.com/material-ui/integrations/nextjs/) |
+| Emotion | `@emotion/react@11.14.0`、`@emotion/styled@11.14.1`、`@emotion/cache@11.14.0` | 满足 MUI v6 与 `@mui/material-nextjs` Peer Range。App Router Path 不选择 Optional `@emotion/server`。 | W-01 Web Manifest 与 SSR Cache Provider | R2 | [Emotion React](https://www.npmjs.com/package/@emotion/react/v/11.14.0)、[Emotion Styled](https://www.npmjs.com/package/@emotion/styled/v/11.14.1)、[Emotion Cache](https://www.npmjs.com/package/@emotion/cache/v/11.14.0) |
+
+### API、ORM 与 Database
+
+| Component | 精确选择 | Compatibility 与 Support Evidence | Pin / Downstream Enforcement | Class | Primary Source |
+| --- | --- | --- | --- | --- | --- |
+| Nest Runtime/Testing | `@nestjs/common@11.1.28`、`@nestjs/core@11.1.28`、`@nestjs/platform-express@11.1.28`、`@nestjs/testing@11.1.28` | Nest Core 要求 Node `>=20`；四个 Package 使用同一 11.1.28 版本线及兼容 11.x Peer。 | F-03 API Manifest/Build/Health；F-03 起的 API Test | R2 | [Nest Common](https://www.npmjs.com/package/@nestjs/common/v/11.1.28)、[Core](https://www.npmjs.com/package/@nestjs/core/v/11.1.28)、[Express Adapter](https://www.npmjs.com/package/@nestjs/platform-express/v/11.1.28)、[Testing](https://www.npmjs.com/package/@nestjs/testing/v/11.1.28) |
+| Nest CLI/Build Support | `@nestjs/cli@11.0.24`、`@nestjs/schematics@11.1.0`、`ts-loader@9.6.2`、`ts-node@10.9.2`、`tsconfig-paths@4.2.0`、`rimraf@6.1.3` | CLI 要求 Node `>=20.11`；Schematics 接受 TypeScript `>=4.8.2`；其他工具接受 Node 24 与 TypeScript 5.9.3。 | F-03 Scaffold 归一化至这些 Pin；F-04 Shared Command | R3 | [Nest CLI](https://www.npmjs.com/package/@nestjs/cli/v/11.0.24)、[Schematics](https://www.npmjs.com/package/@nestjs/schematics/v/11.1.0)、[ts-loader](https://www.npmjs.com/package/ts-loader/v/9.6.2)、[ts-node](https://www.npmjs.com/package/ts-node/v/10.9.2)、[tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths/v/4.2.0)、[rimraf](https://www.npmjs.com/package/rimraf/v/6.1.3) |
+| Nest Foundation | `@nestjs/config@4.0.4`、`reflect-metadata@0.2.2`、`rxjs@7.8.2`、`class-validator@0.15.1`、`class-transformer@0.5.1`、`@types/node@24.13.3`、`@types/express@5.0.6` | 全部 Peer Range 与 Nest 11、Node 24 有交集。TypeScript Configuration 后续超过 5.9 时必须显式列出 `types`。 | F-03 Base Runtime/Types；B-01 Configuration；Transport Validation Task | R2 | [Nest Config](https://www.npmjs.com/package/@nestjs/config/v/4.0.4)、[reflect-metadata](https://www.npmjs.com/package/reflect-metadata/v/0.2.2)、[RxJS](https://www.npmjs.com/package/rxjs/v/7.8.2)、[class-validator](https://www.npmjs.com/package/class-validator/v/0.15.1)、[class-transformer](https://www.npmjs.com/package/class-transformer/v/0.5.1)、[Node Types](https://www.npmjs.com/package/@types/node/v/24.13.3)、[Express Types](https://www.npmjs.com/package/@types/express/v/5.0.6) |
+| TypeORM/PostgreSQL Driver | `@nestjs/typeorm@11.0.3`、`typeorm@0.3.31`、`pg@8.22.0`、`@types/pg@8.20.3` | Nest Adapter 接受 Nest 11 与 TypeORM `^0.3`；TypeORM 0.3.31 要求 Node `>=16.13` 并接受 `pg ^8.5.1`；已选版本满足全部范围。 | B-01 API Manifest/Config；只用 Migration；生产 `synchronize=false` | R2 | [Nest TypeORM](https://www.npmjs.com/package/@nestjs/typeorm/v/11.0.3)、[TypeORM 0.3.31](https://www.npmjs.com/package/typeorm/v/0.3.31)、[pg 8.22.0](https://www.npmjs.com/package/pg/v/8.22.0)、[pg Types](https://www.npmjs.com/package/@types/pg/v/8.20.3) |
+| PostgreSQL/pgvector | PostgreSQL `18.4`；pgvector `0.8.5`；F-05 Candidate `pgvector/pgvector:0.8.5-pg18-trixie` | PostgreSQL 18.4 支持至 2030-11-14。pgvector 提供 PG18 Image，TypeORM 支持 PostgreSQL `vector`/`halfvec`，但本切片不创建 Vector Column。Candidate Tag 在 F-05 记录 Digest 并验证版本前仍可变。 | F-05 Compose Image/Digest、Extension Bootstrap 与 Role Test；B-01 Connection；后续 Vector ADR | R4 | [PostgreSQL Policy](https://www.postgresql.org/support/versioning/)、[18.4 Notes](https://www.postgresql.org/docs/release/18.4/)、[pgvector](https://github.com/pgvector/pgvector)、[PG18 Image Tags](https://hub.docker.com/r/pgvector/pgvector/tags?name=pg18)、[TypeORM Vector Columns](https://typeorm.io/docs/entity/entities/#vector-columns) |
+| Argon2 | `argon2@0.45.1` | Package Engine 为 Node `>=16.17`；Node 24 满足。B-04 仍须在 Host、CI 及后续 Image Candidate 上证明 Native Binary/Build Path，并按当前 OWASP Floor Benchmark Argon2id。 | B-04 Manifest、Native Load Test、Benchmark 与 Redaction Test | R2 | [argon2 0.45.1](https://www.npmjs.com/package/argon2/v/0.45.1)、[OWASP Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) |
+
+### Quality、Test 与 Hook
+
+| Component | 精确选择 | Compatibility 与 Support Evidence | Pin / Downstream Enforcement | Class | Primary Source |
+| --- | --- | --- | --- | --- | --- |
+| ESLint | `eslint@9.39.5`、`@eslint/js@9.39.5`、`typescript-eslint@8.65.0`、`eslint-config-prettier@10.1.8`、`globals@17.9.0` | Next 15 Config 最高接受 ESLint 9.x，不接受 10.x。`typescript-eslint` 接受 TypeScript 5.9.3 与 ESLint 9。本基线明确排除 ESLint 10。 | F-04 Shared Flat Config；F-07 Staged Lint；F-06 Lint | R3 | [ESLint](https://www.npmjs.com/package/eslint/v/9.39.5)、[ESLint JS](https://www.npmjs.com/package/@eslint/js/v/9.39.5)、[typescript-eslint](https://www.npmjs.com/package/typescript-eslint/v/8.65.0)、[config-prettier](https://www.npmjs.com/package/eslint-config-prettier/v/10.1.8)、[globals](https://www.npmjs.com/package/globals/v/17.9.0) |
+| Prettier | `prettier@3.9.6` | Stable 3.x，与 Nest Schematics `^3` Peer 兼容。Formatting 使用独立 Command，不作为 ESLint Plugin Side Effect。 | F-04 Root Policy；F-07 Staged Formatting；F-06 `format:check` | R3 | [Prettier 3.9.6](https://www.npmjs.com/package/prettier/v/3.9.6) |
+| API Test | `jest@30.4.2`、`ts-jest@29.4.12`、`@types/jest@30.0.0`、`supertest@7.2.2`、`@types/supertest@7.2.1` | Jest 明确支持 Node 24；ts-jest 接受 Jest 30 与 TypeScript `<7`；Supertest 支持 Nest Express HTTP Adapter。涉及 Persistence 的 Integration Test 使用真实 PostgreSQL。 | F-03 Test Entry；后续 API Unit/Integration Task；F-06 | R3 | [Jest](https://www.npmjs.com/package/jest/v/30.4.2)、[ts-jest](https://www.npmjs.com/package/ts-jest/v/29.4.12)、[Jest Types](https://www.npmjs.com/package/@types/jest/v/30.0.0)、[Supertest](https://www.npmjs.com/package/supertest/v/7.2.2)、[Supertest Types](https://www.npmjs.com/package/@types/supertest/v/7.2.1)、[Nest Testing Guide](https://docs.nestjs.com/fundamentals/testing) |
+| Web Unit/Component Test | `vitest@4.1.10`、`vite@8.2.0`、`@vitejs/plugin-react@6.0.5`、`jsdom@30.0.1`、`@testing-library/react@16.3.2`、`@testing-library/dom@10.4.1`、`@testing-library/user-event@14.6.1`、`@testing-library/jest-dom@7.0.0` | Vitest 接受 Node 24 与 Vite 8；jsdom 要求 Node `^24.15`，24.18.0 满足；Testing Library 接受 React 19。Async Server Component 通过 E2E 覆盖，不强塞入 jsdom。 | F-02/F-04 Test Config；Component Task；F-06 | R3 | [Vitest](https://www.npmjs.com/package/vitest/v/4.1.10)、[Vite](https://www.npmjs.com/package/vite/v/8.2.0)、[React Plugin](https://www.npmjs.com/package/@vitejs/plugin-react/v/6.0.5)、[jsdom](https://www.npmjs.com/package/jsdom/v/30.0.1)、[React Testing Library](https://www.npmjs.com/package/@testing-library/react/v/16.3.2)、[DOM Testing Library](https://www.npmjs.com/package/@testing-library/dom/v/10.4.1)、[user-event](https://www.npmjs.com/package/@testing-library/user-event/v/14.6.1)、[jest-dom](https://www.npmjs.com/package/@testing-library/jest-dom/v/7.0.0)、[Next Testing Guide](https://nextjs.org/docs/app/guides/testing) |
+| Browser E2E | `@playwright/test@1.62.1` | 要求 Node `>=20`；已选 Node 满足。负责 Browser User Flow 与 Async Server Component Coverage。Browser Binary 仅由需要它的任务安装。 | 首个所属 E2E Task 与 F-06 Applicable Job | R3 | [Playwright 1.62.1](https://www.npmjs.com/package/@playwright/test/v/1.62.1) |
+| Hook/Commit Policy | `husky@9.1.7`、`lint-staged@17.3.0`、`@commitlint/cli@21.2.1`、`@commitlint/config-conventional@21.2.0` | Engine Floor 分别为 Node 18、22.22.1、22.12；Node 24.18.0 全部满足。Hook 仍是可绕过的 Local Feedback，不执行 Network/Database/Build。 | F-07 Root Manifest/Config 与 `.husky`；F-06 PR-title Check | R3 | [Husky](https://www.npmjs.com/package/husky/v/9.1.7)、[lint-staged](https://www.npmjs.com/package/lint-staged/v/17.3.0)、[commitlint CLI](https://www.npmjs.com/package/@commitlint/cli/v/21.2.1)、[Conventional Config](https://www.npmjs.com/package/@commitlint/config-conventional/v/21.2.0) |
+
+## Container Candidate，而非最终 Image
+
+| 用途 | Versioned Candidate | 仅为 Candidate 的原因 | Owner Task | 2026-08-02 Source |
+| --- | --- | --- | --- | --- |
+| 首选 Application Baseline | `node:24.18.0-trixie-slim` | 当前 Debian-slim/glibc Baseline，用于后续 Web/API Multi-stage、Non-root Benchmark。R-09 必须 Scan 并固定 Manifest Digest。 | R-09 | [Official Node Image Tags](https://hub.docker.com/_/node/tags?name=24.18.0) |
+| 对比 Application Baseline | `node:24.18.0-alpine3.23` | 仅用于 musl 对比。不能只因体积批准；Argon2 Native Loading、amd64/arm64、Build/Startup Behavior 与 Security-update Latency 必须在 Benchmark 中胜出。 | R-09 | [Alpine Tag](https://hub.docker.com/_/node/tags?name=24.18.0-alpine3.23)、[Node Image Variants](https://github.com/nodejs/docker-node#image-variants) |
+| Local/CI Database Baseline | `pgvector/pgvector:0.8.5-pg18-trixie` | F-05 必须解析 Multi-arch Digest，并验证 PostgreSQL `18.4` 与 `vector` `0.8.5`；Runtime Role 绝不安装 Extension。 | F-05/F-06 | [pgvector PG18 Tags](https://hub.docker.com/r/pgvector/pgvector/tags?name=pg18) |
+
+P-03 不选择 Production Application Base、Deployment Digest、Registry 或 CD Platform。
+
+## 初始 Immutable GitHub Actions Register
+
+以下 Release Tag 于 2026-08-02 通过 Official GitHub API 解析。Workflow 必须复制此处的 Full SHA。GitHub 文档将完整 Commit SHA 视为唯一 Immutable Action Reference。F-06/F-08 在需要其他 SHA 或新增 Action 时，必须重新 Review 当前 Release，并在同一变更中更新本 Register。
+
+| 用途 | Executable Reference | 可读 Release | Owner Task / Permission Note |
+| --- | --- | --- | --- |
+| Checkout | `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1` | `v7.0.1` | F-06/F-08；只有经狭窄 Review 的 Job 需要时才保留 Credential，否则禁用 |
+| 安装所选 Node | `actions/setup-node@820762786026740c76f36085b0efc47a31fe5020` | `v7.0.0` | F-06；读取 `.node-version`；不得从 Untrusted Output 建立 Trusted Cache |
+| 激活所选 pnpm | `pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271` | `v6.0.9` | F-06；版本必须与 Root `packageManager` 一致 |
+| Dependency Review | `actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294` | `v5.0.0` | F-08；除非 Official Requirement 证明需要，否则仅 Pull-request Read Permission |
+| CodeQL Init/Analyze | `github/codeql-action/init@f205ea1c3313d32999d8d6a48b4f6530d4437b38` 与 `github/codeql-action/analyze@f205ea1c3313d32999d8d6a48b4f6530d4437b38` | `v4.37.4` | F-08；Job-scoped `security-events: write`，其他位置 Read-only |
+
+Source：[GitHub Secure-use Reference](https://docs.github.com/en/actions/reference/security/secure-use)、[Checkout Release](https://github.com/actions/checkout/releases/tag/v7.0.1)、[setup-node Release](https://github.com/actions/setup-node/releases/tag/v7.0.0)、[pnpm/action-setup Release](https://github.com/pnpm/action-setup/releases/tag/v6.0.9)、[Dependency-review Release](https://github.com/actions/dependency-review-action/releases/tag/v5.0.0)、[CodeQL Tag](https://github.com/github/codeql-action/releases/tag/v4.37.4)。
+
+不投机选择 Cache、Path-filter、Artifact、Docker-build 或 Deployment Action。首个真实 Owner Workflow 必须新增经 Review 的 Full-SHA Register Entry。
+
+## Enforcement-owner Map
+
+| Artifact 或 Assertion | 实现/证明任务 | 必需证据 |
+| --- | --- | --- |
+| `.node-version` 等于 `24.18.0`；本文件与英文权威版一致 | P-03 / ISSUE-002 | File Comparison、Markdown/Link/Language Check |
+| 精确 `packageManager`、Node/pnpm Engine、`save-exact`、Workspace Protocol、Root Lockfile 与 Turbo Graph | F-01 / ISSUE-003 | Clean Frozen Install 与 Root Task Discovery |
+| 精确 Next/React/Type Package 与独立 Web Build | F-02 / ISSUE-004 | Web Lint/Typecheck/Test/Build |
+| 精确 Nest/Runtime/Build/Test Package 与独立 API Lifecycle | F-03 / ISSUE-005 | API Lint/Typecheck/Test/Build/Start/Health/Shutdown |
+| Shared TypeScript 5.9.3、ESLint 9 与 Prettier Policy | F-04 / ISSUE-006 | Positive/Negative Root Config Check |
+| PostgreSQL 18.4 + pgvector 0.8.5 Digest 与 Role Separation | F-05 / ISSUE-007 | Clean Pull/Start、`server_version`、`extversion`、Health 与 Denied-capability Test |
+| MUI 6.5.0 + Next 15 Cache Provider 与 Hydration/Style Ordering | W-01 / ISSUE-008 | Server Render、Hydration、Navigation 与 Production Build Evidence |
+| Argon2 0.45.1 Native Path 与 OWASP-floor Benchmark | B-04 / ISSUE-009 | Native Load/Hash/Verify、Benchmark 与 Redaction Evidence |
+| `ubuntu-24.04`、精确 Node/pnpm、Frozen Install、Database Service、Stable Aggregate Result 与 Action SHA | F-06 / ISSUE-011 | Workflow Review 与 Trusted/Fork Failure-path Run |
+| Husky/lint-staged/commitlint Behavior | F-07 / ISSUE-012 | Valid/Invalid 与 Partial-staging Check |
+| Dependency Review、CodeQL、Dependabot、Repository Control 与完整 Action Register | F-08 / ISSUE-013 | Checked-in Governance 与 Verified Remote-setting Checklist |
+
+## P-03 验收记录
+
+- `.node-version` 与矩阵选择同一精确 Node Release。
+- Node 24.18.0 满足全部已记录 Package Engine Floor。
+- 全部 Direct Selection 是 Stable Exact Version；没有所选 Dependency 或 Action Reference 使用 Floating/Prerelease。
+- 已记录 Next/MUI、Nest/TypeORM/PostgreSQL、pgvector、Test Runner、Native Argon2、Runner 与 Action Reference 的 Compatibility/Support Evidence 及检查日期。
+- 每个选择继承明确 Owner、Update Cadence、Rollback Class、Pin Location 与 Downstream Verification Task。
+- 本文明确不声称属于后续任务的 Installation、Lockfile、Build、Native Runtime、Database、SSR、E2E 或 CI Evidence。
+
+因此，在中英文文档通过 Repository Documentation Check 后，P-03 可以作为 Version-policy Task 关闭。下游失败须通过经 Review 的 Matrix Update 重新打开相应 Compatibility Decision；绝不使用 `--force`、Legacy Peer Handling、Unpinned Replacement 或 Skipped Test 隐藏失败。

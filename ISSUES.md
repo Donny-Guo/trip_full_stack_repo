@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-001 is complete locally and ISSUE-002 is next**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 is complete locally and ISSUE-003 is next**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02` on 2026-08-02, so `ISSUE-001` is `DONE` locally and `ISSUE-002` is the next task.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02` and the version-policy evidence completed `P-03` on 2026-08-02, so `ISSUE-001` and `ISSUE-002` are `DONE` locally and `ISSUE-003` is next.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -183,30 +183,45 @@ Create an auditable implementation gate so planning approval cannot be mistaken 
 
 ### ISSUE-002 — [P-03] Freeze the compatible version matrix
 
-- **Status:** `TODO`
+- **Status:** `DONE`
+- **Remote state:** GitHub issue #2 remains open for the owner PR/review/closure workflow.
 - **Labels:** `type:task`, `area:foundation`, `area:ci`, `priority:p0`
 - **Blocked by:** ISSUE-001
 - **PR boundary:** one version-policy change
 
 **Outcome**
 
-Produce one reproducible, supportable toolchain baseline before scaffolding.
+Produce one reproducible toolchain baseline whose supported components and explicitly accepted support exceptions are auditable before scaffolding.
+
+**Confirmed owner constraints (2026-08-02)**
+
+- Retain Next.js 15 with MUI v6; do not silently substitute another major.
+- Use TypeORM 0.3.31.
+- Use PostgreSQL 18.
+- Use Jest/Supertest for API tests, Vitest/React Testing Library for Web unit/component tests, and Playwright for browser E2E.
+- Treat MUI v6 as a deliberate upstream-support exception and Next.js 15 as Maintenance LTS. Re-evaluate the pairing by 2026-09-21 or before public exposure, whichever comes first, and immediately upon a critical unpatched security or compatibility blocker. Review does not authorize an upgrade.
 
 **Work**
 
-- [ ] Verify compatible Node.js LTS, pnpm, Next.js, React, MUI v6, NestJS, TypeORM, PostgreSQL, pgvector, test, formatting, and hook versions from primary sources.
-- [ ] Select a versioned standard GitHub-hosted Ubuntu runner and record Debian-slim/Alpine candidates for later image benchmarking.
-- [ ] Define exact pin/range policy, upgrade cadence, and rollback ownership; require full-SHA third-party Action references with readable version comments.
+- [x] From primary sources, select exact compatible versions for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 15, React/React DOM, MUI v6 plus its official Next/Emotion integration, NestJS plus its CLI/adapter packages, TypeORM 0.3.31, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint.
+- [x] Record the owner's test-stack, PostgreSQL-major, and Next.js 15/MUI v6 re-evaluation choices without generic placeholders.
+- [x] Create authoritative `docs/toolchain.md` and its `docs/toolchain_ZH.md` follower. For every selection, record the exact version or versioned image candidate, compatible/supported intersection, primary-source link and check date, support state or exception, pin/enforcement location, update owner/cadence, rollback target, and downstream verification task.
+- [x] Select `ubuntu-24.04` unless primary-source evidence rejects it, and record versioned Debian-slim/Alpine candidates for later image benchmarking without choosing a final production base.
+- [x] Define exact pin/range policy, upgrade cadence, rollback ownership, and an enforcement-owner map. P-03 selects policy; F-01 implements root package-manager/engine enforcement, F-05 pins the database image, B-04 proves Argon2, W-01 proves MUI SSR, and F-06/F-08 prove CI parity and the complete Action register.
+- [x] Create an initial Action register for known CI/security Actions; every planned reference uses a full commit SHA with a readable version comment. F-06/F-08 update the register when real workflows establish the complete set.
 
 **Review / acceptance**
 
-- [ ] Local and CI Node/pnpm versions are identical and machine-enforced.
-- [ ] No floating `latest`, unapproved canary, preview, or mutable Action reference remains.
-- [ ] Compatibility evidence covers MUI/Next SSR, TypeORM/pgvector, native Argon2id, and supported runtime lines.
-- [ ] Every pinned tool has an owner and reviewed update path.
+- [x] `.node-version` contains the exact selected Node release and matches the matrix; the exact pnpm release and its later F-01/F-06 enforcement locations are recorded.
+- [x] No floating `latest`, unapproved canary, preview, prerelease, or mutable Action reference is selected.
+- [x] The intentional MUI v6 support exception, Next.js 15 maintenance status/re-evaluation trigger, TypeORM 0.3.31, PostgreSQL 18, and selected test families are explicit in the completed toolchain artifacts.
+- [x] Compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2id, and the supported Node/pnpm runtime intersection.
+- [x] Every pinned tool has a primary-source link and check date, owner, reviewed update path, rollback, and downstream enforcement task.
+- [x] The issue does not claim that package installation, lockfile resolution, application builds, runtime smoke tests, or CI parity passed before their owning downstream tasks exist.
 
-**Evidence:** version matrix, primary-source links, compatibility notes, and Action reference register.  
-**Non-goals:** installing dependencies or selecting the final production container base.
+**Evidence:** `.node-version`, `docs/toolchain.md`, synchronized `docs/toolchain_ZH.md`, and the matrix/register contents required above. On 2026-08-02, exact file/heading parity, local Markdown links, authoritative-English language policy, full Action-SHA length, and whitespace checks passed; observed local Node/pnpm versions also matched the selections. Dependency installation and runtime/CI checks remain downstream evidence.
+
+**Non-goals:** installing dependencies, generating the lockfile, scaffolding applications, claiming downstream runtime/CI evidence, or selecting the final production container base.
 
 ### ISSUE-003 — [F-01] Create the pnpm/Turborepo monorepo root
 

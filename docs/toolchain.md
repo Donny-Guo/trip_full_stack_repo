@@ -1,0 +1,139 @@
+# Toolchain baseline
+
+This document is the authoritative English output of `P-03`/`ISSUE-002`. Simplified Chinese follower: [`toolchain_ZH.md`](./toolchain_ZH.md). English controls if the two files differ.
+
+- Status: **FROZEN for the first local authentication slice**
+- Evidence checked: **2026-08-02**
+- Owner: **`@Donny-Guo`**
+- Runtime line: **Node.js 24.18.0 + pnpm 11.18.0**
+- Deliberate constraints: **Next.js 15 + MUI v6, TypeORM 0.3.31, PostgreSQL 18**
+
+“Frozen” means downstream tasks must use these exact direct selections unless a reviewed same-change update modifies this matrix. It does not mean packages are installed, a lockfile exists, applications build, a native module loads, a database image has been pulled, or CI has passed. Those claims belong to the downstream enforcement tasks named below.
+
+## Confirmed choices and support exception
+
+- Web unit/component tests use Vitest and React Testing Library; browser E2E uses Playwright.
+- API unit/integration tests use Jest and Supertest.
+- PostgreSQL uses major 18, with current minor 18.4 selected for this baseline.
+- Next.js remains on the maintained 15.x backport line and MUI remains on v6 for now.
+- MUI v6 is outside upstream support. Next.js 15 is Maintenance LTS and receives only critical fixes and essential security updates. Re-evaluate the pairing by **2026-09-21** or before public exposure, whichever occurs first, and immediately if a critical unpatched security or compatibility blocker appears. A review does not authorize an upgrade; changing a major still requires explicit owner approval.
+
+## Pin and update policy
+
+1. F-01 sets `save-exact=true`, `engine-strict=true`, root `packageManager: "pnpm@11.18.0"`, exact Node/pnpm engine constraints, and one frozen root lockfile. All direct runtime and development dependencies are exact versions; internal dependencies use `workspace:`. Transitive versions are lockfile-controlled.
+2. `.node-version` is exactly `24.18.0`. Local setup and F-06 CI read the same file and assert the observed `node --version` and `pnpm --version` before running tasks.
+3. No install command may use an unqualified package, `latest`, wildcard, canary, preview, RC, beta, or other prerelease. A scaffold generator's output is normalized to this matrix before its result is accepted.
+4. GitHub Actions use full 40-character commit SHAs with readable release comments. Mutable tags appear only as review/source metadata, never as executable `uses:` references.
+5. Versioned container tags in this document are candidates, not immutable deployment references. F-05 resolves the database image to a multi-architecture digest and verifies `server_version` plus `extversion`; R-09 later selects and digest-pins final application images.
+6. Routine direct-dependency review is monthly. Supported runtime/framework/database lines are rechecked quarterly. Security advisories are triaged immediately and do not wait for the routine cadence. Dependabot may propose updates but never auto-merges them.
+7. Package-family updates are isolated from feature work. The update records source evidence, lockfile diff, migration notes when relevant, downstream checks, and a rollback target.
+
+## Rollback classes
+
+Every matrix row is owned by `@Donny-Guo` and uses one of these reviewed rollback classes.
+
+| Class | Update cadence | Rollback target and constraint |
+| --- | --- | --- |
+| R1 — runtime/package manager | Security-immediate; monthly patch review; quarterly support review | Revert `.node-version`, root engine/package-manager pins, and the lockfile to the last green reviewed commit. Do not mix a runtime rollback with feature changes. |
+| R2 — application/framework package | Security-immediate; monthly patch review; major/minor only in an isolated compatibility change | Revert the exact direct pins and lockfile to the last green package-family commit, then repeat the owning build/test task. Database migrations remain forward-compatible and are not history-rewritten. |
+| R3 — developer/test tool | Monthly or security-immediate | Revert the tool/config pins and lockfile to the last green engineering-config commit; repeat formatting, lint, typecheck, and affected test tasks. |
+| R4 — database/container candidate | Security-immediate; monthly image/extension review; PostgreSQL minor review on each upstream release | F-05 may revert an image digest only with clean local-data recreation or a tested backup/restore path. Never start an older PostgreSQL major against a newer data directory. Production rollback design waits for R-09. |
+| R5 — GitHub Action | Security-immediate; monthly tag-to-SHA review | Revert the Action SHA and register entry together to the last reviewed workflow commit. Never fall back to a mutable tag. |
+
+## Exact version matrix
+
+Every linked source in this section was checked on 2026-08-02. npm links identify publisher-controlled registry records; project documentation and release-policy links provide compatibility/support context.
+
+### Runtime and orchestration
+
+| Component | Exact selection | Compatibility and support evidence | Pin / downstream enforcement | Class | Primary source |
+| --- | --- | --- | --- | --- | --- |
+| Node.js | `24.18.0` | Node 24 is LTS through 2028-04-30 and satisfies the strictest selected engine floors: pnpm `>=22.13`, lint-staged `>=22.22.1`, and jsdom `^24.15.0`. | `.node-version` now; root engines/package manager in F-01; CI assertion in F-06 | R1 | [Node releases](https://nodejs.org/en/about/previous-releases) |
+| pnpm | `11.18.0` | Requires Node `>=22.13`; the selected Node line satisfies it. One root lockfile and `workspace:` are mandatory. | F-01 `packageManager`, engine and `.npmrc`; F-06 frozen install | R1 | [pnpm 11.18.0](https://www.npmjs.com/package/pnpm/v/11.18.0) |
+| TypeScript | `5.9.3` | Matches the current Nest 11 starter and is within `typescript-eslint` `>=4.8.4 <6.1.0` and `ts-jest` `>=4.3 <7`. TypeScript 7.0.2 is deliberately excluded because the selected lint transformer does not support it. | F-01 root pin; F-02/F-03 app configs; F-04 shared strict config | R2 | [TypeScript 5.9.3](https://www.npmjs.com/package/typescript/v/5.9.3), [Nest starter](https://github.com/nestjs/typescript-starter) |
+| Turborepo | `2.10.8` | Stable 2.x task orchestrator; remote cache remains disabled. | F-01 root dependency and `turbo.json`; F-06 task invocation | R3 | [turbo 2.10.8](https://www.npmjs.com/package/turbo/v/2.10.8) |
+| GitHub runner | `ubuntu-24.04` | Stable standard x64 VM label with Docker/service-container support; `ubuntu-26.04` is preview and `ubuntu-slim` cannot host the routine Docker CI workload. | F-06 every routine Node/database job | R5 | [GitHub-hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners), [runner images](https://github.com/actions/runner-images) |
+
+### Web runtime and UI
+
+| Component | Exact selection | Compatibility and support evidence | Pin / downstream enforcement | Class | Primary source |
+| --- | --- | --- | --- | --- | --- |
+| Next.js | `next@15.5.22`, `eslint-config-next@15.5.22` | `15.5.22` is the current stable 15.x backport. It accepts Node `>=20`, React/React DOM `^19.0.0`, and ESLint through 9.x. The major is Maintenance LTS, so every update receives compatibility review. | F-02 Web manifest/build; F-04 lint config; F-06 production build | R2 | [next 15.5.22](https://www.npmjs.com/package/next/v/15.5.22), [eslint-config-next 15.5.22](https://www.npmjs.com/package/eslint-config-next/v/15.5.22), [support policy](https://nextjs.org/support-policy) |
+| React | `react@19.2.8`, `react-dom@19.2.8`, `@types/react@19.2.18`, `@types/react-dom@19.2.4` | Next 15.5.22 and MUI 6.5.0 both accept React 19; React DOM requires the matching `^19.2.8` runtime. | F-02 Web manifest; F-06 build/test | R2 | [react 19.2.8](https://www.npmjs.com/package/react/v/19.2.8), [react-dom 19.2.8](https://www.npmjs.com/package/react-dom/v/19.2.8), [React types](https://www.npmjs.com/package/@types/react/v/19.2.18), [React DOM types](https://www.npmjs.com/package/@types/react-dom/v/19.2.4) |
+| MUI | `@mui/material@6.5.0`, `@mui/icons-material@6.5.0`, `@mui/material-nextjs@6.5.0` | The last v6 integration package accepts Next `^15`, React `^19`, and exposes `v15-appRouter`. MUI v6 is an explicitly accepted unsupported major. | W-01 manifest, `AppRouterCacheProvider`, theme and SSR proof | R2 | [Material 6.5.0](https://www.npmjs.com/package/@mui/material/v/6.5.0), [icons 6.5.0](https://www.npmjs.com/package/@mui/icons-material/v/6.5.0), [Next integration 6.5.0](https://www.npmjs.com/package/@mui/material-nextjs/v/6.5.0), [MUI support](https://mui.com/material-ui/getting-started/support/), [App Router guide](https://mui.com/material-ui/integrations/nextjs/) |
+| Emotion | `@emotion/react@11.14.0`, `@emotion/styled@11.14.1`, `@emotion/cache@11.14.0` | Satisfies MUI v6 and `@mui/material-nextjs` peer ranges. Optional `@emotion/server` is not selected for the App Router path. | W-01 Web manifest and SSR cache provider | R2 | [Emotion React](https://www.npmjs.com/package/@emotion/react/v/11.14.0), [Emotion styled](https://www.npmjs.com/package/@emotion/styled/v/11.14.1), [Emotion cache](https://www.npmjs.com/package/@emotion/cache/v/11.14.0) |
+
+### API, ORM, and database
+
+| Component | Exact selection | Compatibility and support evidence | Pin / downstream enforcement | Class | Primary source |
+| --- | --- | --- | --- | --- | --- |
+| Nest runtime/testing | `@nestjs/common@11.1.28`, `@nestjs/core@11.1.28`, `@nestjs/platform-express@11.1.28`, `@nestjs/testing@11.1.28` | Nest core requires Node `>=20`; all four packages share the 11.1.28 line and compatible 11.x peers. | F-03 API manifest/build/health; API tests from F-03 onward | R2 | [Nest common](https://www.npmjs.com/package/@nestjs/common/v/11.1.28), [core](https://www.npmjs.com/package/@nestjs/core/v/11.1.28), [Express adapter](https://www.npmjs.com/package/@nestjs/platform-express/v/11.1.28), [testing](https://www.npmjs.com/package/@nestjs/testing/v/11.1.28) |
+| Nest CLI/build support | `@nestjs/cli@11.0.24`, `@nestjs/schematics@11.1.0`, `ts-loader@9.6.2`, `ts-node@10.9.2`, `tsconfig-paths@4.2.0`, `rimraf@6.1.3` | CLI requires Node `>=20.11`; schematics accepts TypeScript `>=4.8.2`; the remaining tools accept Node 24 and TypeScript 5.9.3. | F-03 scaffold normalized to these pins; F-04 shared commands | R3 | [Nest CLI](https://www.npmjs.com/package/@nestjs/cli/v/11.0.24), [schematics](https://www.npmjs.com/package/@nestjs/schematics/v/11.1.0), [ts-loader](https://www.npmjs.com/package/ts-loader/v/9.6.2), [ts-node](https://www.npmjs.com/package/ts-node/v/10.9.2), [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths/v/4.2.0), [rimraf](https://www.npmjs.com/package/rimraf/v/6.1.3) |
+| Nest foundation | `@nestjs/config@4.0.4`, `reflect-metadata@0.2.2`, `rxjs@7.8.2`, `class-validator@0.15.1`, `class-transformer@0.5.1`, `@types/node@24.13.3`, `@types/express@5.0.6` | All peer ranges intersect Nest 11 and Node 24. Explicit `types` lists are required when TypeScript configuration later moves beyond 5.9. | F-03 base runtime/types; B-01 configuration; transport validation tasks | R2 | [Nest config](https://www.npmjs.com/package/@nestjs/config/v/4.0.4), [reflect-metadata](https://www.npmjs.com/package/reflect-metadata/v/0.2.2), [RxJS](https://www.npmjs.com/package/rxjs/v/7.8.2), [class-validator](https://www.npmjs.com/package/class-validator/v/0.15.1), [class-transformer](https://www.npmjs.com/package/class-transformer/v/0.5.1), [Node types](https://www.npmjs.com/package/@types/node/v/24.13.3), [Express types](https://www.npmjs.com/package/@types/express/v/5.0.6) |
+| TypeORM/PostgreSQL driver | `@nestjs/typeorm@11.0.3`, `typeorm@0.3.31`, `pg@8.22.0`, `@types/pg@8.20.3` | Nest adapter accepts Nest 11 and TypeORM `^0.3`; TypeORM 0.3.31 requires Node `>=16.13` and accepts `pg ^8.5.1`; selected versions meet all ranges. | B-01 API manifest/config; migrations only; production `synchronize=false` | R2 | [Nest TypeORM](https://www.npmjs.com/package/@nestjs/typeorm/v/11.0.3), [TypeORM 0.3.31](https://www.npmjs.com/package/typeorm/v/0.3.31), [pg 8.22.0](https://www.npmjs.com/package/pg/v/8.22.0), [pg types](https://www.npmjs.com/package/@types/pg/v/8.20.3) |
+| PostgreSQL/pgvector | PostgreSQL `18.4`; pgvector `0.8.5`; F-05 candidate `pgvector/pgvector:0.8.5-pg18-trixie` | PostgreSQL 18.4 is supported through 2030-11-14. pgvector provides a PG18 image and TypeORM supports PostgreSQL `vector`/`halfvec`, but this slice creates no vector column. The candidate tag is mutable until F-05 records a digest and verifies versions. | F-05 Compose image/digest, extension bootstrap and role tests; B-01 connection; later vector ADR | R4 | [PostgreSQL policy](https://www.postgresql.org/support/versioning/), [18.4 notes](https://www.postgresql.org/docs/release/18.4/), [pgvector](https://github.com/pgvector/pgvector), [PG18 image tags](https://hub.docker.com/r/pgvector/pgvector/tags?name=pg18), [TypeORM vector columns](https://typeorm.io/docs/entity/entities/#vector-columns) |
+| Argon2 | `argon2@0.45.1` | Package engine is Node `>=16.17`; Node 24 satisfies it. B-04 must still prove the native binary/build path and benchmark Argon2id on host, CI, and later image candidates against the current OWASP floor. | B-04 manifest, native load test, benchmark and redaction tests | R2 | [argon2 0.45.1](https://www.npmjs.com/package/argon2/v/0.45.1), [OWASP password storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) |
+
+### Quality, tests, and hooks
+
+| Component | Exact selection | Compatibility and support evidence | Pin / downstream enforcement | Class | Primary source |
+| --- | --- | --- | --- | --- | --- |
+| ESLint | `eslint@9.39.5`, `@eslint/js@9.39.5`, `typescript-eslint@8.65.0`, `eslint-config-prettier@10.1.8`, `globals@17.9.0` | Next 15's config accepts ESLint through 9.x, not 10.x. `typescript-eslint` accepts TypeScript 5.9.3 and ESLint 9. ESLint 10 is deliberately excluded from this baseline. | F-04 shared flat config; F-07 staged lint; F-06 lint | R3 | [ESLint](https://www.npmjs.com/package/eslint/v/9.39.5), [ESLint JS](https://www.npmjs.com/package/@eslint/js/v/9.39.5), [typescript-eslint](https://www.npmjs.com/package/typescript-eslint/v/8.65.0), [config-prettier](https://www.npmjs.com/package/eslint-config-prettier/v/10.1.8), [globals](https://www.npmjs.com/package/globals/v/17.9.0) |
+| Prettier | `prettier@3.9.6` | Stable 3.x and compatible with Nest schematics' `^3` peer. Formatting remains a separate command rather than an ESLint plugin side effect. | F-04 root policy; F-07 staged formatting; F-06 `format:check` | R3 | [Prettier 3.9.6](https://www.npmjs.com/package/prettier/v/3.9.6) |
+| API tests | `jest@30.4.2`, `ts-jest@29.4.12`, `@types/jest@30.0.0`, `supertest@7.2.2`, `@types/supertest@7.2.1` | Jest explicitly supports Node 24; ts-jest accepts Jest 30 and TypeScript `<7`; Supertest supports the Nest Express HTTP adapter. Integration tests use real PostgreSQL when persistence is involved. | F-03 test entry; later API unit/integration tasks; F-06 | R3 | [Jest](https://www.npmjs.com/package/jest/v/30.4.2), [ts-jest](https://www.npmjs.com/package/ts-jest/v/29.4.12), [Jest types](https://www.npmjs.com/package/@types/jest/v/30.0.0), [Supertest](https://www.npmjs.com/package/supertest/v/7.2.2), [Supertest types](https://www.npmjs.com/package/@types/supertest/v/7.2.1), [Nest testing guide](https://docs.nestjs.com/fundamentals/testing) |
+| Web unit/component tests | `vitest@4.1.10`, `vite@8.2.0`, `@vitejs/plugin-react@6.0.5`, `jsdom@30.0.1`, `@testing-library/react@16.3.2`, `@testing-library/dom@10.4.1`, `@testing-library/user-event@14.6.1`, `@testing-library/jest-dom@7.0.0` | Vitest accepts Node 24 and Vite 8; jsdom requires Node `^24.15`, satisfied by 24.18.0; Testing Library accepts React 19. Async Server Components are covered by E2E instead of being forced into jsdom. | F-02/F-04 test config; component tasks; F-06 | R3 | [Vitest](https://www.npmjs.com/package/vitest/v/4.1.10), [Vite](https://www.npmjs.com/package/vite/v/8.2.0), [React plugin](https://www.npmjs.com/package/@vitejs/plugin-react/v/6.0.5), [jsdom](https://www.npmjs.com/package/jsdom/v/30.0.1), [React Testing Library](https://www.npmjs.com/package/@testing-library/react/v/16.3.2), [DOM Testing Library](https://www.npmjs.com/package/@testing-library/dom/v/10.4.1), [user-event](https://www.npmjs.com/package/@testing-library/user-event/v/14.6.1), [jest-dom](https://www.npmjs.com/package/@testing-library/jest-dom/v/7.0.0), [Next testing guide](https://nextjs.org/docs/app/guides/testing) |
+| Browser E2E | `@playwright/test@1.62.1` | Requires Node `>=20`; selected Node satisfies it. It owns browser user flows and async Server Component coverage. Browser binaries are installed only by the task that needs them. | First owning E2E task and F-06 applicable job | R3 | [Playwright 1.62.1](https://www.npmjs.com/package/@playwright/test/v/1.62.1) |
+| Hooks/commit policy | `husky@9.1.7`, `lint-staged@17.3.0`, `@commitlint/cli@21.2.1`, `@commitlint/config-conventional@21.2.0` | Engine floors are Node 18, 22.22.1, and 22.12 respectively; Node 24.18.0 satisfies all. Hooks remain bypassable local feedback and perform no network/database/build work. | F-07 root manifest/config and `.husky`; F-06 PR-title check | R3 | [Husky](https://www.npmjs.com/package/husky/v/9.1.7), [lint-staged](https://www.npmjs.com/package/lint-staged/v/17.3.0), [commitlint CLI](https://www.npmjs.com/package/@commitlint/cli/v/21.2.1), [conventional config](https://www.npmjs.com/package/@commitlint/config-conventional/v/21.2.0) |
+
+## Container candidates, not final images
+
+| Purpose | Versioned candidate | Why it is only a candidate | Owner task | Source checked 2026-08-02 |
+| --- | --- | --- | --- | --- |
+| Preferred application baseline | `node:24.18.0-trixie-slim` | Current Debian-slim/glibc baseline for later Web/API multi-stage, non-root benchmarking. R-09 must scan and pin a manifest digest. | R-09 | [Official Node image tags](https://hub.docker.com/_/node/tags?name=24.18.0) |
+| Comparison application baseline | `node:24.18.0-alpine3.23` | musl comparison only. It is not approved merely for size; Argon2 native loading, amd64/arm64, build/start behavior, and security-update latency must win the benchmark. | R-09 | [Alpine tag](https://hub.docker.com/_/node/tags?name=24.18.0-alpine3.23), [Node image variants](https://github.com/nodejs/docker-node#image-variants) |
+| Local/CI database baseline | `pgvector/pgvector:0.8.5-pg18-trixie` | F-05 must resolve the multi-arch digest and verify PostgreSQL `18.4` and `vector` `0.8.5`; the runtime role never installs the extension. | F-05/F-06 | [pgvector PG18 tags](https://hub.docker.com/r/pgvector/pgvector/tags?name=pg18) |
+
+No production application base, deployment digest, registry, or CD platform is selected by P-03.
+
+## Initial immutable GitHub Actions register
+
+The following release tags were resolved through the official GitHub API on 2026-08-02. Workflow files must copy the full SHA form shown here. GitHub documents a full commit SHA as the only immutable Action reference. F-06/F-08 re-review the current release and update this register in the same change if they need a different SHA or another Action.
+
+| Intended use | Executable reference | Readable release | Owning task / permissions note |
+| --- | --- | --- | --- |
+| Checkout | `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1` | `v7.0.1` | F-06/F-08; persist credentials only when a narrowly reviewed job needs them, otherwise disable |
+| Install selected Node | `actions/setup-node@820762786026740c76f36085b0efc47a31fe5020` | `v7.0.0` | F-06; read `.node-version`; do not create a trusted cache from untrusted output |
+| Activate selected pnpm | `pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271` | `v6.0.9` | F-06; version must agree with root `packageManager` |
+| Dependency review | `actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294` | `v5.0.0` | F-08; pull-request read permissions only unless official requirements prove otherwise |
+| CodeQL init/analyze | `github/codeql-action/init@f205ea1c3313d32999d8d6a48b4f6530d4437b38` and `github/codeql-action/analyze@f205ea1c3313d32999d8d6a48b4f6530d4437b38` | `v4.37.4` | F-08; job-scoped `security-events: write`, read-only elsewhere |
+
+Sources: [GitHub secure-use reference](https://docs.github.com/en/actions/reference/security/secure-use), [checkout release](https://github.com/actions/checkout/releases/tag/v7.0.1), [setup-node release](https://github.com/actions/setup-node/releases/tag/v7.0.0), [pnpm/action-setup release](https://github.com/pnpm/action-setup/releases/tag/v6.0.9), [dependency-review release](https://github.com/actions/dependency-review-action/releases/tag/v5.0.0), and [CodeQL tag](https://github.com/github/codeql-action/releases/tag/v4.37.4).
+
+No cache, path-filter, artifact, Docker-build, or deployment Action is selected speculatively. Its first real owning workflow must add a reviewed full-SHA register entry.
+
+## Enforcement-owner map
+
+| Artifact or assertion | Implemented/proved by | Required evidence |
+| --- | --- | --- |
+| `.node-version` equals `24.18.0`; this document and follower agree | P-03 / ISSUE-002 | File comparison, Markdown/link/language checks |
+| Exact `packageManager`, Node/pnpm engines, `save-exact`, workspace protocol, root lockfile and Turbo graph | F-01 / ISSUE-003 | Clean frozen install and root task discovery |
+| Exact Next/React/type packages and independent Web build | F-02 / ISSUE-004 | Web lint/typecheck/test/build |
+| Exact Nest/runtime/build/test packages and independent API lifecycle | F-03 / ISSUE-005 | API lint/typecheck/test/build/start/health/shutdown |
+| Shared TypeScript 5.9.3, ESLint 9 and Prettier policy | F-04 / ISSUE-006 | Positive and negative root config checks |
+| PostgreSQL 18.4 + pgvector 0.8.5 digest and role separation | F-05 / ISSUE-007 | Clean pull/start, `server_version`, `extversion`, health and denied-capability tests |
+| MUI 6.5.0 + Next 15 cache provider and hydration/style ordering | W-01 / ISSUE-008 | Server render, hydration, navigation and production build evidence |
+| Argon2 0.45.1 native path and OWASP-floor benchmark | B-04 / ISSUE-009 | Native load/hash/verify, benchmark and redaction evidence |
+| `ubuntu-24.04`, exact Node/pnpm, frozen install, database service, stable aggregate result and Action SHAs | F-06 / ISSUE-011 | Workflow review plus trusted/fork failure-path runs |
+| Husky/lint-staged/commitlint behavior | F-07 / ISSUE-012 | Valid/invalid and partial-staging checks |
+| Dependency review, CodeQL, Dependabot, repository controls and complete Action register | F-08 / ISSUE-013 | Checked-in governance plus verified remote-setting checklist |
+
+## P-03 acceptance record
+
+- `.node-version` and the matrix select the same exact Node release.
+- Node 24.18.0 satisfies every recorded package engine floor.
+- All direct selections are stable exact versions; no selected dependency or Action reference is floating or prerelease.
+- Next/MUI, Nest/TypeORM/PostgreSQL, pgvector, test-runner, native-Argon2, runner, and Action-reference compatibility/support evidence is recorded with a check date.
+- Every selection inherits an explicit owner, update cadence, rollback class, pin location, and downstream verification task.
+- The document explicitly avoids claiming installation, lockfile, build, native runtime, database, SSR, E2E, or CI evidence that belongs to later tasks.
+
+Therefore P-03 can close as a version-policy task once the English/Chinese documents pass repository documentation checks. Downstream failures reopen the relevant compatibility decision through a reviewed matrix update; they are never hidden with `--force`, legacy peer handling, unpinned replacements, or skipped tests.
