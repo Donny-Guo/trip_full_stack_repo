@@ -6,3 +6,6 @@ sharedWorkspaceLockfile: true
 saveWorkspaceProtocol: rolling
 engineStrict: true
 saveExact: true
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
