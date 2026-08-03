@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 and ISSUE-003 are complete locally; ISSUE-004 and ISSUE-005 are next**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-004 are complete locally; ISSUE-005 and the now-unblocked ISSUE-008 Web work are next**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. `ISSUE-001` through `ISSUE-003` are therefore `DONE` locally; `ISSUE-004` and `ISSUE-005` are next.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. `ISSUE-001` through `ISSUE-004` are therefore `DONE` locally; `ISSUE-005` and the now-unblocked `ISSUE-008` Web work are next in dependency order.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -73,7 +73,7 @@ An issue may move to `In Progress` only when all of the following are true:
 - [ ] The relevant decisions in `PLANS.md` are still current; unresolved product or security choices are recorded rather than guessed.
 - [ ] Scope, non-goals, acceptance criteria, and expected evidence are understandable to someone who did not write the issue.
 - [ ] External services, test data, secrets, environments, and permissions required by the work are available through approved paths.
-- [ ] Any schema, API, authentication, deployment, or agent-boundary change has a migration/compatibility or ADR requirement identified before coding.
+- [ ] Any schema, API, authentication, deployment, or agent-boundary change has its migration, compatibility, and design-review requirements identified before coding.
 
 ## 3. Shared review standard
 
@@ -174,7 +174,7 @@ Create an auditable implementation gate so planning approval cannot be mistaken 
 **Review / acceptance**
 
 - [x] The instruction is unambiguous and comes from the repository owner.
-- [x] Scope and exclusions match the approved decisions D-01 through D-24.
+- [x] Scope and exclusions match the approved decisions D-01 through D-25; D-25 changes only framework/ORM version lines and their migration contract.
 - [x] No implementation artifact or remote setting was changed as part of closing this gate before authorization was recorded.
 
 **Evidence:** owner instruction dated 2026-08-02 plus synchronized English/Chinese plan status. The tracked MIT `LICENSE` predates this authorization and is handled by F-08; no remote GitHub state was changed while closing this local gate.
@@ -184,7 +184,7 @@ Create an auditable implementation gate so planning approval cannot be mistaken 
 ### ISSUE-002 — [P-03] Freeze the compatible version matrix
 
 - **Status:** `DONE`
-- **Remote state:** GitHub issue #2 remains open for the owner PR/review/closure workflow.
+- **Remote state:** GitHub issue #2 closed on 2026-08-02.
 - **Labels:** `type:task`, `area:foundation`, `area:ci`, `priority:p0`
 - **Blocked by:** ISSUE-001
 - **PR boundary:** one version-policy change
@@ -193,18 +193,18 @@ Create an auditable implementation gate so planning approval cannot be mistaken 
 
 Produce one reproducible toolchain baseline whose supported components and explicitly accepted support exceptions are auditable before scaffolding.
 
-**Confirmed owner constraints (2026-08-02)**
+**Confirmed owner constraints (revised by D-25 on 2026-08-03)**
 
-- Retain Next.js 15 with MUI v6; do not silently substitute another major.
-- Use TypeORM 0.3.31.
+- Use the current stable Next.js 16 and MUI v9 lines; the reviewed exact pins are Next.js 16.2.12, MUI Material/Icons 9.2.0, and `@mui/material-nextjs` 9.1.1.
+- Use the current stable TypeORM line; the reviewed exact pin is TypeORM 1.1.0.
 - Use PostgreSQL 18.
 - Use Jest/Supertest for API tests, Vitest/React Testing Library for Web unit/component tests, and Playwright for browser E2E.
-- Treat MUI v6 as a deliberate upstream-support exception and Next.js 15 as Maintenance LTS. Re-evaluate the pairing by 2026-09-21 or before public exposure, whichever comes first, and immediately upon a critical unpatched security or compatibility blocker. Review does not authorize an upgrade.
+- Keep exact stable pins, install each dependency only in its owning task, re-review support/compatibility quarterly and before public exposure, and require explicit owner approval for another major change.
 
 **Work**
 
-- [x] From primary sources, select exact compatible versions for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 15, React/React DOM, MUI v6 plus its official Next/Emotion integration, NestJS plus its CLI/adapter packages, TypeORM 0.3.31, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint.
-- [x] Record the owner's test-stack, PostgreSQL-major, and Next.js 15/MUI v6 re-evaluation choices without generic placeholders.
+- [x] From primary sources, select exact compatible versions for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 16, React/React DOM, MUI v9 plus its official Next/Emotion integration, NestJS plus its CLI/adapter packages, TypeORM 1.1, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint.
+- [x] Record the owner's test-stack, PostgreSQL-major, and D-25 Next.js/MUI/TypeORM choices without generic placeholders.
 - [x] Create authoritative `docs/toolchain.md` and its `docs/toolchain_ZH.md` follower. For every selection, record the exact version or versioned image candidate, compatible/supported intersection, primary-source link and check date, support state or exception, pin/enforcement location, update owner/cadence, rollback target, and downstream verification task.
 - [x] Select `ubuntu-24.04` unless primary-source evidence rejects it, and record versioned Debian-slim/Alpine candidates for later image benchmarking without choosing a final production base.
 - [x] Define exact pin/range policy, upgrade cadence, rollback ownership, and an enforcement-owner map. P-03 selects policy; F-01 implements root package-manager/engine enforcement, F-05 pins the database image, B-04 proves Argon2, W-01 proves MUI SSR, and F-06/F-08 prove CI parity and the complete Action register.
@@ -214,19 +214,19 @@ Produce one reproducible toolchain baseline whose supported components and expli
 
 - [x] `.node-version` contains the exact selected Node release and matches the matrix; the exact pnpm release and its F-01/F-06 enforcement locations are recorded.
 - [x] No floating `latest`, unapproved canary, preview, prerelease, or mutable Action reference is selected.
-- [x] The intentional MUI v6 support exception, Next.js 15 maintenance status/re-evaluation trigger, TypeORM 0.3.31, PostgreSQL 18, and selected test families are explicit in the completed toolchain artifacts.
+- [x] The D-25 Next.js 16/MUI v9/TypeORM 1.1 selections, owning-task installation boundaries, PostgreSQL 18, and selected test families are explicit in the completed toolchain artifacts.
 - [x] Compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2id, and the supported Node/pnpm runtime intersection.
 - [x] Every pinned tool has a primary-source link and check date, owner, reviewed update path, rollback, and downstream enforcement task.
 - [x] The issue does not claim that package installation, lockfile resolution, application builds, runtime smoke tests, or CI parity passed before their owning downstream tasks exist.
 
-**Evidence:** `.node-version`, `docs/toolchain.md`, synchronized `docs/toolchain_ZH.md`, and the matrix/register contents required above. On 2026-08-02, exact file/heading parity, local Markdown links, authoritative-English language policy, full Action-SHA length, and whitespace checks passed; observed local Node/pnpm versions also matched the selections. F-01 has since supplied dependency-installation, lockfile, and root-task evidence; application runtime and CI checks remain assigned downstream.
+**Evidence:** `.node-version`, `docs/toolchain.md`, synchronized `docs/toolchain_ZH.md`, D-25 in `PLANS.md`, and the required matrix/register contents. The original P-03 documentation checks passed on 2026-08-02; D-25 rechecked and amended the affected rows on 2026-08-03. F-01 supplies root dependency/lockfile/task evidence, and F-02 supplies installed Next.js 16 evidence. MUI SSR, TypeORM/PostgreSQL runtime behavior, and CI remain assigned downstream.
 
 **Non-goals:** installing dependencies, generating the lockfile, scaffolding applications, claiming downstream runtime/CI evidence, or selecting the final production container base.
 
 ### ISSUE-003 — [F-01] Create the pnpm/Turborepo monorepo root
 
 - **Status:** `DONE`
-- **Remote state:** GitHub issue #3 remains open for the owner PR/review/closure workflow.
+- **Remote state:** GitHub issue #3 closed on 2026-08-03.
 - **Labels:** `type:task`, `area:foundation`, `priority:p0`
 - **Blocked by:** ISSUE-001, ISSUE-002
 - **PR boundary:** one root-workspace PR
@@ -254,7 +254,8 @@ Create the smallest root workspace that consistently discovers and orchestrates 
 
 ### ISSUE-004 — [F-02] Scaffold the Next.js application
 
-- **Status:** `TODO`
+- **Status:** `DONE`
+- **Remote state:** GitHub issue #4 closed on 2026-08-03.
 - **Labels:** `type:task`, `area:web`, `priority:p0`
 - **Blocked by:** ISSUE-003
 - **PR boundary:** one minimal Web scaffold PR
@@ -265,18 +266,20 @@ Create `apps/web` as a clean, independently buildable Next.js App Router TypeScr
 
 **Work**
 
-- [ ] Scaffold App Router with `src/`, strict TypeScript, approved root scripts, and host-run pnpm/Turbo development.
-- [ ] Remove demo/template assets and unused dependencies.
-- [ ] Preserve the planned route/feature boundaries without creating auth, navigation, or agent behavior early.
+- [x] Scaffold App Router with `src/`, strict TypeScript, approved root scripts, and host-run pnpm/Turbo development.
+- [x] Remove demo/template assets and unused dependencies.
+- [x] Preserve the planned route/feature boundaries without creating auth, navigation, or agent behavior early.
+- [x] Apply D-25 to the installed Web surface with exact Next.js 16.2.12 pins and native ESLint flat configuration.
 
 **Review / acceptance**
 
-- [ ] Development start, lint, typecheck, tests if generated, and production build pass from root commands.
-- [ ] No Tailwind or second UI system is introduced.
-- [ ] No API secret/internal origin is exposed to the client bundle.
-- [ ] The scaffold contains no fake business behavior or unused generated example.
+- [x] Development start, lint, typecheck, tests if generated, and production build pass from root commands.
+- [x] No Tailwind or second UI system is introduced.
+- [x] No API secret/internal origin is exposed to the client bundle.
+- [x] The scaffold contains no fake business behavior or unused generated example.
 
-**Evidence:** root command outputs and production build result.  
+**Evidence:** on 2026-08-03, exact Next.js 16 installation, ESLint, route type generation, strict TypeScript, Turbopack production build, and a production `GET /` smoke returning `200` with `Trip Agent` passed. Next 16 generated its mandatory `react-jsx` setting and development route-type include. No test was generated; F-04 and later Web test tasks own test tooling.
+
 **Non-goals:** MUI integration, route groups, forms, or authentication.
 
 ### ISSUE-005 — [F-03] Scaffold the NestJS application
@@ -360,7 +363,7 @@ Provide repeatable local PostgreSQL/pgvector while preserving provisioner, migra
 **Evidence:** clean-start health/extension output and role-capability matrix.  
 **Non-goals:** application containers, Redis, vector schema, or production database selection.
 
-### ISSUE-008 — [W-01] Integrate MUI v6 with App Router SSR
+### ISSUE-008 — [W-01] Integrate MUI v9 with App Router SSR
 
 - **Status:** `TODO`
 - **Labels:** `type:task`, `area:web`, `area:ui`, `priority:p0`
@@ -369,12 +372,13 @@ Provide repeatable local PostgreSQL/pgvector while preserving provisioner, migra
 
 **Outcome**
 
-Provide one stable MUI v6 rendering and theme boundary for development and production.
+Provide one stable MUI v9 rendering and theme boundary for development and production.
 
 **Work**
 
-- [ ] Add only approved MUI v6 dependencies and the official App Router cache integration.
+- [ ] Add exact `@mui/material@9.2.0`, `@mui/icons-material@9.2.0`, `@mui/material-nextjs@9.1.1`, and approved Emotion dependencies; use the official `v16-appRouter` cache integration.
 - [ ] Establish `ThemeProvider`, theme tokens, fonts, and the chosen CSS-variable strategy in the root layout.
+- [ ] Add a local Client Component wrapper if MUI's `component` prop receives `next/link`, and keep URL-reading client controls behind layout-stable Suspense boundaries.
 - [ ] Add a minimal render/build regression test.
 
 **Review / acceptance**
@@ -509,7 +513,8 @@ Create fail-fast API configuration, explicit TypeORM connection lifecycle, and s
 **Work**
 
 - [ ] Validate port, runtime/migration database URLs, proxy trust, CORS/trusted origins, request limits, and JWT/cookie inputs at startup.
-- [ ] Add DatabaseModule/ConfigModule boundaries, dependency-aware readiness, graceful shutdown, and an explicit migration command/job.
+- [ ] Install exact `typeorm@1.1.0`, `@nestjs/typeorm@11.0.3`, and the approved PostgreSQL driver pins; target at least ES2023 and use `DataSource`/`DataSourceOptions` plus instance repositories only.
+- [ ] Add DatabaseModule/ConfigModule boundaries, dependency-aware readiness, graceful shutdown, and an explicit migration command/job. Keep TypeORM 1's fail-closed `invalidWhereValuesBehavior`; use `IsNull()` for intentional null matching.
 - [ ] Disable production `synchronize` and automatic application-start migrations.
 
 **Review / acceptance**
@@ -517,6 +522,7 @@ Create fail-fast API configuration, explicit TypeORM connection lifecycle, and s
 - [ ] Missing, malformed, weak, or contradictory critical configuration fails before serving traffic with no secret echo.
 - [ ] Liveness is process-only; readiness fails and recovers with PostgreSQL availability.
 - [ ] Runtime connects with the least-privilege role and cannot perform DDL; migrator ownership is explicit.
+- [ ] Dependency resolution proves the selected Nest adapter/TypeORM/PostgreSQL versions have no ignored peer conflict; removed TypeORM 0.3 APIs and string-based `select`/`relations` syntax are absent.
 - [ ] Tests inject isolated configuration and close connections without hanging.
 
 **Evidence:** configuration matrix, startup negative tests, readiness recovery test, role check, and graceful-shutdown transcript.  
@@ -1138,7 +1144,7 @@ Close the mandatory abuse-resistance and operational gaps before any public/shar
 - **Status:** `TODO (later)`
 - **Labels:** `type:epic`, `area:security`, `area:auth`, `area:database`, `area:redis`, `scope:post-mvp`
 - **Blocked by:** ISSUE-033, ISSUE-035 and approved session/device semantics; ISSUE-034 recommended
-- **PR boundary:** Epic with design/ADR, persistence, API, Web, and security-test children
+- **PR boundary:** Epic with design, persistence, API, Web, and security-test children
 
 **Outcome**
 
@@ -1155,9 +1161,10 @@ Support longer sessions that can be rotated, detected on replay, and revoked wit
 - [ ] Refresh secrets are never stored recoverably or exposed to JavaScript/logs.
 - [ ] Replaying an old refresh token revokes the intended family; concurrent legitimate refresh behavior is deterministic.
 - [ ] Logout/security events revoke sessions and key/Redis/database outages have tested safe behavior.
-- [ ] Cookie, Origin/CSRF, TTL, cleanup, migration, and rollback evidence agree with the ADR.
+- [ ] Cookie, Origin/CSRF, TTL, cleanup, migration, and rollback evidence agree with the approved design.
 
-**Evidence:** ADR, threat model, migration tests, replay/concurrency suite, outage exercise, and revocation demonstration.  
+**Evidence:** approved design, threat model, migration tests, replay/concurrency suite, outage exercise, and revocation demonstration.
+
 **Non-goals:** OAuth/social login or silently changing the access-token contract.
 
 ### ISSUE-037 — [R-04] Add mail foundation and email verification
@@ -1219,7 +1226,7 @@ Allow secure password recovery without account enumeration, reusable tokens, or 
 - **Status:** `TODO (later)`
 - **Labels:** `type:feature`, `area:domain`, `area:auth`, `area:data-governance`, `scope:post-mvp`
 - **Blocked by:** ISSUE-033 and approved business/operations semantics
-- **PR boundary:** ADR/domain/migration first; behavior may be child issues
+- **PR boundary:** design/domain/migration first; behavior may be child issues
 
 **Outcome**
 
@@ -1238,7 +1245,8 @@ Introduce only lifecycle states backed by explicit business transitions, authori
 - [ ] Audit, retention, recovery, default/backfill, repair, and compatibility behavior agree.
 - [ ] UI copy does not reveal sensitive suspension/security detail.
 
-**Evidence:** ADR/state diagram, permission matrix, migration tests, transition suite, audit samples, and operations runbook.  
+**Evidence:** approved design/state diagram, permission matrix, migration tests, transition suite, audit samples, and operations runbook.
+
 **Non-goals:** RBAC without an approved restricted operation or irreversible hard deletion by default.
 
 ### ISSUE-040 — [R-07] Establish RBAC and authorization
@@ -1342,13 +1350,14 @@ Build reproducible non-root Web/API images once and promote the same verified di
 
 **Review / acceptance**
 
-- [ ] Base-image ADR selects measured compatibility/value, never size alone.
+- [ ] Base-image selection uses measured compatibility/value, never size alone.
 - [ ] Images are reproducible, digest-pinned, non-root, architecture-tested, and free of development dependencies, caches, toolchains, and secrets.
 - [ ] PR code cannot access deployment credentials/production; OIDC is ref/environment scoped.
 - [ ] Staging/production run the same approved digest; Web/API independently deploy and roll back.
 - [ ] Restore meets approved RPO/RTO; health, shutdown, migration ownership, SLO, alerts, approval, and concurrency controls are exercised.
 
-**Evidence:** child-issue closure, benchmark/ADR, image inventory/scans/SBOM/attestation, OIDC policy, deployment/rollback logs, restore report, dashboards, and runbook drills.  
+**Evidence:** child-issue closure, benchmark and selection rationale, image inventory/scans/SBOM/attestation, OIDC policy, deployment/rollback logs, restore report, dashboards, and runbook drills.
+
 **Non-goals:** choosing a platform before inputs are approved or storing production data in application containers.
 
 ### ISSUE-044 — [R-11] Design and validate vector retrieval
@@ -1356,7 +1365,7 @@ Build reproducible non-root Web/API images once and promote the same verified di
 - **Status:** `TODO (later)`
 - **Labels:** `type:epic`, `area:agent`, `area:database`, `area:retrieval`, `scope:post-mvp`
 - **Blocked by:** ISSUE-042 and approved use case, corpus, embedding model/version, privacy class, and evaluation metric
-- **PR boundary:** ADR/evaluation first; schema/ingestion/query children only after approval
+- **PR boundary:** design/evaluation first; schema/ingestion/query children only after approval
 
 **Outcome**
 
@@ -1364,18 +1373,19 @@ Prove retrieval quality, privacy, lifecycle, and cost before adding any vector s
 
 **Work**
 
-- [ ] Write an ADR for extension provisioning, schema ownership, chunking, metadata/tenant isolation, dimension, distance, index, filters, versioning/re-embedding, and deletion.
+- [ ] Record and approve the vector design in `PLANS.md`, covering extension provisioning, schema ownership, chunking, metadata/tenant isolation, dimension, distance, index, filters, versioning/re-embedding, and deletion.
 - [ ] Build an offline representative evaluation for recall/quality, latency, and cost.
 - [ ] Design migration, ingestion, delete, re-embed, and rollback paths.
 
 **Review / acceptance**
 
-- [ ] No vector table/column/index precedes the approved ADR and evaluation.
+- [ ] No vector table/column/index precedes the approved design and evaluation.
 - [ ] Representative quality/latency/cost thresholds pass with reproducible model/corpus versions.
 - [ ] Cross-user/tenant and sensitive-data isolation have direct negative tests.
 - [ ] Delete/re-embed and schema/index changes are migration-driven and observable.
 
-**Evidence:** ADR, versioned evaluation dataset/results, isolation tests, migration plan, and cost record.  
+**Evidence:** approved plan, versioned evaluation dataset/results, isolation tests, migration plan, and cost record.
+
 **Non-goals:** vector use solely because pgvector is installed.
 
 ### ISSUE-045 — [R-12] Implement the first travel-agent vertical slice
@@ -1458,13 +1468,3 @@ Make public exposure an explicit evidence-backed owner decision, never an accide
 
 **Evidence:** signed release checklist, scan/load/accessibility reports, restore/rollback/incident drill records, dependency closure, and explicit authorization.  
 **Non-goals:** schedule-based waiver or treating AI review as release approval.
-
-## 7. References
-
-- [GitHub: planning and tracking work](https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/planning-and-tracking-work-for-your-team-or-project)
-- [GitHub: issue dependencies](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-issue-dependencies)
-- [GitHub: sub-issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/adding-sub-issues)
-- [GitHub: creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue)
-- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
-- [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/)
-- [W3C accessible forms guidance](https://www.w3.org/WAI/tutorials/forms/)

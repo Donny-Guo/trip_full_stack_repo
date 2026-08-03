@@ -1,14 +1,14 @@
 # Development Plan: Monorepo Foundation and Authentication Vertical Slice
 
-Status: **decisions D-01 through D-24 confirmed; first-slice implementation authorized on 2026-08-02; P-03 and F-01 are complete locally; F-02 and F-03 are next**\
+Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03, F-01, and F-02 are complete locally; F-03 and the now-unblocked Web work are next**\
 Plan date: 2026-07-30  
 Implementation authorization date: 2026-08-02\
 Scope source: project directories, Sign Up/Login, Navigation, User table, and Auth API requested by the user  
-Authorization history: the original planning round created documentation only. A 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies. On 2026-08-02, the owner explicitly authorized the planned first local authentication slice, including code and scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates.
+Authorization history: the original planning round created documentation only. A 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies. On 2026-08-02, the owner explicitly authorized the planned first local authentication slice, including code and scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. On 2026-08-03, the owner explicitly authorized D-25 and the isolated Next.js/MUI/TypeORM baseline change.
 
 Authorization exclusions: post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue still require separate explicit authorization.
 
-Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, exact root toolchain dependencies, one pnpm lockfile, editor/ignore conventions, and local-only task graph now exist. No application scaffolding, automation, hooks, migrations, infrastructure configuration, or business code exists yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
+Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and a minimal independently buildable `apps/web` scaffold now exist. The Web scaffold runs Next.js 16.2.12 with React 19.2.8 and native ESLint flat configuration. MUI, the API, TypeORM, automation, hooks, migrations, infrastructure configuration, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
 
 Simplified Chinese translation: [`PLANS_ZH.md`](./PLANS_ZH.md). This English plan is authoritative.
 
@@ -37,7 +37,7 @@ This slice is a milestone spanning multiple independently reviewable change sets
 ### Required in the first slice
 
 - Root pnpm workspace with `apps/web` and `apps/api` project directories.
-- Next.js App Router + TypeScript + MUI v6 foundation.
+- Next.js 16 App Router + TypeScript + MUI v9 foundation.
 - NestJS modular API foundation, configuration validation, and PostgreSQL connection.
 - First `users` migration.
 - `UsersModule` and `AuthModule`.
@@ -69,7 +69,7 @@ These are not forgotten: a public-exposure authentication gate, refresh-token ro
 
 ## 4. Decision record
 
-All decisions D-01 through D-24 are confirmed and authoritative. D-14 through D-19 were accepted from the independent audit; D-20 through D-24 record the user's GitHub identity, governance, CI/CD, local-hook, license, and AI-review requirements. Implementation still requires a separate explicit start instruction.
+All decisions D-01 through D-25 are confirmed and authoritative. D-14 through D-19 were accepted from the independent audit; D-20 through D-24 record the user's GitHub identity, governance, CI/CD, local-hook, license, and AI-review requirements; D-25 records the owner-authorized framework/ORM major-line revision. First-slice implementation is authorized within the stated exclusions.
 
 | ID | Status | Decision | Affects |
 | --- | --- | --- | --- |
@@ -97,6 +97,7 @@ All decisions D-01 through D-24 are confirmed and authoritative. D-14 through D-
 | D-22 | `CONFIRMED` | GitHub CD is gated by R-09 and an approved target: build once from trusted code, attest and publish immutable Web/API image digests, promote the same digests through protected `staging`/`production` Environments using OIDC, require production approval without self-review, serialize deployments, and support rollback; pull-request code receives no deployment secrets | R-09, R-14 |
 | D-23 | `CONFIRMED` | The repository owner and initial `CODEOWNERS` identity is `@Donny-Guo`. MIT is the confirmed open-source license choice; the standard root license uses `Copyright (c) 2026 Donny-Guo`, requires explicit owner authorization, and does not require per-file license headers. F-08 verifies and maintains the artifact | F-08, documentation |
 | D-24 | `CONFIRMED` | At most one advisory AI reviewer may be enabled initially. Manually request review only after Ready for Review, green deterministic CI, and self-review. Evaluate it on three representative risk-bearing pull requests, with no automatic draft/every-push review, no overlapping reviewer, and no merge-gating authority; record useful findings, false positives, misses, and latency before revising the policy. Provider and account details are not recorded in the public repository | F-08, Q-01 |
+| D-25 | `CONFIRMED` | Supersede the original Web/ORM version constraint with the current stable Next.js 16, MUI v9, and TypeORM lines while retaining React 19, PostgreSQL 18, and the approved test families. The 2026-08-03 exact baseline is Next.js 16.2.12, MUI Material/Icons 9.2.0 with `@mui/material-nextjs` 9.1.1, and TypeORM 1.1.0. Installed dependencies move now; not-yet-owned dependencies use these pins when their task begins. Keep exact stable pins, isolate upgrades, and require explicit approval for another major change | P-03, F-02, W-01, B-01 |
 
 ### Password-policy change contract
 
@@ -246,11 +247,11 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 #### P-03 Freeze a compatible version matrix — `DONE`
 
 - Prerequisite: P-02
-- Confirmed owner constraints (2026-08-02): retain Next.js 15 with MUI v6; use TypeORM 0.3.31 and PostgreSQL 18; use Jest/Supertest for API tests, Vitest/React Testing Library for Web unit/component tests, and Playwright for browser E2E. Do not silently replace those majors or test families. MUI v6 is an intentional upstream-support exception and Next.js 15 is in Maintenance LTS; re-evaluate the pairing by 2026-09-21 or before public exposure, whichever comes first, and immediately upon a critical unpatched security or compatibility blocker. Review does not authorize an upgrade.
-- Action: verify an exact compatible baseline from primary sources for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 15, React/React DOM, MUI v6 and its official Next/Emotion integration, NestJS and its CLI/adapter packages, TypeORM 0.3.31, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint. Select a versioned standard GitHub-hosted Ubuntu runner (evaluate `ubuntu-24.04`, not a floating `-latest` or preview label), record Debian-slim/Alpine application-image candidates for later benchmark, define exact pin/range and upgrade/rollback policy, and create an initial full-SHA Action reference register with readable version comments.
+- Confirmed owner constraints: the 2026-08-02 baseline retained Next.js 15, MUI v6, and TypeORM 0.3.31. D-25 explicitly superseded those three selections on 2026-08-03 with the current stable Next.js 16, MUI v9, and TypeORM lines. PostgreSQL 18 and the Jest/Supertest, Vitest/React Testing Library, and Playwright families remain unchanged. Do not silently replace these majors or test families; another major change requires explicit approval.
+- Action: maintain an exact compatible baseline from primary sources for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 16, React/React DOM, MUI v9 and its official Next/Emotion integration, NestJS and its CLI/adapter packages, TypeORM 1.1, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint. Select a versioned standard GitHub-hosted Ubuntu runner (evaluate `ubuntu-24.04`, not a floating `-latest` or preview label), record Debian-slim/Alpine application-image candidates for later benchmark, define exact pin/range and upgrade/rollback policy, and create an initial full-SHA Action reference register with readable version comments.
 - Output: `.node-version` plus authoritative `docs/toolchain.md` and its `docs/toolchain_ZH.md` follower. The toolchain document contains one matrix with exact selections, compatibility/support state, primary-source links and check dates, pin/enforcement locations, update owner/cadence, rollback target, downstream verification task, and the initial immutable Action reference register.
-- Acceptance: the exact Node and pnpm selections are recorded and `.node-version` matches the matrix; no floating `latest`, canary, preview, prerelease, or mutable Action reference is selected; the Next.js 15/MUI v6 support exception and TypeORM 0.3.31 choice are explicit; compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2, and the supported runtime intersection; every pin names an owner, rollback, and downstream enforcement task. F-01 implements root `packageManager`/engine constraints, F-05 pins and verifies the database image, B-04 proves Argon2 runtime behavior, W-01 proves MUI SSR, and F-06/F-08 prove CI parity and the complete Action register; P-03 does not claim those downstream checks already exist.
-- Completion evidence (2026-08-02): `.node-version` selects Node 24.18.0; [`docs/toolchain.md`](./docs/toolchain.md) and its synchronized follower record the exact matrix, policy, rollback classes, candidate images, full-SHA Action register, and downstream enforcement map. File parity, local Markdown links, authoritative-English language policy, Action-SHA length, and whitespace checks passed. At P-03 closure, installation, lockfile, build, native-runtime, database, SSR, E2E, and CI evidence remained assigned to downstream tasks; F-01 has since supplied the root installation, lockfile, and task-graph evidence.
+- Acceptance: the exact Node and pnpm selections are recorded and `.node-version` matches the matrix; no floating `latest`, canary, preview, prerelease, or mutable Action reference is selected; the D-25 Next.js 16/MUI v9/TypeORM 1.1 choices are explicit; compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2, and the supported runtime intersection; every pin names an owner, rollback, and downstream enforcement task. F-01 implements root `packageManager`/engine constraints, F-02 proves the installed Next line, F-05 pins and verifies the database image, B-04 proves Argon2 runtime behavior, W-01 proves MUI SSR, and F-06/F-08 prove CI parity and the complete Action register; P-03 does not claim downstream checks that do not exist.
+- Completion evidence: on 2026-08-02, `.node-version`, [`docs/toolchain.md`](./docs/toolchain.md), and its synchronized follower established the original exact matrix, policy, rollback classes, candidate images, full-SHA Action register, and downstream enforcement map. D-25 amended the Next.js/MUI/TypeORM rows on 2026-08-03 from current primary sources and publisher metadata. F-01 supplies root installation, lockfile, and task-graph evidence; F-02 supplies Next.js 16 installation/build/runtime evidence. MUI SSR and TypeORM/PostgreSQL runtime evidence remain assigned to W-01 and B-01.
 
 ### Phase 1 — Monorepo and local environment
 
@@ -262,12 +263,13 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Acceptance: one root lockfile; internal packages use workspace protocol; root tasks discover applications; Turbo dependencies/outputs are correct; remote cache is disabled.
 - Completion evidence (2026-08-02): `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.editorconfig`, `.gitignore`, and the single `pnpm-lock.yaml` implement the exact Node 24.18.0, pnpm 11.18.0, Turborepo 2.10.8, and TypeScript 5.9.3 selections; root tasks and the reserved no-op `prepare` boundary; `apps/*`/`packages/*` discovery; strict engines, exact dependency saving, and workspace-protocol saving; declared build outputs; uncached formatting; and explicitly disabled remote cache. A frozen install succeeded in a disposable fresh candidate tree assembled from committed HEAD plus this change. The dry graph and all five root commands succeeded with zero package tasks, as expected before application scaffolding. A disposable two-package fixture additionally proved both workspace globs, `workspace:*` resolution, dependency ordering, declared-output restoration from local cache, and format cache bypass. No npm/yarn lockfile or secret-bearing/remote cache configuration was found.
 
-#### F-02 Create the Next.js project directory — `TODO`
+#### F-02 Create the Next.js project directory — `DONE`
 
 - Prerequisite: F-01
 - Action: create `apps/web` with TypeScript, App Router, `src/`, strict checking, and host-run pnpm/Turbo development. Do not add unapproved Tailwind.
 - Output: minimal buildable Web application.
 - Acceptance: dev start, typecheck, lint, and production build succeed; template leftovers and unused dependencies are removed.
+- Completion evidence (2026-08-03): `apps/web` is a minimal App Router/`src` TypeScript package with strict checking, no Tailwind, no fake business behavior, and no client-exposed API configuration. D-25 upgraded the installed framework from 15.5.22 to exact `next@16.2.12`/`eslint-config-next@16.2.12`, removed the direct legacy `FlatCompat` dependency, adopted Next's native flat configs, and accepted Next-generated `react-jsx` plus development route types. `pnpm install`, Web lint, route type generation, strict TypeScript, the Turbopack production build, and a production `GET /` smoke check returning `200` with `Trip Agent` all passed. No Web test was generated; test tooling remains owned by F-04 and later component/E2E tasks.
 
 #### F-03 Create the NestJS project directory — `TODO`
 
@@ -385,10 +387,10 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 
 ### Phase 3 — Web foundation and navigation
 
-#### W-01 Integrate MUI v6 with App Router SSR — `TODO`
+#### W-01 Integrate MUI v9 with App Router SSR — `TODO`
 
 - Prerequisite: F-02
-- Action: add approved MUI v6 dependencies and the official App Router cache provider, ThemeProvider, fonts, and CSS-variable strategy.
+- Action: add exact `@mui/material@9.2.0`, `@mui/icons-material@9.2.0`, `@mui/material-nextjs@9.1.1`, and approved Emotion pins; configure `AppRouterCacheProvider` from `v16-appRouter`, ThemeProvider, fonts, and CSS-variable strategy. Use a local client wrapper when a MUI `component` prop receives `next/link` under the Next.js 16 boundary.
 - Output: stable root layout and theme.
 - Acceptance: development and production render without hydration/style warnings; tokens apply; no second component system is introduced.
 
@@ -540,8 +542,8 @@ Each item begins only after the first slice is accepted. Every item requires ind
 #### R-11 Design and validate vector retrieval — `TODO (later)`
 
 - Prerequisite: R-10 and an approved retrieval use case, corpus, embedding model/version, privacy classification, and evaluation metric
-- Action: write an ADR covering privileged production extension provisioning, schema ownership, chunking, metadata/tenant isolation, vector dimension, distance function, index type, filtering, re-embedding/versioning, deletion, and offline retrieval evaluation.
-- Acceptance: no vector schema precedes the ADR; representative recall/latency/cost targets pass; tenant/privacy controls and delete/re-embed paths are tested; schema/index changes are migration-driven.
+- Action: record and approve the vector design in `PLANS.md`, covering privileged production extension provisioning, schema ownership, chunking, metadata/tenant isolation, vector dimension, distance function, index type, filtering, re-embedding/versioning, deletion, and offline retrieval evaluation.
+- Acceptance: no vector schema precedes the approved design and evaluation; representative recall/latency/cost targets pass; tenant/privacy controls and delete/re-embed paths are tested; schema/index changes are migration-driven.
 
 #### R-12 Implement the first travel-agent vertical slice — `TODO (later)`
 
@@ -666,7 +668,9 @@ Accepted from the audit in D-14 through D-19: the exact JWT/cookie profile, Orig
 
 Confirmed in D-20 through D-24: GitHub as source-control/automation platform; a public repository owned by `@Donny-Guo`; a bootstrap review mode that never removes required CI or permits a general bypass; fast Husky/lint-staged/commitlint local checks with authoritative CI; a later GitHub CD model based on trusted build-once artifacts, immutable digest promotion, protected Environments, OIDC, approval, and rollback; MIT licensing; and a manual provider-neutral advisory AI-review evaluation.
 
-No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` and `F-03` are the next tasks. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
+Confirmed in D-25: the active framework/ORM major lines are Next.js 16, MUI v9, and TypeORM 1.1, with exact reviewed stable pins and owning-task installation boundaries recorded in P-03 and `docs/toolchain.md`.
+
+No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` completed locally and was reverified on Next.js 16 on 2026-08-03. `F-03` and the now-unblocked W-01 Web foundation are next; their dependency order remains authoritative. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
 
 Assumption recorded for D-08: `$#@%` is the complete allowed special-character set for the first policy, not merely an example list. If the user intended these as examples, updating the plan is small and does not affect the architecture.
 
@@ -678,6 +682,7 @@ The plan review is complete:
 - D-08 and its login-compatibility behavior are accepted.
 - D-14 through D-19 security, data, and release boundaries are accepted.
 - D-20 through D-24 GitHub identity/governance, hook/CI authority, gated-CD boundaries, MIT licensing, and advisory AI-review policy are accepted.
+- D-25 Next.js 16/MUI v9/TypeORM 1.1 major-line revision and its owning-task boundaries are accepted.
 - English authority and `_ZH` follower rules are accepted.
 
 The owner issued the separate implementation-start instruction on 2026-08-02. It authorizes only the planned first local authentication slice and its listed repository-governance work. It does not authorize post-MVP scope, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, or remote update/closure of any GitHub issue.

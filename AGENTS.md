@@ -4,11 +4,11 @@ This file governs AI agents and contributors for the repository root and all des
 
 ## 1. Objective, state, and authorized scope
 
-Build a production-oriented travel-agent application with a pnpm/Turborepo monorepo; Next.js 15 App Router, TypeScript, and MUI v6 on the Web; NestJS, TypeScript, and REST in the API; TypeScript LangGraph initially behind an extractable API boundary; TypeORM 0.3.31; and PostgreSQL 18 with pgvector available for later vector work. The first authentication slice uses a 15-minute access JWT in a same-origin HttpOnly cookie. Refresh/rotation/revocation, Redis, Swagger/OpenAPI, observability, agent persistence, and travel-provider integrations come later.
+Build a production-oriented travel-agent application with a pnpm/Turborepo monorepo; Next.js 16 App Router, TypeScript, and MUI v9 on the Web; NestJS, TypeScript, and REST in the API; TypeScript LangGraph initially behind an extractable API boundary; TypeORM 1.1; and PostgreSQL 18 with pgvector available for later vector work. The first authentication slice uses a 15-minute access JWT in a same-origin HttpOnly cookie. Refresh/rotation/revocation, Redis, Swagger/OpenAPI, observability, agent persistence, and travel-provider integrations come later.
 
-Decisions D-01 through D-24 are confirmed. On 2026-08-02, the owner authorized the planned first local authentication slice, closing `P-02`/`ISSUE-001`. The authorization covers planned code/scaffolding, dependencies and the root lockfile, hooks, MIT-license governance, first-slice GitHub CI/governance, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. `P-03`/`ISSUE-002` and `F-01`/`ISSUE-003` are complete locally; continue with `F-02`/`ISSUE-004` and `F-03`/`ISSUE-005` in dependency order and stay within that slice.
+Decisions D-01 through D-25 are confirmed. On 2026-08-02, the owner authorized the planned first local authentication slice, closing `P-02`/`ISSUE-001`. The authorization covers planned code/scaffolding, dependencies and the root lockfile, hooks, MIT-license governance, first-slice GitHub CI/governance, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. `P-03`/`ISSUE-002`, `F-01`/`ISSUE-003`, and `F-02`/`ISSUE-004` are complete locally; continue with `F-03`/`ISSUE-005` and the now-unblocked Web work in dependency order and stay within that slice.
 
-On 2026-08-02, the owner also confirmed that `P-03` must retain the Next.js 15 + MUI v6 pairing, use TypeORM 0.3.31 and PostgreSQL 18, and select Jest/Supertest for API tests, Vitest/React Testing Library for Web unit/component tests, and Playwright for browser E2E. Treat these as deliberate constraints: do not silently substitute another major or test family. Because upstream currently lists MUI v6 as unsupported and Next.js 15 as Maintenance LTS, re-evaluate that pairing by 2026-09-21 or before public exposure, whichever comes first, and immediately upon a critical unpatched security or compatibility blocker. A review does not authorize a major-version change; that still requires the owner's explicit approval.
+On 2026-08-03, the owner explicitly superseded the earlier Web/ORM version constraint through D-25: use the current stable Next.js 16 and MUI v9 lines and the current stable TypeORM line, while retaining PostgreSQL 18 and the selected test families. The reviewed exact baseline is Next.js 16.2.12, MUI Material/Icons 9.2.0 with `@mui/material-nextjs` 9.1.1, and TypeORM 1.1.0. Treat these as deliberate constraints: use exact stable pins, do not silently substitute another major or a prerelease, and keep version upgrades isolated from feature work. Installed dependencies move immediately; dependencies not yet owned by an implementation task use the revised pin when that task begins. Re-review support and compatibility quarterly, before public exposure, and immediately upon a critical unpatched security or compatibility blocker. Another major-version change still requires the owner's explicit approval.
 
 That authorization excludes post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository-visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue. The owner separately authorized remote creation of `ISSUE-001` through `ISSUE-027` and their scoped metadata on 2026-07-30; those public-repository issues exist. Any other remote issue operation needs a separate explicit request.
 
@@ -18,7 +18,7 @@ Resolve conflicts in this order:
 
 1. The user's current explicit request.
 2. This file and any closer `AGENTS.md`.
-3. Approved `PLANS.md` and architecture decision records (ADRs).
+3. Approved `PLANS.md`.
 4. `ISSUES.md`, which packages `PLANS.md` and may add review detail or stricter sequencing but not override the plan.
 5. `README.md` and other documentation.
 
@@ -26,12 +26,12 @@ Current code, migrations, tests, and verified runtime behavior are evidence for 
 
 - Unsuffixed project documents are authoritative English. Existing `_ZH.md` files are Simplified Chinese followers and must identify their English source.
 - Material English changes require same-change follower updates. Keep decision/task/issue IDs, status, scope, paths, commands, and acceptance criteria aligned. English controls on conflict; fix the follower.
-- Code identifiers, APIs, schemas, ADRs, runbooks, commit-facing technical language, and initial UI copy are English unless a later localization task says otherwise.
+- Code identifiers, APIs, schemas, runbooks, commit-facing technical language, and initial UI copy are English unless a later localization task says otherwise.
 - Public content may identify `@Donny-Guo` as owner, assignee, `CODEOWNERS` identity, or copyright name. Never record private account plans/tiers, eligibility/subscription status, billing/usage allowances, maintainer-count profiles, or similar account metadata.
 
 ## 3. Repository and architecture boundaries
 
-Planned locations are `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`, `.husky/`, `apps/{web,api}`, `packages/{api-client,config-eslint,config-typescript,test-utils}`, `infra/docker`, `docs/{adr,api,agent}`, `docs/toolchain*.md`, and root `AGENTS*`, `PLANS*`, `ISSUES*`, `README*`, `CONTRIBUTING.md`, `SECURITY.md`, and `LICENSE`. Workflows start with PR CI/security; deployment waits for R-09. Create `test-utils` only after real cross-application reuse. Generated `api-client` files are never maintained manually. `LICENSE` remains standard MIT text and changes require explicit owner authorization.
+Planned locations are `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`, `.husky/`, `apps/{web,api}`, `packages/{api-client,config-eslint,config-typescript,test-utils}`, `infra/docker`, `docs/{api,agent}`, `docs/toolchain*.md`, and root `AGENTS*`, `PLANS*`, `ISSUES*`, `README*`, `CONTRIBUTING.md`, `SECURITY.md`, and `LICENSE`. Workflows start with PR CI/security; deployment waits for R-09. Create `test-utils` only after real cross-application reuse. Generated `api-client` files are never maintained manually. `LICENSE` remains standard MIT text and changes require explicit owner authorization.
 
 - `apps/web` never accesses PostgreSQL, Redis, model providers, or privileged agent tools directly. `apps/api` owns business rules, authentication/authorization, and data access.
 - Web and API do not import one another's source by relative path. Once available, cross-application contracts come from generated OpenAPI artifacts; do not hand-maintain duplicate request/response models.
@@ -75,10 +75,13 @@ Without explicit authorization, do not replace/upgrade the framework, package ma
 - Enable strict TypeScript. Avoid unjustified `any`, non-null assertions, and broad casts; validate all external input at runtime.
 - Organize by business capability. Keep controllers/pages/components thin and business rules independently testable. Use explicit domain names and meaningful boolean prefixes; minimize exports, circular dependencies, and cross-boundary deep imports. Comments explain reasons, constraints, or risks.
 
-## 6. Web: Next.js and MUI v6
+## 6. Web: Next.js 16 and MUI v9
 
 - Use App Router with `src/app` for routes and `src/features` for capabilities. Prefer Server Components; use Client Components only for browser APIs, interactive state, or client-side forms.
+- Treat Next.js request-time APIs and route `params`/`searchParams` as asynchronous; await them and use generated route-aware helpers where they improve safety. Use `proxy.ts`, not the removed `middleware.ts` convention, for the narrow same-origin proxy boundary.
+- Turbopack is the default development and production bundler. A custom webpack path or other bundler exception needs documented compatibility evidence before adoption.
 - MUI is the default. Use theme tokens and deliberate wrappers/`sx`; configure official App Router SSR caching; avoid hydration/style flashes and scattered magic values.
+- Integrate MUI through `AppRouterCacheProvider` from `@mui/material-nextjs/v16-appRouter`. Use a local Client Component adapter when passing `next/link` to MUI's `component` prop, and place URL-reading client controls behind `Suspense` when Next.js requires it.
 - Form/schema code owns validation; MUI fields present it. Client validation gives immediate feedback, while the API repeats validation and remains authoritative. Associate fields/help text, make submission errors focusable or announced, and never rely on color alone.
 - Navigation uses semantic links and supports keyboard access, active routes, mobile layouts, future permission filtering, and feature flags.
 - Read the API base URL from validated environment configuration; components do not assemble URLs. Browser calls use relative same-origin `/api/v1`; Server Components use a server-only internal API origin, forward incoming cookies explicitly when needed, and never expose that origin to the client bundle.
@@ -119,17 +122,18 @@ Without explicit authorization, do not replace/upgrade the framework, package ma
 ## 9. PostgreSQL and pgvector
 
 - TypeORM is approved. Every schema change uses a reviewable, forward-compatible migration; production `synchronize` is always off. Use consistent table/column/index naming and UTC `timestamptz`.
+- TypeORM 1 code targets ES2023, uses `DataSource` and instance-bound repositories, and requires `@nestjs/typeorm` 11.0.1 or newer. Do not use removed global/deprecated APIs; reject accidental `null`/`undefined` where values and use `IsNull()` only for intentional SQL `NULL` queries.
 - `users` has UUID IDs, canonical unique email, `created_at`, and `updated_at`. Enforce trimmed lowercase ASCII email (maximum 254) with a database check and unique constraint; application prechecks are not race safety.
 - The first migration has no email-verification, account-status, or role fields. Add them by forward migration only after workflow/authorization semantics are approved.
 - Plan locks, backfills, repair/rollback paths, and zero-downtime compatibility windows.
 - Distinguish a pgvector-capable image from an enabled `vector` extension. A privileged provisioner owns extensions/roles; application startup and the runtime role never execute `CREATE EXTENSION`. Local bootstrap enables/verifies it; production does so only before an approved vector migration.
 - Separate provisioner, migrator, and runtime roles: the migrator owns approved DDL; runtime gets only required DML. Run migrations as an explicit deployment job, never implicitly at application startup.
-- Before vector columns, an ADR jointly decides dimension, distance function, index type, embedding model/version, and re-embedding strategy. Do not create unused vector tables/indexes.
+- Before vector columns, record and approve the dimension, distance function, index type, embedding model/version, and re-embedding strategy in `PLANS.md`. Do not create unused vector tables/indexes.
 - Repository integration tests use real PostgreSQL, not an in-memory substitute.
 
 ## 10. LangGraph agents and tools
 
-- Start TypeScript `@langchain/langgraph` in `apps/api/src/modules/agent`; extraction requires an ADR. Graphs, model credentials, and privileged tools stay backend-only; Web may later consume streams but never run graphs, hold model keys, or bypass NestJS auth.
+- Start TypeScript `@langchain/langgraph` in `apps/api/src/modules/agent`; extraction requires an approved `PLANS.md` change. Graphs, model credentials, and privileged tools stay backend-only; Web may later consume streams but never run graphs, hold model keys, or bypass NestJS auth.
 - Explicitly type graph state, node inputs/outputs, routing, and termination. Tools use strict input schemas, timeouts, cancellation, bounded retries, and stable errors.
 - Side-effecting tools are idempotent or use idempotency keys and compensation; never retry without a bound. Validate/normalize untrusted provider responses before the domain layer.
 - Separate system instructions, user content, and tool results. Carry `userId`, `threadId`, `runId`, and correlation ID; logs/traces omit secrets and full private data.
@@ -164,7 +168,7 @@ Before merge, pass documentation-policy checks, dependency review, lint, typeche
 Documentation duties:
 
 - Update `README.md` and `.env.example` for environment variables, ports, commands, or local dependencies; OpenAPI and `docs/api` for contracts/error codes; and migration notes for data-model changes.
-- Add ADRs for consequential service-boundary, ORM, auth-storage, agent-placement, or deployment-topology changes.
+- Record consequential service-boundary, ORM, auth-storage, agent-placement, or deployment-topology decisions in `PLANS.md` and synchronize affected implementation documentation.
 - Update `PLANS.md` for scope/status. Update derived `ISSUES.md` for order, dependencies, issue scope, PR boundaries, or acceptance evidence.
 - CI compares IDs/statuses across English docs and existing followers, validates local Markdown links, and rejects Han characters in authoritative English except required technical values.
 

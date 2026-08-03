@@ -4,11 +4,11 @@
 
 ## 1. 项目目标、状态与授权范围
 
-构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 15 App Router、TypeScript、MUI v6；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 0.3.31；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
+构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 16 App Router、TypeScript、MUI v9；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 1.1；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
 
-D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002` 与 `F-01`/`ISSUE-003` 已在本地完成；继续按依赖顺序推进 `F-02`/`ISSUE-004` 和 `F-03`/`ISSUE-005`，不得超出该切片。
+D-01 至 D-25 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01`/`ISSUE-003` 与 `F-02`/`ISSUE-004` 已在本地完成；继续按依赖顺序推进 `F-03`/`ISSUE-005` 及现已解除阻塞的 Web 工作，不得超出该切片。
 
-2026-08-02，Owner 还确认 `P-03` 必须保留 Next.js 15 + MUI v6 组合，使用 TypeORM 0.3.31 与 PostgreSQL 18，并选择 Jest/Supertest 进行 API 测试、Vitest/React Testing Library 进行 Web Unit/Component 测试、Playwright 进行 Browser E2E。将这些视为明确约束，不得静默替换其他 Major 或测试系列。由于上游当前将 MUI v6 列为不再支持，而 Next.js 15 处于 Maintenance LTS，必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权 Major-version 变更；变更仍需 Owner 明确批准。
+2026-08-03，Owner 通过 D-25 明确取代此前的 Web/ORM 版本约束：使用当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线，同时保留 PostgreSQL 18 和已选测试系列。经 Review 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。将这些视为明确约束：使用精确 Stable Pin，不得静默替换其他 Major 或 Prerelease，并将版本升级与 Feature Work 隔离。已安装 Dependency 立即迁移；尚未进入所属实施任务的 Dependency 在该任务开始时采用新 Pin。每季度、公开暴露前，以及出现严重且无补丁的安全或兼容性阻断时重新 Review Support/Compatibility。再次变更 Major 仍需 Owner 明确批准。
 
 该授权不包含 Post-MVP、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata；这些 Public Repository Issue 已存在。其他远程 Issue 操作都需单独明确请求。
 
@@ -18,7 +18,7 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 
 1. 用户当前明确要求。
 2. 本文件对应的英文 `AGENTS.md` 与更近的 `AGENTS.md`。
-3. 已批准的 `PLANS.md` 和架构决策记录（ADR）。
+3. 已批准的 `PLANS.md`。
 4. 从 `PLANS.md` 派生的 `ISSUES.md`；它可增加审核细节或更严格顺序，但不能覆盖计划。
 5. `README.md` 和其他文档。
 
@@ -26,12 +26,12 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 
 - 无后缀项目文档是英文权威版本；已有 `_ZH.md` 是简体中文跟随版，并须指向英文来源。
 - 英文有实质变更时，同一变更内更新已有跟随版；决策/任务/Issue ID、状态、范围、路径、命令和验收标准必须一致。冲突时英文优先并修复中文。
-- 代码标识、API、Schema、ADR、Runbook、Commit-facing 技术语言及首版 UI 文案默认使用英文，除非后续本地化任务另有规定。
+- 代码标识、API、Schema、Runbook、Commit-facing 技术语言及首版 UI 文案默认使用英文，除非后续本地化任务另有规定。
 - Public 内容可将 `@Donny-Guo` 标为 Owner、Assignee、`CODEOWNERS` Identity 或 Copyright Name；绝不记录私人 Account Plan/Tier、Eligibility/Subscription Status、Billing/Usage Allowance、Maintainer-count Profile 或类似 Metadata。
 
 ## 3. 仓库与架构边界
 
-计划路径为 `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`、`.husky/`、`apps/{web,api}`、`packages/{api-client,config-eslint,config-typescript,test-utils}`、`infra/docker`、`docs/{adr,api,agent}`、`docs/toolchain*.md`，以及根 `AGENTS*`、`PLANS*`、`ISSUES*`、`README*`、`CONTRIBUTING.md`、`SECURITY.md`、`LICENSE`。Workflow 先实现 PR CI/安全；部署等待 R-09。`test-utils` 仅在真实跨应用复用后创建。生成的 `api-client` 文件绝不手工维护。`LICENSE` 保持标准 MIT 正文，修改需 Owner 明确授权。
+计划路径为 `.github/{workflows,CODEOWNERS,dependabot.yml,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/}`、`.husky/`、`apps/{web,api}`、`packages/{api-client,config-eslint,config-typescript,test-utils}`、`infra/docker`、`docs/{api,agent}`、`docs/toolchain*.md`，以及根 `AGENTS*`、`PLANS*`、`ISSUES*`、`README*`、`CONTRIBUTING.md`、`SECURITY.md`、`LICENSE`。Workflow 先实现 PR CI/安全；部署等待 R-09。`test-utils` 仅在真实跨应用复用后创建。生成的 `api-client` 文件绝不手工维护。`LICENSE` 保持标准 MIT 正文，修改需 Owner 明确授权。
 
 - `apps/web` 不得直接访问 PostgreSQL、Redis、Model Provider 或高权限 Agent Tool；`apps/api` 是业务规则、认证/授权和数据访问的权威入口。
 - Web 与 API 不通过相对路径互相导入源码。OpenAPI 生成物可用后，跨应用契约从其产生；不得手工维护会漂移的重复请求/响应 Model。
@@ -75,10 +75,13 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 - 开启 TypeScript Strict；避免无理由 `any`、非空断言和宽泛 Cast；所有外部输入都做 Runtime Validation。
 - 按业务能力组织。Controller/Page/Component 保持薄，业务规则可独立测试。使用明确领域名称和有意义的 Boolean Prefix；最小化 Export、循环依赖和跨边界 Deep Import。注释解释原因、约束或风险。
 
-## 6. Web：Next.js 与 MUI v6
+## 6. Web：Next.js 16 与 MUI v9
 
 - 使用 App Router；Route 放在 `src/app`，Capability 放在 `src/features`。默认 Server Component，仅浏览器 API、交互状态或客户端表单使用 Client Component。
+- 将 Next.js Request-time API 与 Route `params`/`searchParams` 视为异步值；显式 `await`，并在有助于安全时使用生成的 Route-aware Helper。同源 Proxy 窄边界使用 `proxy.ts`，不使用已移除的 `middleware.ts` Convention。
+- Turbopack 是 Development 与 Production 的默认 Bundler。采用自定义 webpack 路径或其他 Bundler 例外前，必须记录兼容性证据。
 - MUI 是默认组件库。使用 Theme Token 和审慎封装/`sx`；配置官方 App Router SSR Cache；避免 Hydration/样式闪烁及散落的魔法值。
+- 通过 `@mui/material-nextjs/v16-appRouter` 的 `AppRouterCacheProvider` 集成 MUI。将 `next/link` 传给 MUI 的 `component` Prop 时使用本地 Client Component Adapter；Next.js 要求时，将读取 URL 的 Client Control 放在 `Suspense` 后。
 - Form/Schema 层拥有校验规则，MUI Field 负责展示。Client Validation 提供即时反馈，API 重复校验并作为权威。关联字段/帮助文本，提交错误可聚焦或播报，不能只用颜色。
 - Navigation 使用语义链接，支持键盘、Active Route、移动布局、未来 Permission Filtering 和 Feature Flag。
 - API Base URL 来自已校验环境配置；Component 不拼接 URL。Browser 调用相对同源 `/api/v1`；Server Component 使用 Server-only 内部 API Origin，需要时显式转发入站 Cookie，且不得将 Origin 打入 Client Bundle。
@@ -119,17 +122,18 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 ## 9. PostgreSQL 与 pgvector
 
 - TypeORM 已批准。所有 Schema 变更使用可审核、Forward-compatible Migration；生产 `synchronize` 始终关闭。表/列/索引命名一致，时间使用 UTC `timestamptz`。
+- TypeORM 1 代码以 ES2023 为目标，使用 `DataSource` 与绑定实例的 Repository，并要求 `@nestjs/typeorm` 11.0.1 或更高版本。不得使用已移除的 Global/Deprecated API；意外的 `null`/`undefined` Where Value 必须报错，仅在明确查询 SQL `NULL` 时使用 `IsNull()`。
 - `users` 使用 UUID ID、规范且唯一的 Email、`created_at`、`updated_at`。数据库用 Check 和 Unique Constraint 强制 Trim 后小写 ASCII Email（最长 254）；应用 Precheck 不提供 Race Safety。
 - 首次 Migration 不加入 Email Verification、Account Status 或 Role；仅在 Workflow/Authorization Semantics 获批后通过 Forward Migration 添加。
 - Migration 需考虑 Lock、Backfill、Repair/Rollback Path 和 Zero-downtime Compatibility Window。
 - 区分 pgvector-capable Image 与已启用的 `vector` Extension。高权限 Provisioner 管理 Extension/Role；应用启动与 Runtime Role 绝不执行 `CREATE EXTENSION`。本地 Bootstrap 启用并验证；生产仅在已批准 Vector Migration 前启用。
 - 分离 Provisioner、Migrator、Runtime Role：Migrator 执行批准 DDL；Runtime 只获必需 DML。Migration 由明确 Deployment Job 执行，绝不随应用启动隐式运行。
-- Vector Column 前用 ADR 一并决定 Dimension、Distance Function、Index Type、Embedding Model/Version 和 Re-embedding Strategy。不得创建未使用的 Vector Table/Index。
+- Vector Column 前，在 `PLANS.md` 中记录并批准 Dimension、Distance Function、Index Type、Embedding Model/Version 和 Re-embedding Strategy。不得创建未使用的 Vector Table/Index。
 - Repository Integration Test 使用真实 PostgreSQL，不用 In-memory Substitute。
 
 ## 10. LangGraph Agent 与工具
 
-- TypeScript `@langchain/langgraph` 初期位于 `apps/api/src/modules/agent`；抽离需 ADR。Graph、Model Credential、高权限 Tool 仅后端运行；Web 后续可消费 Stream，但不得运行 Graph、持有 Model Key 或绕过 NestJS Auth。
+- TypeScript `@langchain/langgraph` 初期位于 `apps/api/src/modules/agent`；抽离需先批准 `PLANS.md` 变更。Graph、Model Credential、高权限 Tool 仅后端运行；Web 后续可消费 Stream，但不得运行 Graph、持有 Model Key 或绕过 NestJS Auth。
 - 显式类型化 Graph State、Node Input/Output、Routing、Termination。Tool 使用严格 Input Schema、Timeout、Cancellation、Bounded Retry 和稳定 Error。
 - 有副作用 Tool 必须 Idempotent，或使用 Idempotency Key 与 Compensation；禁止无界 Retry。Provider Response 作为不可信输入，校验/规范化后才能进入 Domain。
 - 分离 System Instruction、User Content、Tool Result。每次运行携带 `userId`、`threadId`、`runId`、Correlation ID；Log/Trace 不含 Secret 或完整私人数据。
@@ -164,7 +168,7 @@ D-01 至 D-24 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 文档职责：
 
 - Environment Variable、Port、Command 或本地依赖变化时更新 `README.md`/`.env.example`；Contract/Error Code 更新 OpenAPI/`docs/api`；Data Model 变化附 Migration Note。
-- Service Boundary、ORM、Auth Storage、Agent Placement、Deployment Topology 等重要变化新增 ADR。
+- Service Boundary、ORM、Auth Storage、Agent Placement、Deployment Topology 等重要决策记录在 `PLANS.md`，并同步受影响的实施文档。
 - Scope/Status 更新 `PLANS.md`；Order、Dependency、Issue Scope、PR Boundary 或 Acceptance Evidence 更新派生的 `ISSUES.md`。
 - CI 比较英文文档与已有跟随版的 ID/Status，校验本地 Markdown Link，并拒绝权威英文文档中非技术值所必需的汉字。
 
