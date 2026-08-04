@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 与 ISSUE-003 已在本地完成，下一步为 ISSUE-004 与 ISSUE-005**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-005 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`；因此 `ISSUE-001` 至 `ISSUE-003` 在本地为 `DONE`，下一步为 `ISSUE-004` 与 `ISSUE-005`。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 也已于 2026-08-03 完成 `F-03`。因此 `ISSUE-001` 至 `ISSUE-005` 在本地为 `DONE`；`ISSUE-006` 至 `ISSUE-010` 构成下一波依赖已满足的工作。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -73,7 +73,7 @@
 - [ ] `PLANS.md` 中相关决策仍有效；未解决的产品或安全选择被明确记录，而不是猜测。
 - [ ] 不参与编写 Issue 的人也能理解 Scope、Non-goals、Acceptance Criteria 与预期证据。
 - [ ] 所需 External Service、测试数据、Secret、Environment 和 Permission 均可通过已批准路径使用。
-- [ ] Schema、API、认证、部署或 Agent Boundary 变更在编码前已经识别 Migration/Compatibility 或 ADR 要求。
+- [ ] Schema、API、认证、部署或 Agent Boundary 变更在编码前已经识别 Migration、Compatibility 与 Design-review 要求。
 
 ## 3. 统一审核标准
 
@@ -174,7 +174,7 @@
 **审核/验收**
 
 - [x] 指令无歧义且来自 Repository Owner。
-- [x] 范围和排除项与 D-01 至 D-24 一致。
+- [x] 范围和排除项与 D-01 至 D-25 一致；D-25 仅变更 Framework/ORM Version Line 及其 Migration Contract。
 - [x] 在记录授权之前，未为关闭本 Gate 而修改实施 Artifact 或远程 Setting。
 
 **证据：** 2026-08-02 的 Owner 指令与同步后的中英文 Plan Status。已跟踪的 MIT `LICENSE` 早于本次授权存在，由 F-08 处理；关闭本地 Gate 时未修改任何远程 GitHub 状态。
@@ -184,7 +184,7 @@
 ### ISSUE-002 — [P-03] 冻结兼容版本矩阵
 
 - **状态：** `DONE`
-- **远程状态：** GitHub Issue #2 保持 Open，等待 Owner 的 PR/Review/Close Workflow。
+- **远程状态：** GitHub Issue #2 已于 2026-08-02 关闭。
 - **Labels：** `type:task`、`area:foundation`、`area:ci`、`priority:p0`
 - **Blocked by：** ISSUE-001
 - **PR Boundary：** 一个 Version-policy Change
@@ -193,18 +193,18 @@
 
 在创建脚手架前产出唯一可复现的 Toolchain 基线，使受支持组件和明确接受的支持例外都可审计。
 
-**已确认的 Owner 约束（2026-08-02）**
+**已确认的 Owner 约束（D-25 于 2026-08-03 修订）**
 
-- 保留 Next.js 15 与 MUI v6；不得静默替换其他 Major。
-- 使用 TypeORM 0.3.31。
+- 使用当前稳定的 Next.js 16 与 MUI v9 版本线；经 Review 的精确 Pin 为 Next.js 16.2.12、MUI Material/Icons 9.2.0 与 `@mui/material-nextjs` 9.1.1。
+- 使用当前稳定的 TypeORM 版本线；经 Review 的精确 Pin 为 TypeORM 1.1.0。
 - 使用 PostgreSQL 18。
 - API 测试使用 Jest/Supertest，Web Unit/Component 测试使用 Vitest/React Testing Library，Browser E2E 使用 Playwright。
-- 将 MUI v6 视为明确接受的上游支持例外，并记录 Next.js 15 的 Maintenance LTS 状态。必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级。
+- 保持精确 Stable Pin，只在 Owner Task 中安装对应 Dependency；每季度及公开暴露前重新 Review Support/Compatibility，再次变更 Major 需 Owner 明确批准。
 
 **工作**
 
-- [x] 从 Primary Source 选择 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 15、React/React DOM、MUI v6 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 0.3.31、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容版本。
-- [x] 记录 Owner 选择的测试栈、PostgreSQL Major 与 Next.js 15/MUI v6 重新评估条件，不保留笼统占位符。
+- [x] 从 Primary Source 选择 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 16、React/React DOM、MUI v9 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 1.1、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容版本。
+- [x] 记录 Owner 选择的测试栈、PostgreSQL Major 与 D-25 Next.js/MUI/TypeORM Choice，不保留笼统占位符。
 - [x] 创建权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。每个选择都记录精确版本或有版本的 Image Candidate、Compatible/Supported Intersection、Primary-source Link 与检查日期、Support Status 或 Exception、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target 及下游 Verification Task。
 - [x] 除非 Primary-source 证据否决，否则选择 `ubuntu-24.04`；记录后续镜像 Benchmark 的有版本 Debian-slim/Alpine 候选，但不选择最终生产 Base。
 - [x] 定义精确 Pin/Range、升级周期、回滚 Owner 和 Enforcement-owner Map。P-03 选择策略；F-01 实现根 Package-manager/Engine Enforcement，F-05 固定数据库镜像，B-04 证明 Argon2，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register。
@@ -214,19 +214,19 @@
 
 - [x] `.node-version` 包含精确的已选 Node Release 并与矩阵一致；记录精确 pnpm Release 及其 F-01/F-06 Enforcement Location。
 - [x] 不选择浮动 `latest`、未批准 Canary、Preview、Prerelease 或可变 Action Reference。
-- [x] 在完成的 Toolchain Artifact 中明确记录 MUI v6 支持例外、Next.js 15 Maintenance Status/重新评估触发条件、TypeORM 0.3.31、PostgreSQL 18 及所选测试系列。
+- [x] 在完成的 Toolchain Artifact 中明确记录 D-25 的 Next.js 16/MUI v9/TypeORM 1.1 Selection、Owner-task Installation Boundary、PostgreSQL 18 及所选测试系列。
 - [x] 兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2id 及受支持的 Node/pnpm Runtime 交集。
 - [x] 每个固定工具都有 Primary-source Link 与检查日期、Owner、经 Review 的升级路径、回滚及下游 Enforcement Task。
 - [x] Issue 不声称在其对应下游任务存在前，Package Installation、Lockfile Resolution、Application Build、Runtime Smoke Test 或 CI 一致性已经通过。
 
-**证据：** `.node-version`、`docs/toolchain.md`、同步的 `docs/toolchain_ZH.md`，以及上述要求的 Matrix/Register 内容。2026-08-02，Exact File/Heading Parity、Local Markdown Link、权威英文 Language Policy、Full Action-SHA Length 与 Whitespace Check 均通过；本地观察到的 Node/pnpm 版本也与选择一致。F-01 此后已提供 Dependency-installation、Lockfile 与 Root-task Evidence；Application Runtime 与 CI Check 仍由下游任务负责。
+**证据：** `.node-version`、`docs/toolchain.md`、同步的 `docs/toolchain_ZH.md`、`PLANS.md` 中的 D-25，以及要求的 Matrix/Register 内容。原始 P-03 Documentation Check 于 2026-08-02 通过；D-25 于 2026-08-03 重新检查并修订受影响 Row。F-01 提供 Root Dependency/Lockfile/Task Evidence，F-02 提供已安装 Next.js 16 Evidence。MUI SSR、TypeORM/PostgreSQL Runtime Behavior 与 CI 仍由下游任务负责。
 
 **非目标：** 安装依赖、生成 Lockfile、创建应用脚手架、声称下游 Runtime/CI Evidence 已存在，或选择最终生产 Container Base。
 
 ### ISSUE-003 — [F-01] 创建 pnpm/Turborepo Monorepo 根
 
 - **状态：** `DONE`
-- **远程状态：** GitHub Issue #3 保持 Open，等待 Owner 的 PR/Review/Close Workflow。
+- **远程状态：** GitHub Issue #3 已于 2026-08-03 关闭。
 - **Labels：** `type:task`、`area:foundation`、`priority:p0`
 - **Blocked by：** ISSUE-001、ISSUE-002
 - **PR Boundary：** 一个 Root-workspace PR
@@ -254,7 +254,8 @@
 
 ### ISSUE-004 — [F-02] 创建 Next.js 应用脚手架
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** GitHub Issue #4 已于 2026-08-03 关闭。
 - **Labels：** `type:task`、`area:web`、`priority:p0`
 - **Blocked by：** ISSUE-003
 - **PR Boundary：** 一个最小 Web Scaffold PR
@@ -265,23 +266,26 @@
 
 **工作**
 
-- [ ] 使用 App Router、`src/`、严格 TypeScript、已批准 Root Script 和宿主机 pnpm/Turbo 开发。
-- [ ] 清理 Demo/Template Asset 与无用依赖。
-- [ ] 保留计划中的 Route/Feature Boundary，不提前实现 Auth、Navigation 或 Agent。
+- [x] 使用 App Router、`src/`、严格 TypeScript、已批准 Root Script 和宿主机 pnpm/Turbo 开发。
+- [x] 清理 Demo/Template Asset 与无用依赖。
+- [x] 保留计划中的 Route/Feature Boundary，不提前实现 Auth、Navigation 或 Agent。
+- [x] 以精确 Next.js 16.2.12 Pin 与原生 ESLint Flat Configuration 将 D-25 应用于已安装 Web Surface。
 
 **审核/验收**
 
-- [ ] Root Command 下 Dev、lint、typecheck、生成的 Test（如有）与 Production Build 通过。
-- [ ] 不引入 Tailwind 或第二套 UI System。
-- [ ] Client Bundle 不暴露 API Secret/Internal Origin。
-- [ ] 无假业务行为或未使用的生成示例。
+- [x] Root Command 下 Dev、lint、typecheck、生成的 Test（如有）与 Production Build 通过。
+- [x] 不引入 Tailwind 或第二套 UI System。
+- [x] Client Bundle 不暴露 API Secret/Internal Origin。
+- [x] 无假业务行为或未使用的生成示例。
 
-**证据：** Root Command Output 与 Production Build。  
+**证据：** 2026-08-03，精确 Next.js 16 Installation、ESLint、Route Type Generation、Strict TypeScript、Turbopack Production Build，以及返回 `200` 和 `Trip Agent` 的 Production `GET /` Smoke 均通过。Next 16 生成其必需的 `react-jsx` Setting 与 Development Route-type Include。未生成 Test；F-04 与后续 Web Test Task 负责 Test Tooling。
+
 **非目标：** MUI、Route Group、Form 或认证。
 
 ### ISSUE-005 — [F-03] 创建 NestJS 应用脚手架
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** GitHub Issue #5 仍为 Open；未获得或执行远程更新授权。
 - **Labels：** `type:task`、`area:api`、`priority:p0`
 - **Blocked by：** ISSUE-003
 - **PR Boundary：** 一个最小 API Scaffold PR
@@ -292,18 +296,18 @@
 
 **工作**
 
-- [ ] 建立 `/api/v1`、Domain-module Layout、Test Entry、严格 TypeScript、宿主机开发与 Graceful Shutdown。
-- [ ] 提供只检查进程的 Liveness。
-- [ ] 删除默认示例 Controller，或替换为明确 Health Entry。
+- [x] 建立 `/api/v1`、Domain-module Layout、Test Entry、严格 TypeScript、宿主机开发与 Graceful Shutdown。
+- [x] 提供只检查进程的 Liveness。
+- [x] 删除默认示例 Controller，或替换为明确 Health Entry。
 
 **审核/验收**
 
-- [ ] Root Command 下 Start、lint、typecheck、Unit Test 与 Production Build 通过。
-- [ ] Liveness 不伪装成 PostgreSQL Readiness。
-- [ ] 不存在空 `AgentModule`、Database Entity、Auth Bypass 或 Speculative Provider Integration。
-- [ ] Shutdown 可观察且无挂起 Resource。
+- [x] Root Command 下 Start、lint、typecheck、Unit Test 与 Production Build 通过。
+- [x] Liveness 不伪装成 PostgreSQL Readiness。
+- [x] 不存在空 `AgentModule`、Database Entity、Auth Bypass 或 Speculative Provider Integration。
+- [x] Shutdown 可观察且无挂起 Resource。
 
-**证据：** Start/Health/Shutdown Transcript 与 Root CI Task Output。  
+**证据：** 2026-08-03，API lint、严格 Typecheck、一个 Unit Test、两个 Supertest HTTP Assertion、组合 Test Entry 与 Production Build 均通过；Root format、lint、typecheck、test、build 与 Frozen Install 也均通过。Development 与编译后的 Production Start 都从 `GET /api/v1/health/live` 返回 `200` 和 `{"status":"ok"}`；已移除的 Starter Root 返回 `404`，两个进程均在一次中断后退出且无挂起。Scope Search 未发现 ORM、Readiness、认证、UsersModule、AgentModule、Provider Integration、嵌套 Lockfile、Starter Example 或无说明 TODO。
 **非目标：** ORM、Readiness、认证、UsersModule 或 LangGraph。
 
 ### ISSUE-006 — [F-04] 建立共享工程配置
@@ -360,7 +364,7 @@
 **证据：** Clean-start Health/Extension Output 与 Role-capability Matrix。  
 **非目标：** 应用容器、Redis、Vector Schema 或生产数据库选择。
 
-### ISSUE-008 — [W-01] 集成 MUI v6 与 App Router SSR
+### ISSUE-008 — [W-01] 集成 MUI v9 与 App Router SSR
 
 - **状态：** `TODO`
 - **Labels：** `type:task`、`area:web`、`area:ui`、`priority:p0`
@@ -369,12 +373,13 @@
 
 **目标**
 
-为开发和生产提供唯一稳定的 MUI v6 Rendering/Theme Boundary。
+为开发和生产提供唯一稳定的 MUI v9 Rendering/Theme Boundary。
 
 **工作**
 
-- [ ] 仅加入已批准 MUI v6 依赖和官方 App Router Cache Integration。
+- [ ] 加入精确的 `@mui/material@9.2.0`、`@mui/icons-material@9.2.0`、`@mui/material-nextjs@9.1.1` 与已批准 Emotion Dependency；使用官方 `v16-appRouter` Cache Integration。
 - [ ] 在 Root Layout 建立 `ThemeProvider`、Theme Token、Font 与已选 CSS-variable Strategy。
+- [ ] 若 MUI `component` Prop 接收 `next/link`，添加 Local Client Component Wrapper；读取 URL 的 Client Control 必须置于布局稳定的 Suspense Boundary 中。
 - [ ] 加入最小 Render/Build Regression Test。
 
 **审核/验收**
@@ -509,7 +514,8 @@
 **工作**
 
 - [ ] 在启动时验证 Port、Runtime/Migration Database URL、Proxy Trust、CORS/Trusted Origin、Request Limit 与 JWT/Cookie Input。
-- [ ] 添加 DatabaseModule/ConfigModule Boundary、Dependency-aware Readiness、Graceful Shutdown 与显式 Migration Command/Job。
+- [ ] 安装精确的 `typeorm@1.1.0`、`@nestjs/typeorm@11.0.3` 与已批准 PostgreSQL Driver Pin；至少 Target ES2023，并只使用 `DataSource`/`DataSourceOptions` 与 Instance Repository。
+- [ ] 添加 DatabaseModule/ConfigModule Boundary、Dependency-aware Readiness、Graceful Shutdown 与显式 Migration Command/Job。保留 TypeORM 1 Fail-closed `invalidWhereValuesBehavior`；有意匹配 Null 时使用 `IsNull()`。
 - [ ] 禁用 Production `synchronize` 和 Application-start Automatic Migration。
 
 **审核/验收**
@@ -517,6 +523,7 @@
 - [ ] 缺失、格式错误、强度不足或相互矛盾的 Critical Configuration 会在服务流量前失败，且不回显 Secret。
 - [ ] Liveness 仅表示 Process；Readiness 会随 PostgreSQL 不可用而失败，并在恢复后恢复。
 - [ ] Runtime 使用 Least-privilege Role 连接且不能执行 DDL；Migrator Ownership 明确。
+- [ ] Dependency Resolution 证明所选 Nest Adapter/TypeORM/PostgreSQL Version 没有被忽略的 Peer Conflict；不存在已移除的 TypeORM 0.3 API 或 String-based `select`/`relations` Syntax。
 - [ ] 测试可注入隔离 Configuration，并能关闭 Connection 而不挂起。
 
 **证据：** Configuration Matrix、Startup Negative Test、Readiness Recovery Test、Role Check 与 Graceful-shutdown Transcript。  
@@ -1138,7 +1145,7 @@
 - **状态：** `TODO (later)`
 - **Labels：** `type:epic`、`area:security`、`area:auth`、`area:database`、`area:redis`、`scope:post-mvp`
 - **Blocked by：** ISSUE-033、ISSUE-035 与已批准 Session/Device Semantics；建议先完成 ISSUE-034
-- **PR Boundary：** Epic，包含 Design/ADR、Persistence、API、Web 与 Security-test Child
+- **PR Boundary：** Epic，包含 Design、Persistence、API、Web 与 Security-test Child
 
 **目标**
 
@@ -1155,9 +1162,10 @@
 - [ ] Refresh Secret 不以可恢复形式存储，也不暴露给 JavaScript/Log。
 - [ ] Replay Old Refresh Token 会撤销预期 Family；Concurrent Legitimate Refresh Behavior 为确定性。
 - [ ] Logout/Security Event 会撤销 Session，Key/Redis/Database Outage 有经过测试的安全行为。
-- [ ] Cookie、Origin/CSRF、TTL、Cleanup、Migration 与 Rollback Evidence 与 ADR 一致。
+- [ ] Cookie、Origin/CSRF、TTL、Cleanup、Migration 与 Rollback Evidence 与 Approved Design 一致。
 
-**证据：** ADR、Threat Model、Migration Test、Replay/Concurrency Suite、Outage Exercise 与 Revocation Demonstration。  
+**证据：** Approved Design、Threat Model、Migration Test、Replay/Concurrency Suite、Outage Exercise 与 Revocation Demonstration。
+
 **非目标：** OAuth/Social Login，或静默改变 Access-token Contract。
 
 ### ISSUE-037 — [R-04] 添加 Mail Foundation 与 Email Verification
@@ -1219,7 +1227,7 @@
 - **状态：** `TODO (later)`
 - **Labels：** `type:feature`、`area:domain`、`area:auth`、`area:data-governance`、`scope:post-mvp`
 - **Blocked by：** ISSUE-033 与已批准 Business/Operations Semantics
-- **PR Boundary：** ADR/Domain/Migration 优先；Behavior 可拆为 Child Issue
+- **PR Boundary：** Design/Domain/Migration 优先；Behavior 可拆为 Child Issue
 
 **目标**
 
@@ -1238,7 +1246,8 @@
 - [ ] Audit、Retention、Recovery、Default/Backfill、Repair 与 Compatibility Behavior 一致。
 - [ ] UI Copy 不暴露 Sensitive Suspension/Security Detail。
 
-**证据：** ADR/State Diagram、Permission Matrix、Migration Test、Transition Suite、Audit Sample 与 Operations Runbook。  
+**证据：** Approved Design/State Diagram、Permission Matrix、Migration Test、Transition Suite、Audit Sample 与 Operations Runbook。
+
 **非目标：** 在无已批准 Restricted Operation 时实现 RBAC，或默认 Irreversible Hard Deletion。
 
 ### ISSUE-040 — [R-07] 建立 RBAC 与 Authorization
@@ -1342,13 +1351,14 @@
 
 **审核/验收**
 
-- [ ] Base-image ADR 选择基于实测 Compatibility/Value，绝不只看 Size。
+- [ ] Base-image 选择基于实测 Compatibility/Value，绝不只看 Size。
 - [ ] Image 可复现、Digest-pinned、Non-root、通过 Architecture Test，且不含 Development Dependency、Cache、Toolchain 或 Secret。
 - [ ] PR Code 不能访问 Deployment Credential/Production；OIDC 按 Ref/Environment 限定 Scope。
 - [ ] Staging/Production 运行同一 Approved Digest；Web/API 可独立 Deploy 与 Rollback。
 - [ ] Restore 满足已批准 RPO/RTO；Health、Shutdown、Migration Ownership、SLO、Alert、Approval 与 Concurrency Control 均经过演练。
 
-**证据：** Child-issue Closure、Benchmark/ADR、Image Inventory/Scan/SBOM/Attestation、OIDC Policy、Deployment/Rollback Log、Restore Report、Dashboard 与 Runbook Drill。  
+**证据：** Child-issue Closure、Benchmark 与 Selection Rationale、Image Inventory/Scan/SBOM/Attestation、OIDC Policy、Deployment/Rollback Log、Restore Report、Dashboard 与 Runbook Drill。
+
 **非目标：** Input 获批前选择 Platform，或把 Production Data 存入 Application Container。
 
 ### ISSUE-044 — [R-11] 设计并验证 Vector Retrieval
@@ -1356,7 +1366,7 @@
 - **状态：** `TODO (later)`
 - **Labels：** `type:epic`、`area:agent`、`area:database`、`area:retrieval`、`scope:post-mvp`
 - **Blocked by：** ISSUE-042，以及已批准 Use Case、Corpus、Embedding Model/Version、Privacy Class 与 Evaluation Metric
-- **PR Boundary：** ADR/Evaluation 优先；获批后再创建 Schema/Ingestion/Query Child
+- **PR Boundary：** Design/Evaluation 优先；获批后再创建 Schema/Ingestion/Query Child
 
 **目标**
 
@@ -1364,18 +1374,19 @@
 
 **工作**
 
-- [ ] 为 Extension Provisioning、Schema Ownership、Chunking、Metadata/Tenant Isolation、Dimension、Distance、Index、Filter、Versioning/Re-embedding 与 Deletion 编写 ADR。
+- [ ] 在 `PLANS.md` 中记录并批准 Vector Design，覆盖 Extension Provisioning、Schema Ownership、Chunking、Metadata/Tenant Isolation、Dimension、Distance、Index、Filter、Versioning/Re-embedding 与 Deletion。
 - [ ] 为 Recall/Quality、Latency 与 Cost 建立 Offline Representative Evaluation。
 - [ ] 设计 Migration、Ingestion、Delete、Re-embed 与 Rollback Path。
 
 **审核/验收**
 
-- [ ] Approved ADR/Evaluation 前不创建 Vector Table/Column/Index。
+- [ ] Approved Design/Evaluation 前不创建 Vector Table/Column/Index。
 - [ ] Representative Quality/Latency/Cost Threshold 通过，Model/Corpus Version 可复现。
 - [ ] Cross-user/Tenant 与 Sensitive-data Isolation 有直接 Negative Test。
 - [ ] Delete/Re-embed 与 Schema/Index Change 由 Migration 驱动且可观测。
 
-**证据：** ADR、Versioned Evaluation Dataset/Result、Isolation Test、Migration Plan 与 Cost Record。  
+**证据：** Approved Plan、Versioned Evaluation Dataset/Result、Isolation Test、Migration Plan 与 Cost Record。
+
 **非目标：** 仅因已安装 pgvector 就使用 Vector。
 
 ### ISSUE-045 — [R-12] 实现首个 Travel-agent Vertical Slice
@@ -1458,13 +1469,3 @@
 
 **证据：** Signed Release Checklist、Scan/Load/Accessibility Report、Restore/Rollback/Incident Drill Record、Dependency Closure 与 Explicit Authorization。  
 **非目标：** Schedule-based Waiver，或将 AI Review 视为 Release Approval。
-
-## 7. 参考资料
-
-- [GitHub：规划与跟踪工作](https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/planning-and-tracking-work-for-your-team-or-project)
-- [GitHub：Issue Dependencies](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-issue-dependencies)
-- [GitHub：Sub-issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/adding-sub-issues)
-- [GitHub：创建 Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue)
-- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
-- [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/)
-- [W3C Accessible Forms Guidance](https://www.w3.org/WAI/tutorials/forms/)

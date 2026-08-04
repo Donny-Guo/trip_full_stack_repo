@@ -2,15 +2,15 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-24 已确认；首切片已于 2026-08-02 授权实施；P-03 与 F-01 已在本地完成，下一步为 F-02 与 F-03**\
+状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03 与 F-01 至 F-03 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
-授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。
+授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。
 
 授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、精确根 Toolchain Dependency、唯一 pnpm Lockfile、Editor/Ignore 约定与仅本地缓存的 Task Graph 已存在。尚无应用脚手架、自动化、Hook、迁移、基础设施配置或业务代码。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与原生 ESLint Flat Configuration。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、原生类型感知 ESLint、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。MUI、TypeORM、自动化、Hook、迁移、基础设施配置、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -37,7 +37,7 @@
 ### 首个切片必须交付
 
 - pnpm workspace 根结构及 `apps/web`、`apps/api` 项目目录。
-- Next.js App Router + TypeScript + MUI v6 基础集成。
+- Next.js 16 App Router + TypeScript + MUI v9 基础集成。
 - NestJS 模块化 API 基础、配置校验和 PostgreSQL 连接。
 - `users` 表的首个迁移。
 - `UsersModule` 与 `AuthModule`。
@@ -69,7 +69,7 @@
 
 ## 4. 决策记录
 
-D-01 至 D-24 全部已确认并作为当前权威。D-14 至 D-19 是已接受的独立审计建议；D-20 至 D-24 记录用户提出的 GitHub Identity、治理、CI/CD、本地 Hook、License 和 AI Review 要求。实施仍需另行明确授权。
+D-01 至 D-25 全部已确认并作为当前权威。D-14 至 D-19 是已接受的独立审计建议；D-20 至 D-24 记录用户提出的 GitHub Identity、治理、CI/CD、本地 Hook、License 和 AI Review 要求；D-25 记录 Owner 授权的 Framework/ORM Major-line Revision。首切片实施在既定排除项内已获授权。
 
 | ID | 状态 | 决策 | 影响范围 |
 | --- | --- | --- | --- |
@@ -97,6 +97,7 @@ D-01 至 D-24 全部已确认并作为当前权威。D-14 至 D-19 是已接受�
 | D-22 | `CONFIRMED` | GitHub CD 受 R-09 和已批准部署目标约束：从可信代码构建一次并 Attest/发布不可变 Web/API Image Digest，通过 OIDC 将同一 Digest 推进受保护的 `staging`/`production` Environments，生产必须由他人批准且禁用 Self-review，部署串行化并支持回滚；Pull Request 代码不获得部署 Secret | R-09、R-14 |
 | D-23 | `CONFIRMED` | 仓库 Owner 及初始 `CODEOWNERS` Identity 为 `@Donny-Guo`。MIT 是已确认的 Open-source License 选择；标准根 License 使用 `Copyright (c) 2026 Donny-Guo`，需要 Owner 明确授权，且不强制每个 Source File 加 License Header。F-08 负责验证与维护该 Artifact | F-08、文档 |
 | D-24 | `CONFIRMED` | 初始最多启用一个辅助 AI Reviewer。只有 Pull Request 已 Ready for Review、确定性 CI 全绿并完成 Self-review 后才手动请求。用三个有代表性且承载风险的 Pull Request 评估它；不自动 Review Draft/每次 Push，不启用重叠 Reviewer，也不赋予 Merge Gate 权限；调整 Policy 前记录有效发现、False Positive、漏检和 Latency。Public Repository 不记录 Provider 与 Account Detail | F-08、Q-01 |
+| D-25 | `CONFIRMED` | 以当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线取代原有 Web/ORM 版本约束，同时保留 React 19、PostgreSQL 18 与已批准测试系列。2026-08-03 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。已安装 Dependency 立即迁移；尚未进入 Owner Task 的 Dependency 在任务开始时使用这些 Pin。保持精确 Stable Pin、隔离 Upgrade，再次变更 Major 需明确批准 | P-03、F-02、W-01、B-01 |
 
 ### 密码策略变更契约
 
@@ -243,11 +244,11 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### P-03 冻结兼容版本矩阵 — `DONE`
 
 - 前置：P-02
-- 已确认的 Owner 约束（2026-08-02）：保留 Next.js 15 与 MUI v6；使用 TypeORM 0.3.31 与 PostgreSQL 18；API 测试使用 Jest/Supertest，Web Unit/Component 测试使用 Vitest/React Testing Library，Browser E2E 使用 Playwright。不得静默替换这些 Major 或测试系列。MUI v6 是明确接受的上游支持例外，Next.js 15 处于 Maintenance LTS；必须在 2026-09-21 前或公开暴露前重新评估该组合，以先发生者为准；出现严重且无补丁的安全或兼容性阻断时立即评估。Review 不授权升级。
-- 动作：从 Primary Source 验证 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 15、React/React DOM、MUI v6 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 0.3.31、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
+- 已确认的 Owner 约束：2026-08-02 Baseline 保留 Next.js 15、MUI v6 与 TypeORM 0.3.31。D-25 于 2026-08-03 明确以当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线取代这三项选择。PostgreSQL 18 与 Jest/Supertest、Vitest/React Testing Library、Playwright 系列保持不变。不得静默替换这些 Major 或测试系列；再次变更 Major 需明确批准。
+- 动作：从 Primary Source 维护 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 16、React/React DOM、MUI v9 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 1.1、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
 - 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
-- 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 Next.js 15/MUI v6 支持例外和 TypeORM 0.3.31 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称这些下游检查已经存在。
-- 完成证据（2026-08-02）：`.node-version` 选择 Node 24.18.0；[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版记录精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。File Parity、Local Markdown Link、权威英文 Language Policy、Action SHA Length 与 Whitespace Check 均通过。P-03 关闭时，Installation、Lockfile、Build、Native-runtime、Database、SSR、E2E 与 CI Evidence 仍由下游任务负责；F-01 此后已提供 Root Installation、Lockfile 与 Task-graph Evidence。
+- 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 D-25 的 Next.js 16/MUI v9/TypeORM 1.1 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-02 证明已安装 Next Line，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称尚不存在的下游检查。
+- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence。MUI SSR 与 TypeORM/PostgreSQL Runtime Evidence 仍由 W-01 与 B-01 负责。
 
 ### Phase 1 — Monorepo 与本地环境
 
@@ -259,19 +260,21 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 验收：单一根 lockfile；内部包只能使用 workspace protocol；根命令能定位各应用任务；Turbo 依赖和输出声明正确且未启用远程缓存。
 - 完成证据（2026-08-02）：`package.json`、`pnpm-workspace.yaml`、`turbo.json`、`.editorconfig`、`.gitignore` 与唯一 `pnpm-lock.yaml` 实现了精确的 Node 24.18.0、pnpm 11.18.0、Turborepo 2.10.8 与 TypeScript 5.9.3 选择；根任务与保留的 No-op `prepare` Boundary；`apps/*`/`packages/*` 发现；Strict Engine、Exact Dependency Saving 与 Workspace-protocol Saving；声明的 Build Output；不缓存 Format；以及显式禁用 Remote Cache。Frozen Install 在由 Committed HEAD 加本次变更组装的 Disposable Fresh Candidate Tree 中成功。Dry Graph 与五个根命令全部成功；应用脚手架尚未创建，因此零个 Package Task 符合预期。Disposable Two-package Fixture 进一步证明了两个 Workspace Glob、`workspace:*` Resolution、Dependency Ordering、Local Cache 对声明 Output 的恢复以及 Format Cache Bypass。未发现 npm/yarn Lockfile 或包含 Secret/Remote Cache 的配置。
 
-#### F-02 创建 Next.js 项目目录 — `TODO`
+#### F-02 创建 Next.js 项目目录 — `DONE`
 
 - 前置：F-01
 - 动作：在 `apps/web` 创建 TypeScript + App Router + `src/` 结构；不引入未批准的 Tailwind；配置严格类型检查；默认由宿主机 pnpm/Turbo 运行开发服务。
 - 产出：最小可构建 Web 应用。
 - 验收：开发启动、类型检查、lint、production build 成功；没有模板遗留页面或无用依赖。
+- 完成证据（2026-08-03）：`apps/web` 是最小 App Router/`src` TypeScript Package，启用 Strict Checking，不包含 Tailwind、伪 Business Behavior 或暴露到 Client 的 API Configuration。D-25 将已安装 Framework 从 15.5.22 升级为精确的 `next@16.2.12`/`eslint-config-next@16.2.12`，移除 Direct Legacy `FlatCompat` Dependency，采用 Next 原生 Flat Config，并接受 Next 生成的 `react-jsx` 与 Development Route Type。`pnpm install`、Web Lint、Route Type Generation、Strict TypeScript、Turbopack Production Build，以及返回 `200` 和 `Trip Agent` 的 Production `GET /` Smoke Check 全部通过。Scaffold 未生成 Web Test；Test Tooling 仍由 F-04 及后续 Component/E2E Task 负责。
 
-#### F-03 创建 NestJS 项目目录 — `TODO`
+#### F-03 创建 NestJS 项目目录 — `DONE`
 
 - 前置：F-01
 - 动作：在 `apps/api` 创建 NestJS TypeScript 应用；建立 `/api/v1`、模块目录、测试入口、仅检查进程的 Liveness 和 Graceful Shutdown Hook；默认由宿主机 pnpm/Turbo 运行。不得创建空的 `AgentModule`。
 - 产出：最小可启动 API。
 - 验收：启动、类型检查、lint、test、production build 成功；默认示例 Controller 已清理或替换为明确健康入口。
+- 完成证据（2026-08-03）：`apps/api` 是可独立构建的 NestJS 11.1.28 Package，使用严格 ES2023 TypeScript、原生类型感知 ESLint、`/api/v1` Prefix、明确的 `HealthModule`、只检查进程的 `GET /api/v1/health/live` 与 Shutdown Hook。API lint、typecheck、一个 Unit Test、两个 Supertest HTTP Assertion、组合 Test Entry 和 Production Build 均通过；Root format、lint、typecheck、test、build 与 Frozen Install 均通过。Development 与编译后的 Production Start 都返回 `200` 和 `{"status":"ok"}`，已移除的 Starter Root 返回 `404`，两个进程均在一次中断后退出且无挂起。Package 不含 ORM、Readiness、认证、UsersModule、AgentModule、Redis、Swagger、Provider Integration、嵌套 Lockfile 或 Starter README。
 
 #### F-04 建立共享工程配置 — `TODO`
 
@@ -382,10 +385,10 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### Phase 3 — Web 基础与 Navigation
 
-#### W-01 集成 MUI v6 与 App Router SSR — `TODO`
+#### W-01 集成 MUI v9 与 App Router SSR — `TODO`
 
 - 前置：F-02
-- 动作：安装 MUI v6 所需依赖；按官方 App Router 方案配置 SSR cache provider、ThemeProvider、字体和 CSS 变量策略。
+- 动作：加入精确的 `@mui/material@9.2.0`、`@mui/icons-material@9.2.0`、`@mui/material-nextjs@9.1.1` 与已批准 Emotion Pin；配置来自 `v16-appRouter` 的 `AppRouterCacheProvider`、ThemeProvider、字体与 CSS Variable Strategy。当 MUI `component` Prop 在 Next.js 16 Boundary 下接收 `next/link` 时，使用 Local Client Wrapper。
 - 产出：稳定无闪烁的应用根 layout 和主题。
 - 验收：开发/生产渲染无 hydration/style 警告；主题 token 生效；不混入第二套组件库。
 
@@ -467,7 +470,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### H-01 文档与交接 — `TODO`
 
 - 前置：Q-01
-- 动作：把实际版本、目录、命令、环境变量、迁移、API 契约和测试方式同步到英文权威 README/AGENTS/ADR；同步所有已有 `_ZH.md` 跟随版并更新计划状态。
+- 动作：把实际版本、目录、命令、环境变量、迁移、API 契约和测试方式同步到英文权威 README/AGENTS 等文档；同步所有已有 `_ZH.md` 跟随版并更新计划状态。
 - 验收：新开发者仅凭英文文档能启动和验证；中文跟随版的任务/决策 ID、依赖与状态一致；链接和英文主语言检查通过；文档与运行时一致；公开发布门仍明确关闭。
 
 ### Post-MVP — 已登记的递进任务（非首个切片范围）
@@ -537,8 +540,8 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### R-11 设计并验证向量检索 — `TODO（后续）`
 
 - 前置：R-10，且检索用例、Corpus、Embedding 模型/版本、隐私分类和评测指标已批准
-- 动作：用 ADR 记录生产扩展高权限 Provisioning、Schema Owner、Chunking、Metadata/Tenant 隔离、维度、距离函数、索引、过滤、重新 Embedding/版本化、删除和离线检索评测。
-- 验收：ADR 前不创建向量 Schema；代表性 Recall/Latency/Cost 达标；Tenant/隐私、删除/重新 Embedding 经过测试；Schema/索引通过 Migration 变更。
+- 动作：在 `PLANS.md` 中记录并批准 Vector Design，覆盖生产扩展高权限 Provisioning、Schema Owner、Chunking、Metadata/Tenant 隔离、维度、距离函数、索引、过滤、重新 Embedding/版本化、删除和离线检索评测。
+- 验收：获批 Design 与 Evaluation 前不创建向量 Schema；代表性 Recall/Latency/Cost 达标；Tenant/隐私、删除/重新 Embedding 经过测试；Schema/索引通过 Migration 变更。
 
 #### R-12 实现首个旅行 Agent 纵向切片 — `TODO（后续）`
 
@@ -663,7 +666,9 @@ D-14 至 D-19 是已接受的审计建议：精确 JWT/Cookie 配置、Origin/Re
 
 D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo` 所有的 Public 仓库；绝不移除 Required CI 或允许通用 Bypass 的 Bootstrap Review Mode；快速 Husky/lint-staged/commitlint 本地检查与权威 CI；基于可信 Build-once Artifact、不可变 Digest Promotion、受保护 Environment、OIDC、Approval 和 Rollback 的后续 GitHub CD 模式；MIT License；以及手动请求、Provider-neutral 的辅助 AI Review Evaluation。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。下一步任务为 `F-02` 与 `F-03`。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 TypeORM 1.1；P-03 与 `docs/toolchain.md` 记录精确且经 Review 的 Stable Pin 与 Owner-task Installation Boundary。
+
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`ISSUE-006` 至 `ISSUE-010` 是下一波依赖已满足的工作，权威 Issue 顺序仍是安全默认值。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 
@@ -675,6 +680,7 @@ D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo`
 - D-08 及登录兼容行为已接受。
 - D-14 至 D-19 的安全、数据和发布边界已接受。
 - D-20 至 D-24 的 GitHub Identity/治理、Hook/CI 权威、受控 CD 边界、MIT License 与辅助 AI Review Policy 已接受。
+- D-25 的 Next.js 16/MUI v9/TypeORM 1.1 Major-line Revision 及其 Owner-task Boundary 已接受。
 - 英文权威和 `_ZH` 跟随规则已接受。
 
 Owner 已于 2026-08-02 发出独立的实施开始指令。该指令只授权计划内的首个本地认证切片及其列明的仓库治理工作，不授权 Post-MVP 范围、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。
