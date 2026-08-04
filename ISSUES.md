@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-004 are complete locally; ISSUE-005 and the now-unblocked ISSUE-008 Web work are next**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-005 are complete locally; ISSUE-006 through ISSUE-010 are the next dependency-eligible wave**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. `ISSUE-001` through `ISSUE-004` are therefore `DONE` locally; `ISSUE-005` and the now-unblocked `ISSUE-008` Web work are next in dependency order.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03. `ISSUE-001` through `ISSUE-005` are therefore `DONE` locally; `ISSUE-006` through `ISSUE-010` form the next dependency-eligible wave.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -284,7 +284,8 @@ Create `apps/web` as a clean, independently buildable Next.js App Router TypeScr
 
 ### ISSUE-005 — [F-03] Scaffold the NestJS application
 
-- **Status:** `TODO`
+- **Status:** `DONE`
+- **Remote state:** GitHub issue #5 remains open; no remote update was authorized or performed.
 - **Labels:** `type:task`, `area:api`, `priority:p0`
 - **Blocked by:** ISSUE-003
 - **PR boundary:** one minimal API scaffold PR
@@ -295,18 +296,18 @@ Create `apps/api` as a strict, independently buildable NestJS REST application w
 
 **Work**
 
-- [ ] Establish `/api/v1`, domain-module layout, test entry point, strict TypeScript, host-run development, and graceful shutdown.
-- [ ] Provide a process-only liveness endpoint.
-- [ ] Remove the default example controller or replace it with the intentional health entry.
+- [x] Establish `/api/v1`, domain-module layout, test entry point, strict TypeScript, host-run development, and graceful shutdown.
+- [x] Provide a process-only liveness endpoint.
+- [x] Remove the default example controller or replace it with the intentional health entry.
 
 **Review / acceptance**
 
-- [ ] Start, lint, typecheck, unit test, and production build pass from root commands.
-- [ ] Liveness does not pretend PostgreSQL is ready.
-- [ ] No empty `AgentModule`, database entity, auth bypass, or speculative provider integration exists.
-- [ ] Shutdown behavior is observable and exits without hanging resources.
+- [x] Start, lint, typecheck, unit test, and production build pass from root commands.
+- [x] Liveness does not pretend PostgreSQL is ready.
+- [x] No empty `AgentModule`, database entity, auth bypass, or speculative provider integration exists.
+- [x] Shutdown behavior is observable and exits without hanging resources.
 
-**Evidence:** start/health/shutdown transcript and root CI-task outputs.  
+**Evidence:** on 2026-08-03, API lint, strict typecheck, one unit test, two Supertest HTTP assertions, the combined test entry, and the production build passed. Root format, lint, typecheck, test, build, and frozen install also passed. Development and compiled production starts returned `200` with `{"status":"ok"}` from `GET /api/v1/health/live`; the removed starter root returned `404`, and each process stopped after one interrupt without hanging. Scope searches found no ORM, readiness, authentication, UsersModule, AgentModule, provider integration, nested lockfile, starter example, or unexplained TODO.
 **Non-goals:** ORM, readiness, authentication, UsersModule, or LangGraph.
 
 ### ISSUE-006 — [F-04] Establish shared engineering configuration

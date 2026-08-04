@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-004 已在本地完成，下一步为 ISSUE-005 及现已解除阻塞的 ISSUE-008 Web 工作**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-005 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证。因此 `ISSUE-001` 至 `ISSUE-004` 在本地为 `DONE`；下一步按依赖顺序推进 `ISSUE-005` 与现已解除阻塞的 `ISSUE-008` Web 工作。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 也已于 2026-08-03 完成 `F-03`。因此 `ISSUE-001` 至 `ISSUE-005` 在本地为 `DONE`；`ISSUE-006` 至 `ISSUE-010` 构成下一波依赖已满足的工作。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -284,7 +284,8 @@
 
 ### ISSUE-005 — [F-03] 创建 NestJS 应用脚手架
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** GitHub Issue #5 仍为 Open；未获得或执行远程更新授权。
 - **Labels：** `type:task`、`area:api`、`priority:p0`
 - **Blocked by：** ISSUE-003
 - **PR Boundary：** 一个最小 API Scaffold PR
@@ -295,18 +296,18 @@
 
 **工作**
 
-- [ ] 建立 `/api/v1`、Domain-module Layout、Test Entry、严格 TypeScript、宿主机开发与 Graceful Shutdown。
-- [ ] 提供只检查进程的 Liveness。
-- [ ] 删除默认示例 Controller，或替换为明确 Health Entry。
+- [x] 建立 `/api/v1`、Domain-module Layout、Test Entry、严格 TypeScript、宿主机开发与 Graceful Shutdown。
+- [x] 提供只检查进程的 Liveness。
+- [x] 删除默认示例 Controller，或替换为明确 Health Entry。
 
 **审核/验收**
 
-- [ ] Root Command 下 Start、lint、typecheck、Unit Test 与 Production Build 通过。
-- [ ] Liveness 不伪装成 PostgreSQL Readiness。
-- [ ] 不存在空 `AgentModule`、Database Entity、Auth Bypass 或 Speculative Provider Integration。
-- [ ] Shutdown 可观察且无挂起 Resource。
+- [x] Root Command 下 Start、lint、typecheck、Unit Test 与 Production Build 通过。
+- [x] Liveness 不伪装成 PostgreSQL Readiness。
+- [x] 不存在空 `AgentModule`、Database Entity、Auth Bypass 或 Speculative Provider Integration。
+- [x] Shutdown 可观察且无挂起 Resource。
 
-**证据：** Start/Health/Shutdown Transcript 与 Root CI Task Output。  
+**证据：** 2026-08-03，API lint、严格 Typecheck、一个 Unit Test、两个 Supertest HTTP Assertion、组合 Test Entry 与 Production Build 均通过；Root format、lint、typecheck、test、build 与 Frozen Install 也均通过。Development 与编译后的 Production Start 都从 `GET /api/v1/health/live` 返回 `200` 和 `{"status":"ok"}`；已移除的 Starter Root 返回 `404`，两个进程均在一次中断后退出且无挂起。Scope Search 未发现 ORM、Readiness、认证、UsersModule、AgentModule、Provider Integration、嵌套 Lockfile、Starter Example 或无说明 TODO。
 **非目标：** ORM、Readiness、认证、UsersModule 或 LangGraph。
 
 ### ISSUE-006 — [F-04] 建立共享工程配置

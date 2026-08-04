@@ -1,6 +1,6 @@
 # Development Plan: Monorepo Foundation and Authentication Vertical Slice
 
-Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03, F-01, and F-02 are complete locally; F-03 and the now-unblocked Web work are next**\
+Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03 and F-01 through F-03 are complete locally; ISSUE-006 through ISSUE-010 are the next dependency-eligible wave**\
 Plan date: 2026-07-30  
 Implementation authorization date: 2026-08-02\
 Scope source: project directories, Sign Up/Login, Navigation, User table, and Auth API requested by the user  
@@ -8,7 +8,7 @@ Authorization history: the original planning round created documentation only. A
 
 Authorization exclusions: post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue still require separate explicit authorization.
 
-Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and a minimal independently buildable `apps/web` scaffold now exist. The Web scaffold runs Next.js 16.2.12 with React 19.2.8 and native ESLint flat configuration. MUI, the API, TypeORM, automation, hooks, migrations, infrastructure configuration, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
+Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and minimal independently buildable `apps/web` and `apps/api` scaffolds now exist. The Web scaffold runs Next.js 16.2.12 with React 19.2.8 and native ESLint flat configuration. The API scaffold runs NestJS 11.1.28 with strict ES2023 TypeScript, native type-aware ESLint, Jest/Supertest entry points, a process-only `GET /api/v1/health/live` endpoint, and graceful shutdown hooks. MUI, TypeORM, automation, hooks, migrations, infrastructure configuration, authentication, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
 
 Simplified Chinese translation: [`PLANS_ZH.md`](./PLANS_ZH.md). This English plan is authoritative.
 
@@ -271,12 +271,13 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Acceptance: dev start, typecheck, lint, and production build succeed; template leftovers and unused dependencies are removed.
 - Completion evidence (2026-08-03): `apps/web` is a minimal App Router/`src` TypeScript package with strict checking, no Tailwind, no fake business behavior, and no client-exposed API configuration. D-25 upgraded the installed framework from 15.5.22 to exact `next@16.2.12`/`eslint-config-next@16.2.12`, removed the direct legacy `FlatCompat` dependency, adopted Next's native flat configs, and accepted Next-generated `react-jsx` plus development route types. `pnpm install`, Web lint, route type generation, strict TypeScript, the Turbopack production build, and a production `GET /` smoke check returning `200` with `Trip Agent` all passed. No Web test was generated; test tooling remains owned by F-04 and later component/E2E tasks.
 
-#### F-03 Create the NestJS project directory — `TODO`
+#### F-03 Create the NestJS project directory — `DONE`
 
 - Prerequisite: F-01
 - Action: create `apps/api`, `/api/v1`, domain-module layout, test entry point, strict TypeScript, host-run pnpm/Turbo development, a process-only liveness endpoint, and graceful shutdown hooks. Do not create an empty `AgentModule`.
 - Output: minimal startable API.
 - Acceptance: start, typecheck, lint, tests, and production build succeed; default example controller is replaced by an intentional health entry or removed.
+- Completion evidence (2026-08-03): `apps/api` is an independently buildable NestJS 11.1.28 package with strict ES2023 TypeScript, native type-aware ESLint, the `/api/v1` prefix, an intentional `HealthModule`, process-only `GET /api/v1/health/live`, and shutdown hooks. API lint, typecheck, one unit test, two Supertest HTTP assertions, the combined test entry, and production build passed. Root format, lint, typecheck, test, build, and frozen install passed. Development and compiled production starts returned `200` with `{"status":"ok"}`, the removed starter root returned `404`, and each process stopped after one interrupt without hanging. The package contains no ORM, readiness, authentication, UsersModule, AgentModule, Redis, Swagger, provider integration, nested lockfile, or starter README.
 
 #### F-04 Create shared engineering configuration — `TODO`
 
@@ -670,7 +671,7 @@ Confirmed in D-20 through D-24: GitHub as source-control/automation platform; a 
 
 Confirmed in D-25: the active framework/ORM major lines are Next.js 16, MUI v9, and TypeORM 1.1, with exact reviewed stable pins and owning-task installation boundaries recorded in P-03 and `docs/toolchain.md`.
 
-No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` completed locally and was reverified on Next.js 16 on 2026-08-03. `F-03` and the now-unblocked W-01 Web foundation are next; their dependency order remains authoritative. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
+No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` completed locally and was reverified on Next.js 16 on 2026-08-03; `F-03` completed locally with its verified NestJS lifecycle and liveness boundary on 2026-08-03. `ISSUE-006` through `ISSUE-010` are the next dependency-eligible wave, and their authoritative issue order remains the safe default. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
 
 Assumption recorded for D-08: `$#@%` is the complete allowed special-character set for the first policy, not merely an example list. If the user intended these as examples, updating the plan is small and does not affect the architecture.
 

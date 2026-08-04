@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03、F-01 与 F-02 已在本地完成，下一步为 F-03 及现已解除阻塞的 Web 工作**\
+状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03 与 F-01 至 F-03 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
@@ -10,7 +10,7 @@
 
 授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` Scaffold 已存在。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与原生 ESLint Flat Configuration。MUI、API、TypeORM、自动化、Hook、迁移、基础设施配置与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与原生 ESLint Flat Configuration。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、原生类型感知 ESLint、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。MUI、TypeORM、自动化、Hook、迁移、基础设施配置、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -268,12 +268,13 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 验收：开发启动、类型检查、lint、production build 成功；没有模板遗留页面或无用依赖。
 - 完成证据（2026-08-03）：`apps/web` 是最小 App Router/`src` TypeScript Package，启用 Strict Checking，不包含 Tailwind、伪 Business Behavior 或暴露到 Client 的 API Configuration。D-25 将已安装 Framework 从 15.5.22 升级为精确的 `next@16.2.12`/`eslint-config-next@16.2.12`，移除 Direct Legacy `FlatCompat` Dependency，采用 Next 原生 Flat Config，并接受 Next 生成的 `react-jsx` 与 Development Route Type。`pnpm install`、Web Lint、Route Type Generation、Strict TypeScript、Turbopack Production Build，以及返回 `200` 和 `Trip Agent` 的 Production `GET /` Smoke Check 全部通过。Scaffold 未生成 Web Test；Test Tooling 仍由 F-04 及后续 Component/E2E Task 负责。
 
-#### F-03 创建 NestJS 项目目录 — `TODO`
+#### F-03 创建 NestJS 项目目录 — `DONE`
 
 - 前置：F-01
 - 动作：在 `apps/api` 创建 NestJS TypeScript 应用；建立 `/api/v1`、模块目录、测试入口、仅检查进程的 Liveness 和 Graceful Shutdown Hook；默认由宿主机 pnpm/Turbo 运行。不得创建空的 `AgentModule`。
 - 产出：最小可启动 API。
 - 验收：启动、类型检查、lint、test、production build 成功；默认示例 Controller 已清理或替换为明确健康入口。
+- 完成证据（2026-08-03）：`apps/api` 是可独立构建的 NestJS 11.1.28 Package，使用严格 ES2023 TypeScript、原生类型感知 ESLint、`/api/v1` Prefix、明确的 `HealthModule`、只检查进程的 `GET /api/v1/health/live` 与 Shutdown Hook。API lint、typecheck、一个 Unit Test、两个 Supertest HTTP Assertion、组合 Test Entry 和 Production Build 均通过；Root format、lint、typecheck、test、build 与 Frozen Install 均通过。Development 与编译后的 Production Start 都返回 `200` 和 `{"status":"ok"}`，已移除的 Starter Root 返回 `404`，两个进程均在一次中断后退出且无挂起。Package 不含 ORM、Readiness、认证、UsersModule、AgentModule、Redis、Swagger、Provider Integration、嵌套 Lockfile 或 Starter README。
 
 #### F-04 建立共享工程配置 — `TODO`
 
@@ -667,7 +668,7 @@ D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo`
 
 D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 TypeORM 1.1；P-03 与 `docs/toolchain.md` 记录精确且经 Review 的 Stable Pin 与 Owner-task Installation Boundary。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证。下一步为 `F-03` 与现已解除阻塞的 W-01 Web Foundation；其依赖顺序继续作为权威。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`ISSUE-006` 至 `ISSUE-010` 是下一波依赖已满足的工作，权威 Issue 顺序仍是安全默认值。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 

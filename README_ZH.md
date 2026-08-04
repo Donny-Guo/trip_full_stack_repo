@@ -2,16 +2,16 @@
 
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-这是一个面向生产边界设计的旅游 Agent Monorepo。仓库当前仅包含 Workspace 基础与最小 Next.js Web 应用；API、认证流程、数据库基础设施和 Agent 能力仍处于计划阶段。
+这是一个面向生产边界设计的旅游 Agent Monorepo。仓库当前包含 Workspace 基础、最小 Next.js Web 应用与最小 NestJS API 应用；认证流程、数据库基础设施和 Agent 能力仍处于计划阶段。
 
 ## 当前状态
 
 截至 2026-08-03：
 
-- 已存在：pnpm/Turborepo 根、单一 Lockfile 和最小 Next.js 16 Web Scaffold。
-- 本地已完成：`P-03`/`ISSUE-002`、`F-01`/`ISSUE-003`、`F-02`/`ISSUE-004`。
-- 下一步：按依赖顺序创建 NestJS Scaffold（`F-03`/`ISSUE-005`），并推进现已解除阻塞的 MUI Foundation（`W-01`/`ISSUE-008`）。
-- 尚未实现：MUI、API、认证、PostgreSQL 基础设施、CI/Hook 或业务功能。
+- 已存在：pnpm/Turborepo 根、单一 Lockfile、最小 Next.js 16 Web Scaffold，以及带 Process Liveness 的最小 NestJS 11 API Scaffold。
+- 本地已完成：`P-03`/`ISSUE-002` 与 `F-01` 至 `F-03`/`ISSUE-003` 至 `ISSUE-005`。
+- 下一步：按照权威 Issue 顺序推进依赖已满足的 `ISSUE-006` 至 `ISSUE-010` 这一波工作。
+- 尚未实现：MUI、认证、PostgreSQL 基础设施、CI/Hook 或业务功能。
 - 生产部署和公开暴露尚未授权。
 
 权威范围与状态见 [PLANS.md](./PLANS.md)。
@@ -35,10 +35,10 @@
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8 | 已存在 |
 | Web | Next.js 16.2.12 + React 19.2.8 | 最小 Scaffold 已存在 |
 | UI | MUI v9 | 计划于 W-01 |
-| API | NestJS REST + TypeScript | 计划于 F-03 |
+| API | NestJS 11.1.28 REST + TypeScript | 最小 Scaffold 已存在 |
 | Data | PostgreSQL 18 + pgvector + TypeORM 1.1 | 计划于 F-05/B-01 |
 | Agent | API 边界内的 TypeScript LangGraph | 后续 |
-| Tests | Jest/Supertest、Vitest/React Testing Library、Playwright | 计划中 |
+| Tests | Jest/Supertest、Vitest/React Testing Library、Playwright | API Jest/Supertest 已存在；Web 与 Browser Suite 仍在计划中 |
 
 精确 Pin、兼容性证据与更新策略见 [docs/toolchain_ZH.md](./docs/toolchain_ZH.md)。
 
@@ -53,6 +53,14 @@ pnpm --filter web dev
 
 打开 http://localhost:3000。当前页面仅展示最小 Web Scaffold。
 
+在另一个 Terminal 启动 API：
+
+```sh
+pnpm --filter api dev
+```
+
+只检查进程的 Liveness Endpoint 为 http://localhost:3001/api/v1/health/live。
+
 在仓库根运行检查：
 
 ```sh
@@ -63,12 +71,13 @@ pnpm test
 pnpm build
 ```
 
-当前 Scaffold 阶段，`pnpm format` 与 `pnpm test` 会在没有 Package Task 的情况下完成；F-04 将加入共享 Tooling。F-03 与 F-05 完成前，没有需要启动的 API 或数据库服务。
+当前 Scaffold 阶段，`pnpm format` 会在没有 Package Task 的情况下完成；F-04 将加入共享 Formatting Tooling。`pnpm test` 会运行 API Unit 与 HTTP Check。F-05 前不需要数据库服务。
 
 ## 仓库结构
 
 ```text
 apps/web/              最小 Next.js 应用
+apps/api/              最小 NestJS 应用与 Liveness Endpoint
 docs/toolchain*.md     精确版本与兼容性证据
 AGENTS*.md             Contributor 与 Agent 的仓库规则
 PLANS*.md              决策、范围、状态与验收标准
@@ -78,7 +87,7 @@ pnpm-workspace.yaml    Workspace 与安装策略
 turbo.json             跨 Package Task Graph
 ```
 
-`apps/api`、`infra/docker` 与共享 Package 等目录仅在所属任务开始时创建。
+`infra/docker` 与共享 Package 等目录仅在所属任务开始时创建。
 
 ## 架构边界
 
