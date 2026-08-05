@@ -10,7 +10,7 @@
 
 - 已存在：pnpm/Turborepo 根、单一 Lockfile、统一根 Prettier Policy、共享严格 TypeScript 与类型感知 ESLint Package、带 MUI v9 SSR/Theme Integration 的最小 Next.js 16 Web Scaffold，以及带 Process Liveness 的最小 NestJS 11 API Scaffold。
 - 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-04`/`ISSUE-003` 至 `ISSUE-006`，以及 `W-01`/`ISSUE-008`。
-- 下一步：按照权威 Issue 顺序推进 `ISSUE-007`、`ISSUE-009` 与 `ISSUE-010`。
+- 当前顺序：Owner 正在实施 `ISSUE-007`，之后依次为合并后的 `ISSUE-009`/`MVP-01` 与 `ISSUE-010`/`MVP-02`。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
 - 尚未实现：认证、PostgreSQL 基础设施、CI/Hook 或业务功能。
 - 生产部署和公开暴露尚未授权。
 
@@ -18,15 +18,16 @@
 
 ## 首个切片
 
-首个纵向切片将提供：
+限时本地演示将提供：
 
 - Email/Password 注册与登录。
 - 注册成功后通过同源 HttpOnly Cookie 中的 15 分钟 Access JWT 自动登录。
 - Session 恢复、退出和受保护 Web Route。
-- Dashboard、Flight Info 和 User 导航目标。
+- 用于证明 Session Restore 与 Route Protection 的受保护 Dashboard。
 - PostgreSQL User Model、API 权威校验及自动化测试。
+- 快速本地 Husky/lint-staged/commitlint Hook 与最小确定性 Pull-request CI。
 
-旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为后续工作。
+Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub Governance/Security Administration、旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为文档化后续工作。
 
 ## 技术栈
 
@@ -84,7 +85,7 @@ packages/config-typescript/ 共享严格 TypeScript 配置
 docs/toolchain*.md          精确版本与兼容性证据
 AGENTS*.md                  Contributor 与 Agent 的仓库规则
 PLANS*.md                   决策、范围、状态与验收标准
-ISSUES*.md                  有序实施 Issue 规格
+ISSUES*.md                  两个合并执行 Issue、远程处置与文档 Backlog 路由
 package.json                根命令与 Runtime 约束
 pnpm-workspace.yaml         Workspace 与安装策略
 turbo.json                  跨 Package Task Graph
@@ -103,7 +104,7 @@ turbo.json                  跨 Package Task Graph
 ## 文档入口
 
 - [PLANS_ZH.md](./PLANS_ZH.md) — 权威英文计划的中文跟随版，包含决策、范围、任务状态与验收标准。
-- [ISSUES_ZH.md](./ISSUES_ZH.md) — 实施级 Issue 规格与远程 Issue Registry 的中文跟随版。
+- [ISSUES_ZH.md](./ISSUES_ZH.md) — 两个合并执行规格、远程处置表与文档 Backlog 路由的中文跟随版。
 - [docs/toolchain_ZH.md](./docs/toolchain_ZH.md) — 精确 Dependency Pin 与 Source Evidence 的中文跟随版。
 - [AGENTS_ZH.md](./AGENTS_ZH.md) — 仓库工程与安全规则的中文跟随版。
 

@@ -10,7 +10,7 @@ As of 2026-08-05:
 
 - Available: the pnpm/Turborepo root, one lockfile, one root Prettier policy, shared strict TypeScript and typed ESLint packages, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, and a minimal NestJS 11 API scaffold with process liveness.
 - Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-04`/`ISSUE-003` through `ISSUE-006`, and `W-01`/`ISSUE-008`.
-- Next: `ISSUE-007`, `ISSUE-009`, and `ISSUE-010`, following the authoritative issue order.
+- Current order: owner-active `ISSUE-007`, then consolidated `ISSUE-009`/`MVP-01` and `ISSUE-010`/`MVP-02`. GitHub issues #11-#27 are closed as superseded or deferred, not as implementation evidence.
 - Not available yet: authentication, PostgreSQL infrastructure, CI/hooks, or business features.
 - Production deployment and public exposure are not authorized.
 
@@ -18,15 +18,16 @@ See [PLANS.md](./PLANS.md) for authoritative scope and status.
 
 ## First slice
 
-The first vertical slice will provide:
+The time-limited local demo will provide:
 
 - Email/password sign-up and login.
 - Automatic login after registration using a 15-minute access JWT in a same-origin HttpOnly cookie.
 - Session restore, logout, and protected Web routes.
-- Dashboard, Flight Info, and User navigation targets.
+- A protected Dashboard proving session restore and route protection.
 - A PostgreSQL-backed User model with API-authoritative validation and automated tests.
+- Fast local Husky/lint-staged/commitlint hooks and minimum deterministic pull-request CI.
 
-Travel-provider integration, LangGraph workflows, vector retrieval, refresh-token rotation, Redis, and production deployment are later work.
+Extensible navigation, Flight Info/User pages, localization, full GitHub governance/security administration, travel-provider integration, LangGraph workflows, vector retrieval, refresh-token rotation, Redis, and production deployment are documented later work.
 
 ## Stack
 
@@ -103,7 +104,7 @@ Directories such as `infra/docker` are created only when their owning task begin
 ## Documentation
 
 - [PLANS.md](./PLANS.md) — authoritative decisions, scope, task status, and acceptance criteria.
-- [ISSUES.md](./ISSUES.md) — implementation-ready issue specifications and the remote issue registry.
+- [ISSUES.md](./ISSUES.md) — the two consolidated execution specifications, remote disposition map, and documented-backlog routing.
 - [docs/toolchain.md](./docs/toolchain.md) — exact dependency pins and source evidence.
 - [AGENTS.md](./AGENTS.md) — repository-wide engineering and safety rules.
 

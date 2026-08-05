@@ -1,12 +1,12 @@
 # Development Plan: Monorepo Foundation and Authentication Vertical Slice
 
-Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03, F-01 through F-04, and W-01 are complete locally; ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
+Status: **decisions D-01 through D-26 confirmed; first-slice implementation authorized on 2026-08-02 and consolidated on 2026-08-05; P-03, F-01 through F-04, and W-01 are complete locally; ISSUE-007 remains owner-active, followed only by ISSUE-009/MVP-01 and ISSUE-010/MVP-02**\
 Plan date: 2026-07-30  
 Implementation authorization date: 2026-08-02\
-Scope source: project directories, Sign Up/Login, Navigation, User table, and Auth API requested by the user  
-Authorization history: the original planning round created documentation only. A 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies. On 2026-08-02, the owner explicitly authorized the planned first local authentication slice, including code and scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. On 2026-08-03, the owner explicitly authorized D-25 and the isolated Next.js/MUI/TypeORM baseline change.
+Scope source: project directories, Sign Up/Login, User table, Auth API, protected Dashboard, and time-limited demo requested by the user\
+Authorization history: the original planning round created documentation only. A 2026-07-30 request separately authorized remote creation of `ISSUE-001` through `ISSUE-027` plus their labels, milestone, assignment, and native dependencies. On 2026-08-02, the owner explicitly authorized the planned first local authentication slice, including code and scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. On 2026-08-03, the owner explicitly authorized D-25 and the isolated Next.js/MUI/TypeORM baseline change. On 2026-08-05, the owner authorized D-26: retain production-quality requirements on the core local auth path while consolidating all work after ISSUE-007 into ISSUE-009/MVP-01 and ISSUE-010/MVP-02, moving lower-priority breadth to this documented backlog. The owner also explicitly authorized rewriting remote issues #9/#10 and closing #11-#27 while leaving #7 untouched; that one-time remote reorganization is complete.
 
-Authorization exclusions: post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue still require separate explicit authorization.
+Authorization exclusions: post-MVP implementation, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and any remote issue operation beyond the completed 2026-08-05 reorganization still require separate explicit authorization.
 
 Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and minimal independently buildable `apps/web` and `apps/api` scaffolds now exist. One root Prettier 3.9.6 policy and standardized root checks are active; narrow shared strict TypeScript and typed ESLint packages are consumed by both applications. The Web scaffold runs Next.js 16.2.12 with React 19.2.8, an exact MUI v9 App Router SSR/CSS-variable theme foundation, and one Vitest/React Testing Library render regression. The API scaffold runs NestJS 11.1.28 with strict ES2023 TypeScript, Jest/Supertest entry points, a process-only `GET /api/v1/health/live` endpoint, and graceful shutdown hooks. App-specific Next.js, Node, Jest, and Vitest concerns remain local. TypeORM, CI automation, hooks, migrations, infrastructure configuration, authentication, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
 
@@ -14,11 +14,11 @@ Simplified Chinese translation: [`PLANS_ZH.md`](./PLANS_ZH.md). This English pla
 
 ## 1. Objective for the first implementation slice
 
-Deliver a testable vertical slice in which developers run Web/API on the host through the pnpm monorepo, start PostgreSQL + pgvector as local containerized infrastructure, and complete this user journey: register, receive real API success feedback, remain authenticated, log in again with the same credentials, and navigate the extensible application shell.
+Deliver a testable vertical slice in which developers run Web/API on the host through the pnpm monorepo, start PostgreSQL + pgvector as local containerized infrastructure, and complete this user journey: register, receive real API success feedback, enter and refresh a protected Dashboard, log out, and log in again with the same credentials.
 
 “Production-oriented” means the first slice has correct boundaries, authoritative validation, secure password storage, reviewable migrations, stable error contracts, and automated tests. It does not mean every later platform capability is implemented at once.
 
-This slice is a milestone spanning multiple independently reviewable change sets. “First slice” is sequencing language, not a one-calendar-day delivery commitment.
+After ISSUE-007, this slice is packaged as two outcome-focused execution issues. Consolidation reduces issue-management overhead; it does not require an unreviewable pull request or waive a retained acceptance criterion.
 
 ## 2. Expected user journey
 
@@ -30,7 +30,6 @@ This slice is a milestone spanning multiple independently reviewable change sets
 6. The page restores the session through `/auth/me`; unauthenticated users cannot access protected application routes.
 7. Logout clears the cookie and returns the user to Login.
 8. Login returns one stable invalid-credentials response for an unknown email or wrong password; a successful login resets the cookie and opens Dashboard.
-9. Navigation reaches Dashboard, Flight Info, and User.
 
 ## 3. Scope
 
@@ -44,12 +43,10 @@ This slice is a milestone spanning multiple independently reviewable change sets
 - `POST /api/v1/auth/sign-up` and `POST /api/v1/auth/login`.
 - Minimal access JWT in a same-origin HttpOnly cookie, `GET /auth/me`, `POST /auth/logout`, and protected routes.
 - Complete Sign Up and Login request states.
-- Extensible, responsive, accessible navigation.
-- Minimal Dashboard, Flight Info, and User route targets.
-- English first-release UI with centralized message keys, an English catalog, and locale-aware formatters.
+- Minimal protected Dashboard route proving the authenticated boundary.
+- Accessible English Sign Up/Login/Dashboard UI; full localization architecture is deferred.
 - Unit, integration, component, and critical end-to-end tests proportional to the slice.
 - Environment-variable examples, local run instructions, root pre-commit/commit-message hooks, and GitHub Actions CI quality gates.
-- GitHub repository governance: protected `main`, pull-request ownership/templates, an MIT license, Dependabot, and supported security scanning.
 
 ### Explicitly out of scope for the first slice
 
@@ -58,8 +55,9 @@ This slice is a milestone spanning multiple independently reviewable change sets
 - Embedding models, vector generation, vector columns, or pgvector indexes. Privileged local bootstrap enables and verifies the packaged extension for environment parity, but no speculative vector schema is created.
 - Refresh tokens, token rotation/server revocation, Redis, cache, queues, or distributed locks.
 - Email verification, forgot/reset password, social login, MFA, account-status workflows, or RBAC.
-- Simplified Chinese product copy, a language switcher, or locale URLs. Only the localization boundary is created now.
-- A complete User Profile; User is only a navigation target.
+- Product localization infrastructure, Simplified Chinese product copy, a language switcher, or locale URLs.
+- Extensible product navigation, Flight Info/User targets, final branding, or a complete User Profile.
+- Full GitHub repository-governance and security-administration work beyond the retained minimum PR CI and local hooks.
 - Full Swagger documentation or a generated API client.
 - Production deployment, cloud resources, application images, registry publication, and activation of continuous delivery. The future GitHub CD contract is planned now but implemented only under R-09.
 
@@ -69,35 +67,36 @@ These are not forgotten: a public-exposure authentication gate, refresh-token ro
 
 ## 4. Decision record
 
-All decisions D-01 through D-25 are confirmed and authoritative. D-14 through D-19 were accepted from the independent audit; D-20 through D-24 record the user's GitHub identity, governance, CI/CD, local-hook, license, and AI-review requirements; D-25 records the owner-authorized framework/ORM major-line revision. First-slice implementation is authorized within the stated exclusions.
+All decisions D-01 through D-26 are confirmed and authoritative. D-14 through D-19 were accepted from the independent audit; D-20 through D-24 record the user's GitHub identity, governance, CI/CD, local-hook, license, and AI-review requirements; D-25 records the owner-authorized framework/ORM major-line revision; D-26 records the owner-authorized time-boxed issue and scope consolidation. First-slice implementation is authorized within the stated exclusions.
 
-| ID   | Status      | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Affects                         |
-| ---- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| D-01 | `CONFIRMED` | Use TypeORM with migrations only; disable `synchronize` in production                                                                                                                                                                                                                                                                                                                                                                                                                                                         | B-01 onward                     |
-| D-02 | `CONFIRMED` | pnpm workspace manages dependencies; Turborepo manages task graphs and local cache; remote cache waits for a later review                                                                                                                                                                                                                                                                                                                                                                                                     | F-01 onward                     |
-| D-03 | `CONFIRMED` | The first slice uses a short-lived access JWT in a same-origin HttpOnly cookie; refresh rotation, revocation, and Redis come later                                                                                                                                                                                                                                                                                                                                                                                            | B-05, W-05, I-02, R-03          |
-| D-04 | `CONFIRMED` | Unknown email and wrong password share one external `INVALID_CREDENTIALS` response                                                                                                                                                                                                                                                                                                                                                                                                                                            | B-07, W-07                      |
-| D-05 | `CONFIRMED` | Successful sign-up issues the same access JWT and automatically enters Dashboard                                                                                                                                                                                                                                                                                                                                                                                                                                              | B-06, W-06, E2E-01              |
-| D-06 | `CONFIRMED` | Use TypeScript LangGraph inside NestJS `AgentModule` when the first agent use case begins; Web only consumes authenticated streams; extract `apps/agent` only when independent scaling is justified; do not create an empty module in this slice                                                                                                                                                                                                                                                                              | R-12                            |
-| D-07 | `CONFIRMED` | UUID primary key, physical table `users`, and trim + lowercase normalized unique email                                                                                                                                                                                                                                                                                                                                                                                                                                        | B-02 onward                     |
-| D-08 | `CONFIRMED` | Initial password policy: 8–20 ASCII characters, allowed set `A-Z`, `a-z`, `0-9`, and `$#@%`, with at least one uppercase, lowercase, digit, and `$#@%` character; never trim; retain common/compromised-password rejection and benchmarked Argon2id                                                                                                                                                                                                                                                                           | B-04, B-06, W-04, R-13          |
-| D-09 | `CONFIRMED` | Next.js and NestJS deploy independently; the browser uses one public origin and `/api/v1` through a gateway to NestJS                                                                                                                                                                                                                                                                                                                                                                                                         | F-05, B-05, W-05                |
-| D-10 | `CONFIRMED` | First product UI is English with centralized messages from day one; add at least `zh-CN` later; no first-slice switcher or locale URL                                                                                                                                                                                                                                                                                                                                                                                         | W-02 onward, R-08               |
-| D-11 | `CONFIRMED` | The first migration excludes email verification, account status, and roles; introduce them through sequenced forward migrations                                                                                                                                                                                                                                                                                                                                                                                               | B-02 onward, R-04/R-06/R-07     |
-| D-12 | `CONFIRMED` | Local inner loop runs Next.js/NestJS on the host; PostgreSQL + pgvector and later stateful dependencies are containerized; application images follow after the slice is stable                                                                                                                                                                                                                                                                                                                                                | F-02, F-03, F-05, R-09          |
-| D-13 | `CONFIRMED` | Unsuffixed project documents are authoritative English; matching `_ZH.md` files are synchronized Simplified Chinese followers; English wins on conflict                                                                                                                                                                                                                                                                                                                                                                       | All documentation tasks         |
-| D-14 | `CONFIRMED` | First-slice JWT/cookie profile: `HS256`, at least 256-bit managed secret, 15-minute TTL, User UUID `sub`, `iss=trip-api`, `aud=trip-web`, required `iat`/`exp`, at most 30-second clock tolerance; production cookie `__Host-trip_access`, `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, no `Domain`, `Max-Age=900`; local HTTP uses `trip_access_dev` for 900 seconds; logout uses `Max-Age=0` with the matching tuple                                                                                                     | B-05, B-08, W-05, I-02          |
-| D-15 | `CONFIRMED` | Browser-only unsafe auth requests are JSON-only and require exact trusted Origin with same-origin Referer fallback; missing/`null` provenance is rejected. This is the narrow first-slice CSRF baseline; add a token before the first protected business mutation or any broader topology                                                                                                                                                                                                                                     | B-05 through B-10, I-01/I-02    |
-| D-16 | `CONFIRMED` | Authenticated/user-specific responses and Next server auth fetches are `no-store`; gateways never cache `Set-Cookie` or private responses                                                                                                                                                                                                                                                                                                                                                                                     | B-05, B-08, W-05, I-01/I-02     |
-| D-17 | `CONFIRMED` | First-slice email storage is canonical trimmed, lowercased ASCII, maximum 254 characters, protected by a database canonical-form check plus uniqueness; internationalized email requires a later policy                                                                                                                                                                                                                                                                                                                       | B-02, B-03, B-06/B-07           |
-| D-18 | `CONFIRMED` | Database provisioner, migrator, and runtime roles are separate; privileged bootstrap owns extension enablement; migrations are an explicit job, never automatic application startup work                                                                                                                                                                                                                                                                                                                                      | F-05, B-01, B-02, R-09          |
-| D-19 | `CONFIRMED` | Completing the local slice does not authorize public exposure; the release gate requires R-02, R-09, and R-10 plus renewed security/operations approval                                                                                                                                                                                                                                                                                                                                                                       | Q-01, H-01, R-02/R-09/R-10/R-14 |
-| D-20 | `CONFIRMED` | GitHub is the source-control and automation platform. The public repository is owned by `@Donny-Guo`. `main` is pull-request-only with stable required CI, resolved conversations, linear history, squash merge by default, and no force push/deletion. During bootstrap, approval requirements remain satisfiable without a general check bypass; require at least one non-author owned-path approval whenever eligible reviewers are available                                                                              | F-06, F-08, Q-01                |
-| D-21 | `CONFIRMED` | Root Husky hooks use lint-staged formatting/linting for staged files and commitlint Conventional Commits at `commit-msg`; CI is authoritative, validates the squash pull-request title, and keeps network/database/build/full-suite work out of pre-commit                                                                                                                                                                                                                                                                    | F-04, F-07, F-08                |
-| D-22 | `CONFIRMED` | GitHub CD is gated by R-09 and an approved target: build once from trusted code, attest and publish immutable Web/API image digests, promote the same digests through protected `staging`/`production` Environments using OIDC, require production approval without self-review, serialize deployments, and support rollback; pull-request code receives no deployment secrets                                                                                                                                                | R-09, R-14                      |
-| D-23 | `CONFIRMED` | The repository owner and initial `CODEOWNERS` identity is `@Donny-Guo`. MIT is the confirmed open-source license choice; the standard root license uses `Copyright (c) 2026 Donny-Guo`, requires explicit owner authorization, and does not require per-file license headers. F-08 verifies and maintains the artifact                                                                                                                                                                                                        | F-08, documentation             |
-| D-24 | `CONFIRMED` | At most one advisory AI reviewer may be enabled initially. Manually request review only after Ready for Review, green deterministic CI, and self-review. Evaluate it on three representative risk-bearing pull requests, with no automatic draft/every-push review, no overlapping reviewer, and no merge-gating authority; record useful findings, false positives, misses, and latency before revising the policy. Provider and account details are not recorded in the public repository                                   | F-08, Q-01                      |
-| D-25 | `CONFIRMED` | Supersede the original Web/ORM version constraint with the current stable Next.js 16, MUI v9, and TypeORM lines while retaining React 19, PostgreSQL 18, and the approved test families. The 2026-08-03 exact baseline is Next.js 16.2.12, MUI Material/Icons 9.2.0 with `@mui/material-nextjs` 9.1.1, and TypeORM 1.1.0. Installed dependencies move now; not-yet-owned dependencies use these pins when their task begins. Keep exact stable pins, isolate upgrades, and require explicit approval for another major change | P-03, F-02, W-01, B-01          |
+| ID   | Status      | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Affects                                       |
+| ---- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| D-01 | `CONFIRMED` | Use TypeORM with migrations only; disable `synchronize` in production                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | B-01 onward                                   |
+| D-02 | `CONFIRMED` | pnpm workspace manages dependencies; Turborepo manages task graphs and local cache; remote cache waits for a later review                                                                                                                                                                                                                                                                                                                                                                                                                                        | F-01 onward                                   |
+| D-03 | `CONFIRMED` | The first slice uses a short-lived access JWT in a same-origin HttpOnly cookie; refresh rotation, revocation, and Redis come later                                                                                                                                                                                                                                                                                                                                                                                                                               | B-05, W-05, I-02, R-03                        |
+| D-04 | `CONFIRMED` | Unknown email and wrong password share one external `INVALID_CREDENTIALS` response                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | B-07, W-07                                    |
+| D-05 | `CONFIRMED` | Successful sign-up issues the same access JWT and automatically enters Dashboard                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | B-06, W-06, E2E-01                            |
+| D-06 | `CONFIRMED` | Use TypeScript LangGraph inside NestJS `AgentModule` when the first agent use case begins; Web only consumes authenticated streams; extract `apps/agent` only when independent scaling is justified; do not create an empty module in this slice                                                                                                                                                                                                                                                                                                                 | R-12                                          |
+| D-07 | `CONFIRMED` | UUID primary key, physical table `users`, and trim + lowercase normalized unique email                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | B-02 onward                                   |
+| D-08 | `CONFIRMED` | Initial password policy: 8–20 ASCII characters, allowed set `A-Z`, `a-z`, `0-9`, and `$#@%`, with at least one uppercase, lowercase, digit, and `$#@%` character; never trim; retain common/compromised-password rejection and benchmarked Argon2id                                                                                                                                                                                                                                                                                                              | B-04, B-06, W-04, R-13                        |
+| D-09 | `CONFIRMED` | Next.js and NestJS deploy independently; the browser uses one public origin and `/api/v1` through a gateway to NestJS                                                                                                                                                                                                                                                                                                                                                                                                                                            | F-05, B-05, W-05                              |
+| D-10 | `CONFIRMED` | First product UI is English; add at least `zh-CN` later. D-26 defers the full message-catalog/localization boundary, switcher, and locale URL until after the local auth demo                                                                                                                                                                                                                                                                                                                                                                                    | W-02, R-08, D-26                              |
+| D-11 | `CONFIRMED` | The first migration excludes email verification, account status, and roles; introduce them through sequenced forward migrations                                                                                                                                                                                                                                                                                                                                                                                                                                  | B-02 onward, R-04/R-06/R-07                   |
+| D-12 | `CONFIRMED` | Local inner loop runs Next.js/NestJS on the host; PostgreSQL + pgvector and later stateful dependencies are containerized; application images follow after the slice is stable                                                                                                                                                                                                                                                                                                                                                                                   | F-02, F-03, F-05, R-09                        |
+| D-13 | `CONFIRMED` | Unsuffixed project documents are authoritative English; matching `_ZH.md` files are synchronized Simplified Chinese followers; English wins on conflict                                                                                                                                                                                                                                                                                                                                                                                                          | All documentation tasks                       |
+| D-14 | `CONFIRMED` | First-slice JWT/cookie profile: `HS256`, at least 256-bit managed secret, 15-minute TTL, User UUID `sub`, `iss=trip-api`, `aud=trip-web`, required `iat`/`exp`, at most 30-second clock tolerance; production cookie `__Host-trip_access`, `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, no `Domain`, `Max-Age=900`; local HTTP uses `trip_access_dev` for 900 seconds; logout uses `Max-Age=0` with the matching tuple                                                                                                                                        | B-05, B-08, W-05, I-02                        |
+| D-15 | `CONFIRMED` | Browser-only unsafe auth requests are JSON-only and require exact trusted Origin with same-origin Referer fallback; missing/`null` provenance is rejected. This is the narrow first-slice CSRF baseline; add a token before the first protected business mutation or any broader topology                                                                                                                                                                                                                                                                        | B-05 through B-10, I-01/I-02                  |
+| D-16 | `CONFIRMED` | Authenticated/user-specific responses and Next server auth fetches are `no-store`; gateways never cache `Set-Cookie` or private responses                                                                                                                                                                                                                                                                                                                                                                                                                        | B-05, B-08, W-05, I-01/I-02                   |
+| D-17 | `CONFIRMED` | First-slice email storage is canonical trimmed, lowercased ASCII, maximum 254 characters, protected by a database canonical-form check plus uniqueness; internationalized email requires a later policy                                                                                                                                                                                                                                                                                                                                                          | B-02, B-03, B-06/B-07                         |
+| D-18 | `CONFIRMED` | Database provisioner, migrator, and runtime roles are separate; privileged bootstrap owns extension enablement; migrations are an explicit job, never automatic application startup work                                                                                                                                                                                                                                                                                                                                                                         | F-05, B-01, B-02, R-09                        |
+| D-19 | `CONFIRMED` | Completing the local slice does not authorize public exposure; the release gate requires R-02, R-09, and R-10 plus renewed security/operations approval                                                                                                                                                                                                                                                                                                                                                                                                          | Q-01, H-01, R-02/R-09/R-10/R-14               |
+| D-20 | `CONFIRMED` | GitHub is the source-control and automation platform. The public repository is owned by `@Donny-Guo`. `main` is pull-request-only with stable required CI, resolved conversations, linear history, squash merge by default, and no force push/deletion. During bootstrap, approval requirements remain satisfiable without a general check bypass; require at least one non-author owned-path approval whenever eligible reviewers are available                                                                                                                 | F-06, F-08, Q-01                              |
+| D-21 | `CONFIRMED` | Root Husky hooks use lint-staged formatting/linting for staged files and commitlint Conventional Commits at `commit-msg`; CI is authoritative, validates the squash pull-request title, and keeps network/database/build/full-suite work out of pre-commit                                                                                                                                                                                                                                                                                                       | F-04, F-07, F-08                              |
+| D-22 | `CONFIRMED` | GitHub CD is gated by R-09 and an approved target: build once from trusted code, attest and publish immutable Web/API image digests, promote the same digests through protected `staging`/`production` Environments using OIDC, require production approval without self-review, serialize deployments, and support rollback; pull-request code receives no deployment secrets                                                                                                                                                                                   | R-09, R-14                                    |
+| D-23 | `CONFIRMED` | The repository owner and initial `CODEOWNERS` identity is `@Donny-Guo`. MIT is the confirmed open-source license choice; the standard root license uses `Copyright (c) 2026 Donny-Guo`, requires explicit owner authorization, and does not require per-file license headers. F-08 verifies and maintains the artifact                                                                                                                                                                                                                                           | F-08, documentation                           |
+| D-24 | `CONFIRMED` | At most one advisory AI reviewer may be enabled initially. Manually request review only after Ready for Review, green deterministic CI, and self-review. Evaluate it on three representative risk-bearing pull requests, with no automatic draft/every-push review, no overlapping reviewer, and no merge-gating authority; record useful findings, false positives, misses, and latency before revising the policy. Provider and account details are not recorded in the public repository                                                                      | F-08, Q-01                                    |
+| D-25 | `CONFIRMED` | Supersede the original Web/ORM version constraint with the current stable Next.js 16, MUI v9, and TypeORM lines while retaining React 19, PostgreSQL 18, and the approved test families. The 2026-08-03 exact baseline is Next.js 16.2.12, MUI Material/Icons 9.2.0 with `@mui/material-nextjs` 9.1.1, and TypeORM 1.1.0. Installed dependencies move now; not-yet-owned dependencies use these pins when their task begins. Keep exact stable pins, isolate upgrades, and require explicit approval for another major change                                    | P-03, F-02, W-01, B-01                        |
+| D-26 | `CONFIRMED` | For the time-limited local demo, keep production-quality requirements on the PostgreSQL-backed auth API, JWT-cookie session, accessible Sign Up/Login/protected Dashboard journey, critical tests, local hooks, and minimum PR CI. After ISSUE-007, package this work only as ISSUE-009/MVP-01 and ISSUE-010/MVP-02. Defer localization, extensible navigation, full GitHub governance/security administration, and other product/release breadth to the documented backlog. Consolidation never authorizes public exposure or waives retained security controls | ISSUE-009, ISSUE-010, F-08, W-03, R-01 onward |
 
 ### Password-policy change contract
 
@@ -225,7 +224,7 @@ Migration acceptance: forward migration works on an empty database under the mig
 
 Implementation-ready issue packaging, ordering, review criteria, and required evidence are maintained in [`ISSUES.md`](./ISSUES.md). This plan remains authoritative if the documents ever disagree.
 
-Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started; `BLOCKED` waits on an external decision or authorization; `DONE` is evidenced complete; `TODO (later)` is registered backlog outside the first-slice authority; `BLOCKED (later)` is a later gate waiting on both prerequisites and explicit authorization.
+Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started; `OWNER-ACTIVE` is currently being implemented by the owner; `TRACKED BY ISSUE-009` and `TRACKED BY ISSUE-010` are retained task-level requirements packaged by the named consolidated issue; `BLOCKED` waits on an external decision or authorization; `DONE` is evidenced complete; `TODO (later)` is registered backlog outside the compressed demo; `BLOCKED (later)` is a later gate waiting on both prerequisites and explicit authorization.
 
 ### Phase 0 — Review and implementation gate
 
@@ -242,7 +241,7 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Prerequisite: P-01
 - Action: obtain an explicit user instruction to start implementation. Review feedback and planning edits do not count as authorization.
 - Output: the owner's unambiguous 2026-08-02 implementation-start instruction.
-- Acceptance: satisfied on 2026-08-02—the owner explicitly authorized the planned first local authentication slice, covering code, scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. Post-MVP work, production deployment/CD, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue remain excluded.
+- Acceptance: satisfied on 2026-08-02—the owner explicitly authorized the planned first local authentication slice, covering code, scaffolding, dependencies and the root lockfile, hooks, MIT license governance, first-slice GitHub CI/governance configuration, migrations, local PostgreSQL/pgvector infrastructure, and synchronized documentation/status updates. At that gate, post-MVP work, production deployment/CD, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and all remote issue mutation remained excluded; D-26 later authorized only the completed 2026-08-05 reorganization.
 
 #### P-03 Freeze a compatible version matrix — `DONE`
 
@@ -287,28 +286,28 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Acceptance: Web/API do not carry conflicting duplicate rules; cache outputs are correct; generated and environment files are ignored.
 - Completion evidence (2026-08-05): both applications consume narrow `@trip/config-typescript` and `@trip/config-eslint` packages through `workspace:*`; one exact root Prettier 3.9.6 policy and standardized `format`, `format:check`, `lint`, `typecheck`, `test`, and `build` tasks are active, while Next.js, Node, Jest, and Vitest concerns remain application-local. The exact Node/pnpm check, frozen install, formatting check, forced lint/typecheck/test/build tasks, Web render test, API unit and HTTP tests, production builds, shared-config loading, five intentional negative rule probes, ignore allow/deny matrix, lockfile/package-boundary audit, and a two-hit local-cache output-restoration run passed. Remote cache remained disabled, and no competing lockfile, deep/circular config import, speculative `test-utils`, probe residue, or hidden source/contract file was found.
 
-#### F-05 Create local PostgreSQL/pgvector infrastructure — `TODO`
+#### F-05 Create local PostgreSQL/pgvector infrastructure — `OWNER-ACTIVE` (`ISSUE-007`)
 
 - Prerequisite: D-09, D-12, D-18, F-03
 - Action: use Docker Compose for a pinned PostgreSQL + pgvector image, health check, named development volume, and distinct non-production provisioner/migrator/runtime credentials; privileged bootstrap enables `vector` and records `extversion`; add `.env.example` and ignore `.env`. Do not put Web/API in Compose yet.
 - Output: repeatable local PostgreSQL + pgvector.
 - Acceptance: database starts/stops independently and becomes healthy; extension availability and enablement are separately verified; migrations run from empty state only as migrator; API connects as a least-privilege runtime user that cannot perform DDL/extension work; no real secret exists; Redis is absent.
 
-#### F-06 Add GitHub Actions pull-request CI — `TODO`
+#### F-06 Add GitHub Actions pull-request CI — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-20, F-04, F-05
 - Action: create a least-privilege workflow for `pull_request`, trusted pushes to `main`, and `merge_group` when merge queue is enabled. On the selected versioned standard GitHub-hosted Ubuntu runner, install the pinned Node/pnpm toolchain with a frozen lockfile; run format check, lint, typecheck, unit/integration tests, and builds directly through Turbo rather than inside an Alpine application image; start an ephemeral pinned PostgreSQL + pgvector service; validate Markdown links, English-primary-language rules, and decision/task/issue ID plus status parity in existing `_ZH` followers. Pin third-party Actions to full SHAs, set timeouts/concurrency cancellation, isolate untrusted caches, and emit one stable aggregate `ci-required` result even when path filters skip jobs. A lightweight runner may be evaluated only for short non-Docker documentation/metadata jobs.
 - Output: `.github/workflows/ci.yml` and documented required-check names.
 - Acceptance: every required result reports and failures block merge; forked pull requests run without secrets; no `pull_request_target` job executes untrusted code; untrusted artifacts/caches cannot enter trusted jobs; cache cannot hide lockfile or generated-artifact drift; no production credential or real third-party API is used.
 
-#### F-07 Add local Git hooks and commit conventions — `TODO`
+#### F-07 Add local Git hooks and commit conventions — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-21, F-01, F-04
 - Action: configure root Husky hooks; run lint-staged Prettier/ESLint checks only against staged files in `pre-commit`; enforce Conventional Commits with commitlint in `commit-msg`; validate the squash pull-request title in CI. Keep hooks deterministic, preserve partial staging, and exclude network calls, database work, builds, and the full test suite.
 - Output: `.husky/` hooks, lint-staged and commitlint configuration, root scripts, and contributor guidance.
 - Acceptance: valid staged changes and commit messages pass; formatting/lint/message failures are actionable; partially staged files are not corrupted; a documented `--no-verify` bypass is caught by CI/PR-title checks; hook installation works after a normal root pnpm install.
 
-#### F-08 Establish GitHub repository governance and security automation — `TODO`
+#### F-08 Establish GitHub repository governance and security automation — `TODO (later)`
 
 - Prerequisite: D-20, D-21, D-23, D-24, F-06, F-07
 - Action: add `CODEOWNERS` assigning the initial sensitive paths to `@Donny-Guo`, contribution/security guidance, pull-request and issue templates, and Dependabot configuration for pnpm/npm plus GitHub Actions; verify and maintain the standard MIT `LICENSE` with `Copyright (c) 2026 Donny-Guo`. Configure the public repository's `main` ruleset for pull-request-only changes, squash/linear history, resolved conversations, stable required checks, and no force push/deletion. During bootstrap, keep approval requirements satisfiable and configure no general owner bypass for required checks; document the trigger to require one non-author owned-path approval whenever eligible reviewers are available. Enable public-repository dependency review, CodeQL/code scanning, secret scanning, and push protection after verifying current settings. If an advisory AI reviewer is enabled, request it manually only on Ready-for-Review pull requests after green deterministic CI and self-review; exclude drafts, automatic every-PR/every-push review, and docs-only/generated-only/routine dependency-update changes. Evaluate it on three representative authentication, migration, or workflow pull requests; re-review only after material risk-bearing changes. Record useful findings, false positives, misses, latency, availability, and relevant data-handling settings. Do not enable overlapping AI reviewers; a replacement requires a separate permissions/data/retention/reliability review. Do not record provider or account details in the public repository.
@@ -317,77 +316,77 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 
 ### Phase 2 — Database, Users, and Auth API
 
-#### B-01 Add validated configuration and ORM — `TODO`
+#### B-01 Add validated configuration and ORM — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-01, F-03, F-05
 - Action: validate port, runtime and migration database URLs, proxy trust, CORS/trusted origins, request limits, and authentication settings at startup; define connection lifecycle, dependency-aware readiness, graceful shutdown, and explicit migration-job boundaries.
 - Output: DatabaseModule/ConfigModule foundation.
 - Acceptance: missing critical configuration fails fast with actionable output; liveness does not depend on PostgreSQL while readiness does; production `synchronize` and automatic startup migrations are off; tests inject isolated configuration.
 
-#### B-02 Create the `users` migration — `TODO`
+#### B-02 Create the `users` migration — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-07, D-11, B-01
 - Action: create the table, canonical-form email check, unique email, and timestamps from Section 7 under the migration role.
 - Output: first reviewable migration.
 - Acceptance: migration succeeds from an empty database; schema matches the plan; direct noncanonical email writes and concurrent duplicates are database-rejected; runtime DDL fails; forward repair/down guidance exists.
 
-#### B-03 Implement the UsersModule persistence boundary — `TODO`
+#### B-03 Implement the UsersModule persistence boundary — `TRACKED BY ISSUE-009`
 
 - Prerequisite: B-02
 - Action: implement narrow User entity/repository/service operations and distinguish a safe User view from internal credential lookup.
 - Output: create-user and lookup-by-normalized-email capabilities.
 - Acceptance: ordinary queries do not select/return `password_hash`; unique conflicts map stably; repositories have real PostgreSQL integration tests.
 
-#### B-04 Implement PasswordPolicy and PasswordHasher — `TODO`
+#### B-04 Implement PasswordPolicy and PasswordHasher — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-08
 - Action: centralize the confirmed 8–20 ASCII allowed-set and category rules; define stable error codes per failed requirement; pin a licensed, versioned, checksummed local whole-password blocklist with documented provenance/update/failure policy; wrap Argon2id hash/verify; benchmark parameters and bound concurrent cost. Never call a remote password-check service with the candidate or a derived hash.
 - Output: independently testable `PasswordPolicy` and `PasswordHasher` boundaries.
 - Acceptance: 7/8/20/21 boundaries are tested; each missing category is tested; exhaustive printable-ASCII complement plus whitespace and Unicode cases prove unsupported input is rejected; paste input is unchanged; common passwords fail; the same password produces different salted hashes; correct/incorrect verification works; plaintext/hash never enter logs; algorithm, benchmark, rehash, and future policy-change behavior are documented.
 
-#### B-05 Create the minimal access-JWT session boundary — `TODO`
+#### B-05 Create the minimal access-JWT session boundary — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-03, D-09, D-14, D-15, D-16, B-01
 - Action: create TokenIssuer, JWT guard, cookie adapter, and unsafe-request provenance guard; implement the exact Section 6 JWT/cookie profile, JSON-only/body-limit policy, trusted Origin/Referer rules, Fetch Metadata defense in depth, no-store headers, and secret/rotation configuration boundary.
 - Output: one issuance/verification capability reused by sign-up and login.
 - Acceptance: only expected algorithm/claims pass; set/delete cookie attributes match in production and local profiles; missing or weak secret fails startup; unsafe requests with untrusted/missing provenance, unsupported content type, or oversized body fail safely; auth responses are no-store; token never enters a response body, Web Storage, cache, or logs.
 
-#### B-06 Implement sign-up and automatic login API — `TODO`
+#### B-06 Implement sign-up and automatic login API — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-05, B-03, B-04, B-05, B-09
 - Action: create DTO, global validation, canonical email normalization, password-policy checks, hashing, and User creation; map validation/blocklist/duplicate errors; reuse TokenIssuer on success and return the frozen safe User plus `messageCode` contract.
 - Output: `POST /api/v1/auth/sign-up`.
 - Acceptance: success returns `201` and a real session; empty/format/length/category/unsupported-character/common-password/unknown-field cases return safe, actionable `400`; duplicate returns `409`; responses/logs contain no password, hash, or token; one concurrent duplicate registration succeeds.
 
-#### B-07 Implement login API — `TODO`
+#### B-07 Implement login API — `TRACKED BY ISSUE-009`
 
 - Prerequisite: D-04, B-03, B-04, B-05, B-09
 - Action: validate transport shape and 1,024-byte password transport cap, normalize email, verify exact password input against the stored hash without applying sign-up policy, perform one verification against a fixed dummy Argon2id hash for an unknown account, keep both paths externally equivalent, and set the access cookie on success.
 - Output: `POST /api/v1/auth/login`.
 - Acceptance: valid existing credentials work even if a later creation policy changes; unknown email and wrong password execute comparable verification paths and return structurally identical `401 INVALID_CREDENTIALS`; tests do not assert brittle wall-clock equality; missing fields/oversized transport input return `400`; no sensitive field is exposed.
 
-#### B-08 Implement current user, logout, and authorization protection — `TODO`
+#### B-08 Implement current user, logout, and authorization protection — `TRACKED BY ISSUE-009`
 
 - Prerequisite: B-03, B-05, B-09
 - Action: implement `/auth/me`, idempotent logout, exact cookie deletion, reusable JWT guard, and no-store private responses.
 - Output: `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, and a common protection boundary.
 - Acceptance: valid token returns a safe User; missing/invalid/expired token returns `401`; logout clears cookie; NestJS is final authorization authority; tests document the first slice's lack of active revocation.
 
-#### B-09 Standardize exceptions and request correlation — `TODO`
+#### B-09 Standardize exceptions and request correlation — `TRACKED BY ISSUE-009`
 
 - Prerequisite: F-03; complete before B-06 and B-07
 - Action: freeze stable success/error codes; define `fieldErrors` as arrays of codes, safe English fallback messages, safe User serialization, a global exception filter, request ID, log redaction, JSON content-type/body-size handling, and no-store response policy; separate safe public errors from internal diagnostics.
 - Output: implementation of the Section 6 error shape.
 - Acceptance: expected errors are stable and can carry multiple field failures; Web need not parse prose; password input is never echoed; unknown errors leak no internals; logs correlate through request ID; auth/private cache headers are testable.
 
-#### B-10 Add API automation — `TODO`
+#### B-10 Add API automation — `TRACKED BY ISSUE-009`
 
 - Prerequisite: B-06, B-07, B-08, B-09
 - Action: cover DTO/email normalization/password-policy/Argon2id/JWT units, repository + PostgreSQL integration, and registration/login/session API E2E.
 - Output: isolated repeatable API suite.
 - Acceptance: covers success, empty values, invalid/noncanonical email, 7/8/20/21 password bounds, each missing category, allowed characters, printable-ASCII complement, whitespace/Unicode rejection, pinned blocklist behavior, unknown fields/content types/oversized bodies, duplicate/concurrent registration, cookie set/delete attributes, trusted/untrusted/missing Origin and Referer behavior, no-store headers, JWT claims/expiry, auto-login, restore, logout, invalid token, dummy-hash unknown-user path, wrong password, old-policy login compatibility, database role boundaries, and sensitive-field/log leakage; order independent.
 
-### Phase 3 — Web foundation and navigation
+### Phase 3 — Web authentication demo
 
 #### W-01 Integrate MUI v9 with App Router SSR — `DONE`
 
@@ -397,82 +396,82 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Acceptance: development and production render without hydration/style warnings; tokens apply; no second component system is introduced.
 - Completion evidence: on 2026-08-05, exact MUI/Emotion and required Web render-test pins were installed in the root lockfile. The root layout uses `AppRouterCacheProvider` from `v16-appRouter`, one client `ThemeProvider`/`CssBaseline` boundary, MUI CSS variables, and self-hosted Roboto through `next/font`. The minimal Server Component page consumes theme spacing and palette tokens. Frozen install, the Web render test, root lint/typecheck/test/build, production SSR style placement (three Emotion style elements in `head`, none in `body`), and two repeated client-navigation cycles passed with stable style counts and no relevant browser console errors. No custom palette, second UI system, auth forms, or product navigation was added.
 
-#### W-02 Create route groups and application shell — `TODO`
+#### W-02 Create the minimal auth and protected Dashboard shell — `TRACKED BY ISSUE-010`
 
 - Prerequisite: W-01
-- Action: create `(auth)` and `(app)` route groups; exclude Navigation from auth pages; share App Shell across protected pages; add stable message keys, English catalog, and locale formatters.
-- Output: Login, Sign Up, Dashboard, Flight Info, and User route targets.
-- Acceptance: route-group names are absent from URLs; direct/refresh navigation works; loading/error/404 boundaries are clear; `html lang` matches English; another catalog would not require component restructuring.
+- Action: create `(auth)` and `(app)` route groups for `/sign-up`, `/login`, and protected `/dashboard`; exclude protected content from auth pages. Defer extensible navigation, Flight Info/User targets, and the localization catalog boundary under D-26.
+- Output: minimal Login, Sign Up, and protected Dashboard route targets.
+- Acceptance: route-group names are absent from URLs; direct/refresh navigation works; loading/error/404 boundaries are clear; `html lang` matches the English demo; private content does not flash.
 
-#### W-03 Implement extensible Navigation — `TODO`
+#### W-03 Implement extensible Navigation — `TODO (later)`
 
 - Prerequisite: D-10, W-02
 - Action: use MUI AppBar/Toolbar with semantic links and Drawer/Menu on narrow screens; use typed configuration and message keys.
 - Output: Dashboard, Flight Info, and User navigation.
 - Acceptance: current route is visible; mouse/keyboard/touch work; mobile does not overflow; refresh routes correctly; future permissions and feature flags can filter configuration.
 
-#### W-04 Create form-validation and API-access boundaries — `TODO`
+#### W-04 Create form-validation and API-access boundaries — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-08, D-16, W-01, B-09, and the approved Section 6 contract
 - Action: select a form/schema approach; centralize browser-relative `/api/v1`, server-only internal API origin, timeout, credentials, and code-based error mapping; mirror PasswordPolicy intent through structured constraints rather than scattered regexes; preserve paste/autofill.
 - Output: Auth form foundation and typed API adapter.
-- Acceptance: components do not concatenate URLs or parse API prose; internal origins cannot enter client bundles; client feedback matches server intent while server remains authoritative; a concise password checklist covers length/uppercase/lowercase/digit/`$#@%`; network, timeout, parsing, and multiple server field codes remain distinct; all copy comes from the catalog.
+- Acceptance: components do not concatenate URLs or parse API prose; internal origins cannot enter client bundles; client feedback matches server intent while server remains authoritative; a concise password checklist covers length/uppercase/lowercase/digit/`$#@%`; network, timeout, parsing, and multiple server field codes remain distinct; initial copy remains coherent English without requiring the deferred localization framework.
 
-#### W-05 Restore sessions, log out, and protect routes — `TODO`
+#### W-05 Restore sessions, log out, and protect routes — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-03, D-09, D-16, B-08, W-02
 - Action: protect the `(app)` group in a server-side layout; call same-origin `/auth/me` through the server-only internal API origin with the incoming cookie forwarded and explicit no-store behavior; implement logout and sanitize relative return paths; keep the NestJS guard as final authority.
 - Output: real authenticated App Shell access control available to the auth forms.
 - Acceptance: unauthenticated users cannot access protected pages; `401` redirects to Login while an API outage renders a recoverable error; invalid/expired credentials do not loop; private content does not flash or enter shared caches; open redirects are rejected; browser code cannot read the token; logout clears the exact cookie tuple and client User state.
 
-#### W-06 Implement Sign Up with automatic login — `TODO`
+#### W-06 Implement Sign Up with automatic login — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-05, W-04, W-05, B-06
 - Action: build email/password fields, labels, password visibility, requirements checklist, loading, duplicate-submit prevention, field errors, form alert, and real success feedback.
 - Output: usable `/sign-up`.
 - Acceptance: empty/invalid email and every password rule receive immediate accessible feedback; common-password and `409` server errors are clear; success enters Dashboard after the cookie is set; keyboard submit, paste, autofill, focus, and error announcement work; no password/token logging.
 
-#### W-07 Implement Login — `TODO`
+#### W-07 Implement Login — `TRACKED BY ISSUE-010`
 
 - Prerequisite: D-04, W-04, W-05, B-07
 - Action: build email/password form and complete request states; map `INVALID_CREDENTIALS` to one message; do not apply sign-up composition checks to login.
 - Output: usable `/login`.
 - Acceptance: empty/invalid email feedback is local; unknown email and wrong password look identical; legacy passwords remain submit-able after policy evolution; requests cannot duplicate; success enters Dashboard; password/token never enters URL, logs, or persistent client state.
 
-#### W-08 Add Web component and accessibility tests — `TODO`
+#### W-08 Add focused Web component and accessibility tests — `TRACKED BY ISSUE-010`
 
-- Prerequisite: W-03, W-06, W-07
-- Action: test form states, password checklist, API error mapping, navigation states, message-key completeness, automated accessibility, and keyboard flows.
+- Prerequisite: W-06, W-07
+- Action: test auth form states, password checklist, API error mapping, protected Dashboard behavior, automated accessibility, and keyboard flows. Broader navigation/localization matrices remain later work.
 - Output: Web test suite and manual-check record.
 - Acceptance: tests assert behavior rather than incidental implementation; no serious accessibility violations; narrow and desktop layouts are covered.
 
 ### Phase 4 — End-to-end integration and handoff
 
-#### I-01 Integrate registration — `TODO`
+#### I-01 Integrate registration — `TRACKED BY ISSUE-010`
 
 - Prerequisite: B-06, W-06
 - Action: exercise real Web -> Gateway `/api/v1/*` -> API -> PostgreSQL behavior, including proxy trust, exact Origin/Referer, content type/body limits, cookie/cache headers, environment configuration, error codes, normalization, and password boundaries.
 - Acceptance: valid registration enters Dashboard; invalid password categories/characters, blocklisted password, duplicate email, provenance failure, and API outage follow the contract; gateway does not cache private/`Set-Cookie` responses; database has no plaintext password; Web cannot read JWT.
 
-#### I-02 Integrate login — `TODO`
+#### I-02 Integrate login — `TRACKED BY ISSUE-010`
 
 - Prerequisite: B-07, W-07, W-05
 - Action: exercise successful and failed real credentials, cookie set/delete parity, redirect/session/cache behavior, dummy-hash unknown-user path, and login compatibility after a test policy change.
 - Acceptance: success enters Dashboard; both invalid-credential causes are externally identical; refresh restores the no-store session; expiry returns safely to Login without loops; an API outage is not treated as `401`; return URLs remain same-origin; a stored password is not rejected by creation-policy validation.
 
-#### E2E-01 Automate the main browser path — `TODO`
+#### E2E-01 Automate the main browser path — `TRACKED BY ISSUE-010`
 
-- Prerequisite: I-01, I-02, W-03
-- Action: automate sign-up -> automatic Dashboard -> three navigation entries -> refresh restore -> logout -> login, plus duplicate registration, password-policy failures, wrong credentials, and unauthenticated access.
+- Prerequisite: I-01, I-02
+- Action: automate sign-up -> automatic Dashboard -> refresh restore -> logout -> login, plus duplicate registration, password-policy failures, wrong credentials, and unauthenticated access.
 - Acceptance: isolated data; repeatable in CI; safe failure screenshots/traces without passwords.
 
-#### Q-01 Run full quality and security review — `TODO`
+#### Q-01 Run the local-demo quality and security review — `TRACKED BY ISSUE-010`
 
-- Prerequisite: F-01 through F-08, B-01 through B-10, W-01 through W-08, I-01, I-02, and E2E-01
-- Action: run format, lint, typecheck, unit/integration/E2E, and production build; inspect dependencies, Action SHA pinning, workflow permissions/events/cache trust, required-check behavior, repository rules, ownership, proxy/CORS/origin behavior, cookie/cache policy, database privileges, sensitive logs, response fields, environment files, password dataset/policy boundaries, and English catalog completeness.
-- Acceptance: every local and GitHub gate passes; required checks cannot remain accidentally pending after path skips; no skipped tests, mutable workflow dependency, hard-coded secret, or unexplained TODO exists; supported dependency/CodeQL/secret checks have no unresolved high-severity finding; known risks have owners; results authorize local handoff only, not public exposure.
+- Prerequisite: F-06, F-07, B-01 through B-10, W-01, W-02, W-04 through W-08, I-01, I-02, and E2E-01
+- Action: run format, lint, typecheck, unit/integration/E2E, and production build; inspect dependencies, Action SHA pinning, workflow permissions/events/cache trust, required-check behavior, proxy/CORS/origin behavior, cookie/cache policy, database privileges, sensitive logs, response fields, environment files, and password dataset/policy boundaries. Full F-08 repository-governance administration remains later.
+- Acceptance: every retained local and GitHub CI gate passes; required checks cannot remain accidentally pending after path skips; no skipped test, mutable workflow dependency, hard-coded secret, or unexplained production-path TODO exists; known risks have owners; results authorize local handoff only, not public exposure.
 
-#### H-01 Synchronize documentation and handoff — `TODO`
+#### H-01 Synchronize documentation and hand off the local demo — `TRACKED BY ISSUE-010`
 
 - Prerequisite: Q-01
 - Action: update actual versions, structure, commands, environment variables, migrations, contracts, and tests in authoritative English docs; synchronize every existing `_ZH.md` follower and plan status.
@@ -480,7 +479,7 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 
 ### Post-MVP — registered backlog, not first-slice scope
 
-Each item begins only after the first slice is accepted. Every item requires independent review, migrations where relevant, tests, and release evidence. Listing does not authorize implementation.
+Each item begins only after the first slice is accepted or receives separate explicit authorization. F-08 full repository governance, W-03 extensible navigation, and the deferred localization boundary join the R-series work in this documented backlog. Every item requires independent review, migrations where relevant, tests, and release evidence. Listing does not authorize implementation or remote issue creation.
 
 #### R-01 Establish Swagger/OpenAPI and a generated client — `TODO (later)`
 
@@ -524,10 +523,10 @@ Each item begins only after the first slice is accepted. Every item requires ind
 - Action: derive role/permission/assignment data from a permission matrix; implement deny-by-default NestJS authorization, management boundaries, and Web navigation filtering.
 - Acceptance: hidden navigation is not treated as security; API independently denies privilege escalation; role changes are audited; matrix, migration, and tests agree.
 
-#### R-08 Add Simplified Chinese product localization — `TODO (later)`
+#### R-08 Establish product localization and add Simplified Chinese — `TODO (later)`
 
-- Prerequisite: stable W-02 message boundary
-- Action: decide locale URL/persistence from SEO and preference needs; add `zh-CN` catalog, switcher, fallback, date/currency formatting, and translation QA.
+- Prerequisite: H-01 and an approved localization boundary
+- Action: establish the deferred message-catalog boundary; decide locale URL/persistence from SEO and preference needs; add `zh-CN` catalog, switcher, fallback, date/currency formatting, and translation QA.
 - Acceptance: English and Simplified Chinese catalogs are complete; missing/extra keys fail CI; preference survives refresh; narrow layouts tolerate longer copy.
 
 #### R-09 Containerize applications and establish GitHub delivery/operational readiness — `TODO (later)`
@@ -569,39 +568,23 @@ Each item begins only after the first slice is accepted. Every item requires ind
 ## 9. Recommended order and safe parallelism
 
 ```text
-P-01 -> P-02 -> P-03 -> F-01
-F-01 -> F-02 -----------------------> W-01 -> W-02 -> W-03
-     `-> F-03 -> F-05 -> B-01 ------+-> B-02 -> B-03
-           |                         `-> B-05
-           `-> B-09
-F-02 + F-03 -> F-04 ----------------> F-07
-F-04 + F-05 ------------------------> F-06
-F-06 + F-07 ------------------------> F-08
-
-B-03 + B-04 + B-05 + B-09 ---------> B-06 and B-07
-B-03 + B-05 + B-09 ----------------> B-08
-W-01 + B-09 -----------------------> W-04
-W-02 + B-08 -----------------------> W-05
-B-06 + W-04 + W-05 ----------------> W-06 -> I-01
-B-07 + W-04 + W-05 ----------------> W-07 -> I-02
-W-03 + W-06 + W-07 ----------------> W-08
-W-03 + I-01 + I-02 ----------------> E2E-01
-F-01..F-08 + B-01..B-10 + W-01..W-08 + I/E2E -> Q-01 -> H-01
+Completed foundation: P-01..P-03, F-01..F-04, W-01
+Owner-active: ISSUE-007 / F-05
+ISSUE-007 -> ISSUE-009 / MVP-01
+ISSUE-009 -> ISSUE-010 / MVP-02
 ```
 
-After the monorepo root exists, Web foundation and API/database foundation can proceed in parallel. Freeze each relevant API contract before its Web error mapping. A single owner coordinates migrations, shared configuration, primary English docs, and their `_ZH` followers to prevent merge drift.
+Within ISSUE-009, keep configuration/data, password/JWT security, endpoints, and tests in layered commits. Within ISSUE-010, hooks and CI may begin while the backend is under review, but the real Web/session/E2E acceptance depends on ISSUE-009. A single owner coordinates migrations, primary English docs, and `_ZH` followers to prevent drift.
 
 ## 10. Reviewable change sets
 
-Preserve these review and rollback boundaries; the full list is not a one-day commitment:
+Preserve these review and rollback boundaries inside the consolidated issues:
 
-1. **Foundation**: pnpm workspace, Web/API scaffolding, shared configuration, local PostgreSQL, fast local hooks, GitHub PR CI, and repository governance/security automation.
-2. **Backend auth**: users migration, Users/Auth modules, PasswordPolicy/Argon2id, access JWT/cookie, `me`/logout, error contract, API tests.
-3. **Web shell**: MUI SSR/theme, route groups, English message catalog, Navigation, route targets.
-4. **Web auth**: form schema/checklist, Sign Up/Login, API adapter, component tests.
-5. **Integration**: session restore, protected routes, E2E, bilingual documentation synchronization, quality gates.
+1. **ISSUE-007 infrastructure**: local PostgreSQL/pgvector and role boundaries; the owner controls this issue.
+2. **ISSUE-009 backend auth**: configuration/ORM and migration; Users/password/JWT boundaries; endpoints and real-PostgreSQL tests.
+3. **ISSUE-010 local demo**: same-origin Web boundary and minimal auth routes; Sign Up/Login/session behavior; hooks and PR CI; component/E2E verification and synchronized handoff docs.
 
-Every set must build and test independently. Do not mix a database migration with unrelated UI work.
+Each layer must remain reviewable and testable. One issue may close through multiple focused pull requests when a single diff would be unsafe; do not mix a database migration with unrelated UI work merely to preserve the two-issue count.
 
 ## 11. Acceptance matrix
 
@@ -627,7 +610,6 @@ Every set must build and test independently. Do not mix a database migration wit
 | Unauthenticated protected access               | Return to Login; no private-content flash     | Guard returns `401`                                            | No change                                 |
 | Unsafe request with invalid/missing provenance | Actionable request failure; no redirect loop  | Reject before mutation                                         | No change                                 |
 | Auth/private response caching                  | Private state never comes from a shared cache | `Cache-Control: no-store`; gateway does not cache `Set-Cookie` | No change                                 |
-| Navigation                                     | Active item, keyboard usable                  | No API required                                                | No change                                 |
 | API/network outage                             | Recoverable error; form usable again          | Request ID traceable where response exists                     | No partial registration write             |
 
 ## 12. Risks and controls
@@ -673,7 +655,9 @@ Confirmed in D-20 through D-24: GitHub as source-control/automation platform; a 
 
 Confirmed in D-25: the active framework/ORM major lines are Next.js 16, MUI v9, and TypeORM 1.1, with exact reviewed stable pins and owning-task installation boundaries recorded in P-03 and `docs/toolchain.md`.
 
-No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` completed locally and was reverified on Next.js 16 on 2026-08-03; `F-03` completed locally with its verified NestJS lifecycle and liveness boundary on 2026-08-03. `F-04` completed locally with shared TypeScript/ESLint configuration, one root Prettier policy, standardized checks, negative-rule probes, and cache/ignore/package-boundary evidence on 2026-08-05. `ISSUE-007`, `ISSUE-009`, and `ISSUE-010` are the remaining dependency-eligible wave, and their authoritative issue order remains the safe default. The independent public-release gate remains blocked, and the first-slice authorization does not extend to post-MVP or production work.
+Confirmed in D-26: the time-limited local demo retains production-quality requirements on the core authentication path while consolidating post-infrastructure execution into ISSUE-009/MVP-01 and ISSUE-010/MVP-02. Localization, extensible navigation, and full GitHub governance/security administration are documented later work; this scope compression does not change the public-release gate.
+
+No foundational product, review, or first-slice implementation gate remains. The owner closed `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` locally on 2026-08-02. `F-02` completed locally and was reverified on Next.js 16 on 2026-08-03; `F-03` completed locally with its verified NestJS lifecycle and liveness boundary on 2026-08-03. `F-04` completed locally with shared TypeScript/ESLint configuration, one root Prettier policy, standardized checks, negative-rule probes, and cache/ignore/package-boundary evidence on 2026-08-05. ISSUE-007 remains owner-active; after it, only ISSUE-009/MVP-01 and ISSUE-010/MVP-02 remain open. GitHub #11-#27 were closed as superseded or deferred, not as implementation evidence. The independent public-release gate remains blocked, and the first-slice authorization does not extend to later or production work.
 
 Assumption recorded for D-08: `$#@%` is the complete allowed special-character set for the first policy, not merely an example list. If the user intended these as examples, updating the plan is small and does not affect the architecture.
 
@@ -686,9 +670,10 @@ The plan review is complete:
 - D-14 through D-19 security, data, and release boundaries are accepted.
 - D-20 through D-24 GitHub identity/governance, hook/CI authority, gated-CD boundaries, MIT licensing, and advisory AI-review policy are accepted.
 - D-25 Next.js 16/MUI v9/TypeORM 1.1 major-line revision and its owning-task boundaries are accepted.
+- D-26 two-issue execution consolidation and documented deferrals are accepted.
 - English authority and `_ZH` follower rules are accepted.
 
-The owner issued the separate implementation-start instruction on 2026-08-02. It authorizes only the planned first local authentication slice and its listed repository-governance work. It does not authorize post-MVP scope, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, or remote update/closure of any GitHub issue.
+The owner issued the separate implementation-start instruction on 2026-08-02. On 2026-08-05, the owner further authorized D-26 and the one-time remote rewrite of #9/#10 plus closure of #11-#27 while excluding #7. Those remote actions are complete. Neither authorization permits post-MVP implementation, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, or future remote issue mutations without another explicit request.
 
 ## 15. Implementation-time inputs
 
