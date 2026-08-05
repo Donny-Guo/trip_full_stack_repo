@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-005 are complete locally; ISSUE-006 through ISSUE-010 are the next dependency-eligible wave**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-005 and ISSUE-008 are complete locally; ISSUE-006, ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03. `ISSUE-001` through `ISSUE-005` are therefore `DONE` locally; `ISSUE-006` through `ISSUE-010` form the next dependency-eligible wave.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03, and the MUI SSR/theme foundation completed `W-01` on 2026-08-05. `ISSUE-001` through `ISSUE-005` and `ISSUE-008` are therefore `DONE` locally; `ISSUE-006`, `ISSUE-007`, `ISSUE-009`, and `ISSUE-010` remain in the dependency-eligible wave.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -366,10 +366,11 @@ Provide repeatable local PostgreSQL/pgvector while preserving provisioner, migra
 
 ### ISSUE-008 — [W-01] Integrate MUI v9 with App Router SSR
 
-- **Status:** `TODO`
+- **Status:** `DONE`
 - **Labels:** `type:task`, `area:web`, `area:ui`, `priority:p0`
 - **Blocked by:** ISSUE-004
 - **PR boundary:** one theme/SSR integration PR
+- **Remote state:** GitHub issue #8 remains open; no remote update was authorized or performed.
 
 **Outcome**
 
@@ -377,18 +378,19 @@ Provide one stable MUI v9 rendering and theme boundary for development and produ
 
 **Work**
 
-- [ ] Add exact `@mui/material@9.2.0`, `@mui/icons-material@9.2.0`, `@mui/material-nextjs@9.1.1`, and approved Emotion dependencies; use the official `v16-appRouter` cache integration.
-- [ ] Establish `ThemeProvider`, theme tokens, fonts, and the chosen CSS-variable strategy in the root layout.
-- [ ] Add a local Client Component wrapper if MUI's `component` prop receives `next/link`, and keep URL-reading client controls behind layout-stable Suspense boundaries.
-- [ ] Add a minimal render/build regression test.
+- [x] Add exact `@mui/material@9.2.0`, `@mui/icons-material@9.2.0`, `@mui/material-nextjs@9.1.1`, and approved Emotion dependencies; use the official `v16-appRouter` cache integration.
+- [x] Establish `ThemeProvider`, theme tokens, fonts, and the chosen CSS-variable strategy in the root layout.
+- [x] Add a local Client Component wrapper if MUI's `component` prop receives `next/link`, and keep URL-reading client controls behind layout-stable Suspense boundaries.
+- [x] Add a minimal render/build regression test.
 
 **Review / acceptance**
 
-- [ ] Development, server render, hydration, navigation, and production build show no style-order/hydration warning or flash caused by configuration.
-- [ ] Theme tokens apply consistently and support responsive/accessibility work.
-- [ ] No second component system or scattered global magic styling is introduced.
+- [x] Development, server render, hydration, navigation, and production build show no style-order/hydration warning or flash caused by configuration.
+- [x] Theme tokens apply consistently and support responsive/accessibility work.
+- [x] No second component system or scattered global magic styling is introduced.
 
-**Evidence:** production build/test output and clean console/render evidence.  
+**Evidence:** on 2026-08-05, exact MUI/Emotion and required Web render-test pins were installed in the root lockfile. The root layout uses the official `v16-appRouter` cache provider, one theme/CSS baseline boundary, MUI CSS variables, and self-hosted Roboto. The Server Component page consumes theme spacing and palette tokens while retaining the default palette. Frozen install, the Web Vitest render regression, root lint/typecheck/test/build, production SSR style placement (three Emotion style elements in `head`, none in `body`), and two repeated client-navigation cycles passed with stable style counts and no relevant browser console errors. No MUI-to-`next/link` or URL-reading client control exists yet, so the conditional wrapper/Suspense requirement was satisfied by inspection without speculative code.
+
 **Non-goals:** final branding, navigation, or auth forms.
 
 ### ISSUE-009 — [B-04] Implement PasswordPolicy and PasswordHasher

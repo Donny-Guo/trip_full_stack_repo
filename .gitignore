@@ -71,8 +71,19 @@ web_modules/
 !.env.example
 .envrc
 
-# Local pull-request drafts
+# Local drafts
 PR_ISSUE_*.md
+ISSUE_*.md
+
+# Docs
+!AGENTS.md
+!AGENTS_ZH.md
+!README.md
+!README_ZH.md
+!ISSUES.md
+!ISSUES_ZH.md
+!PLANS.md
+!PLANS_ZH.md
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -164,3 +175,8 @@ next-env.d.ts
 
 # Private key material
 *.pem
+
+# AI tools
+.claude/
+.codex/
+.opencode/

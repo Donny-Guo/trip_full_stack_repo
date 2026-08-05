@@ -1,6 +1,6 @@
 # Development Plan: Monorepo Foundation and Authentication Vertical Slice
 
-Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03 and F-01 through F-03 are complete locally; ISSUE-006 through ISSUE-010 are the next dependency-eligible wave**\
+Status: **decisions D-01 through D-25 confirmed; first-slice implementation authorized on 2026-08-02; P-03, F-01 through F-03, and W-01 are complete locally; ISSUE-006, ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
 Plan date: 2026-07-30  
 Implementation authorization date: 2026-08-02\
 Scope source: project directories, Sign Up/Login, Navigation, User table, and Auth API requested by the user  
@@ -8,7 +8,7 @@ Authorization history: the original planning round created documentation only. A
 
 Authorization exclusions: post-MVP work, production deployment, CD activation, cloud resources, public exposure, repository visibility changes, remote creation of `ISSUE-028` onward, and remote update/closure of any GitHub issue still require separate explicit authorization.
 
-Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and minimal independently buildable `apps/web` and `apps/api` scaffolds now exist. The Web scaffold runs Next.js 16.2.12 with React 19.2.8 and native ESLint flat configuration. The API scaffold runs NestJS 11.1.28 with strict ES2023 TypeScript, native type-aware ESLint, Jest/Supertest entry points, a process-only `GET /api/v1/health/live` endpoint, and graceful shutdown hooks. MUI, TypeORM, automation, hooks, migrations, infrastructure configuration, authentication, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
+Current repository state: `Donny-Guo/trip_full_stack_repo` is public. The root pnpm/Turborepo workspace, one pnpm lockfile, editor/ignore conventions, local-only task graph, and minimal independently buildable `apps/web` and `apps/api` scaffolds now exist. The Web scaffold runs Next.js 16.2.12 with React 19.2.8, native ESLint flat configuration, an exact MUI v9 App Router SSR/CSS-variable theme foundation, and one Vitest/React Testing Library render regression. The API scaffold runs NestJS 11.1.28 with strict ES2023 TypeScript, native type-aware ESLint, Jest/Supertest entry points, a process-only `GET /api/v1/health/live` endpoint, and graceful shutdown hooks. TypeORM, automation, hooks, migrations, infrastructure configuration, authentication, and business code do not exist yet. A tracked root MIT `LICENSE` predates this authorization; its current notice awaits F-08 alignment with D-23.
 
 Simplified Chinese translation: [`PLANS_ZH.md`](./PLANS_ZH.md). This English plan is authoritative.
 
@@ -251,7 +251,7 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 - Action: maintain an exact compatible baseline from primary sources for Node.js LTS, pnpm, TypeScript, Turborepo, Next.js 16, React/React DOM, MUI v9 and its official Next/Emotion integration, NestJS and its CLI/adapter packages, TypeORM 1.1, the PostgreSQL driver, PostgreSQL 18, pgvector, Argon2, ESLint, Prettier, Jest/Supertest, Vitest/React Testing Library, Playwright, Husky, lint-staged, and commitlint. Select a versioned standard GitHub-hosted Ubuntu runner (evaluate `ubuntu-24.04`, not a floating `-latest` or preview label), record Debian-slim/Alpine application-image candidates for later benchmark, define exact pin/range and upgrade/rollback policy, and create an initial full-SHA Action reference register with readable version comments.
 - Output: `.node-version` plus authoritative `docs/toolchain.md` and its `docs/toolchain_ZH.md` follower. The toolchain document contains one matrix with exact selections, compatibility/support state, primary-source links and check dates, pin/enforcement locations, update owner/cadence, rollback target, downstream verification task, and the initial immutable Action reference register.
 - Acceptance: the exact Node and pnpm selections are recorded and `.node-version` matches the matrix; no floating `latest`, canary, preview, prerelease, or mutable Action reference is selected; the D-25 Next.js 16/MUI v9/TypeORM 1.1 choices are explicit; compatibility evidence covers MUI/Next SSR, NestJS/TypeORM/PostgreSQL, pgvector, native Argon2, and the supported runtime intersection; every pin names an owner, rollback, and downstream enforcement task. F-01 implements root `packageManager`/engine constraints, F-02 proves the installed Next line, F-05 pins and verifies the database image, B-04 proves Argon2 runtime behavior, W-01 proves MUI SSR, and F-06/F-08 prove CI parity and the complete Action register; P-03 does not claim downstream checks that do not exist.
-- Completion evidence: on 2026-08-02, `.node-version`, [`docs/toolchain.md`](./docs/toolchain.md), and its synchronized follower established the original exact matrix, policy, rollback classes, candidate images, full-SHA Action register, and downstream enforcement map. D-25 amended the Next.js/MUI/TypeORM rows on 2026-08-03 from current primary sources and publisher metadata. F-01 supplies root installation, lockfile, and task-graph evidence; F-02 supplies Next.js 16 installation/build/runtime evidence. MUI SSR and TypeORM/PostgreSQL runtime evidence remain assigned to W-01 and B-01.
+- Completion evidence: on 2026-08-02, `.node-version`, [`docs/toolchain.md`](./docs/toolchain.md), and its synchronized follower established the original exact matrix, policy, rollback classes, candidate images, full-SHA Action register, and downstream enforcement map. D-25 amended the Next.js/MUI/TypeORM rows on 2026-08-03 from current primary sources and publisher metadata. F-01 supplies root installation, lockfile, and task-graph evidence; F-02 supplies Next.js 16 installation/build/runtime evidence; W-01 supplied MUI v9 installation, SSR, hydration, navigation, and render-test evidence on 2026-08-05. TypeORM/PostgreSQL runtime evidence remains assigned to B-01.
 
 ### Phase 1 — Monorepo and local environment
 
@@ -388,12 +388,13 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 
 ### Phase 3 — Web foundation and navigation
 
-#### W-01 Integrate MUI v9 with App Router SSR — `TODO`
+#### W-01 Integrate MUI v9 with App Router SSR — `DONE`
 
 - Prerequisite: F-02
 - Action: add exact `@mui/material@9.2.0`, `@mui/icons-material@9.2.0`, `@mui/material-nextjs@9.1.1`, and approved Emotion pins; configure `AppRouterCacheProvider` from `v16-appRouter`, ThemeProvider, fonts, and CSS-variable strategy. Use a local client wrapper when a MUI `component` prop receives `next/link` under the Next.js 16 boundary.
 - Output: stable root layout and theme.
 - Acceptance: development and production render without hydration/style warnings; tokens apply; no second component system is introduced.
+- Completion evidence: on 2026-08-05, exact MUI/Emotion and required Web render-test pins were installed in the root lockfile. The root layout uses `AppRouterCacheProvider` from `v16-appRouter`, one client `ThemeProvider`/`CssBaseline` boundary, MUI CSS variables, and self-hosted Roboto through `next/font`. The minimal Server Component page consumes theme spacing and palette tokens. Frozen install, the Web render test, root lint/typecheck/test/build, production SSR style placement (three Emotion style elements in `head`, none in `body`), and two repeated client-navigation cycles passed with stable style counts and no relevant browser console errors. No custom palette, second UI system, auth forms, or product navigation was added.
 
 #### W-02 Create route groups and application shell — `TODO`
 

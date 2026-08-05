@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-005 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-005 与 ISSUE-008 已在本地完成，当前依赖已满足的工作还包括 ISSUE-006、ISSUE-007、ISSUE-009 与 ISSUE-010**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 也已于 2026-08-03 完成 `F-03`。因此 `ISSUE-001` 至 `ISSUE-005` 在本地为 `DONE`；`ISSUE-006` 至 `ISSUE-010` 构成下一波依赖已满足的工作。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 于 2026-08-03 完成 `F-03`，MUI SSR/Theme Foundation 于 2026-08-05 完成 `W-01`。因此 `ISSUE-001` 至 `ISSUE-005` 与 `ISSUE-008` 在本地为 `DONE`；`ISSUE-006`、`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010` 仍属于依赖已满足的工作。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -366,10 +366,11 @@
 
 ### ISSUE-008 — [W-01] 集成 MUI v9 与 App Router SSR
 
-- **状态：** `TODO`
+- **状态：** `DONE`
 - **Labels：** `type:task`、`area:web`、`area:ui`、`priority:p0`
 - **Blocked by：** ISSUE-004
 - **PR Boundary：** 一个 Theme/SSR Integration PR
+- **远程状态：** GitHub Issue #8 仍为 Open；未获授权且未执行任何远程更新。
 
 **目标**
 
@@ -377,18 +378,19 @@
 
 **工作**
 
-- [ ] 加入精确的 `@mui/material@9.2.0`、`@mui/icons-material@9.2.0`、`@mui/material-nextjs@9.1.1` 与已批准 Emotion Dependency；使用官方 `v16-appRouter` Cache Integration。
-- [ ] 在 Root Layout 建立 `ThemeProvider`、Theme Token、Font 与已选 CSS-variable Strategy。
-- [ ] 若 MUI `component` Prop 接收 `next/link`，添加 Local Client Component Wrapper；读取 URL 的 Client Control 必须置于布局稳定的 Suspense Boundary 中。
-- [ ] 加入最小 Render/Build Regression Test。
+- [x] 加入精确的 `@mui/material@9.2.0`、`@mui/icons-material@9.2.0`、`@mui/material-nextjs@9.1.1` 与已批准 Emotion Dependency；使用官方 `v16-appRouter` Cache Integration。
+- [x] 在 Root Layout 建立 `ThemeProvider`、Theme Token、Font 与已选 CSS-variable Strategy。
+- [x] 若 MUI `component` Prop 接收 `next/link`，添加 Local Client Component Wrapper；读取 URL 的 Client Control 必须置于布局稳定的 Suspense Boundary 中。
+- [x] 加入最小 Render/Build Regression Test。
 
 **审核/验收**
 
-- [ ] Dev、Server Render、Hydration、Navigation 和 Production Build 无配置导致的 Style-order/Hydration Warning 或 Flash。
-- [ ] Theme Token 一致生效并支持 Responsive/Accessibility。
-- [ ] 不引入第二套 Component System 或散落的 Global Magic Style。
+- [x] Dev、Server Render、Hydration、Navigation 和 Production Build 无配置导致的 Style-order/Hydration Warning 或 Flash。
+- [x] Theme Token 一致生效并支持 Responsive/Accessibility。
+- [x] 不引入第二套 Component System 或散落的 Global Magic Style。
 
-**证据：** Production Build/Test Output 与 Clean Console/Render Evidence。  
+**证据：** 2026-08-05，精确 MUI/Emotion 与所需 Web Render-test Pin 已写入根 Lockfile。Root Layout 使用官方 `v16-appRouter` Cache Provider、唯一 Theme/CSS Baseline Boundary、MUI CSS Variable 与自托管 Roboto。Server Component 页面使用 Theme Spacing 与 Palette Token，同时保留默认 Palette。Frozen Install、Web Vitest Render Regression、Root Lint/Typecheck/Test/Build、Production SSR Style Placement（`head` 中三个 Emotion Style Element，`body` 中为零）与两轮重复 Client-navigation Cycle 均通过，Style Count 稳定且 Browser Console 无相关错误。目前不存在 MUI-to-`next/link` 或读取 URL 的 Client Control，因此 Conditional Wrapper/Suspense 要求通过检查确认满足，无需添加推测性代码。
+
 **非目标：** 最终 Branding、Navigation 或 Auth Form。
 
 ### ISSUE-009 — [B-04] 实现 PasswordPolicy 与 PasswordHasher

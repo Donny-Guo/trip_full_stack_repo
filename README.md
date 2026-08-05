@@ -1,17 +1,17 @@
 # Trip Agent Full Stack
 
-A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation plus minimal Next.js Web and NestJS API applications; the authentication flow, database infrastructure, and agent capabilities are planned but not implemented yet.
+A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation, minimal Next.js Web and NestJS API applications, and a simple MUI SSR/theme foundation; the authentication flow, database infrastructure, and agent capabilities are planned but not implemented yet.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
 
 ## Current status
 
-As of 2026-08-03:
+As of 2026-08-05:
 
-- Available: the pnpm/Turborepo root, one lockfile, a minimal Next.js 16 Web scaffold, and a minimal NestJS 11 API scaffold with process liveness.
-- Completed locally: `P-03`/`ISSUE-002` and `F-01` through `F-03`/`ISSUE-003` through `ISSUE-005`.
-- Next: the dependency-eligible `ISSUE-006` through `ISSUE-010` wave, following the authoritative issue order.
-- Not available yet: MUI, authentication, PostgreSQL infrastructure, CI/hooks, or business features.
+- Available: the pnpm/Turborepo root, one lockfile, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, and a minimal NestJS 11 API scaffold with process liveness.
+- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-03`/`ISSUE-003` through `ISSUE-005`, and `W-01`/`ISSUE-008`.
+- Next: `ISSUE-006`, `ISSUE-007`, `ISSUE-009`, and `ISSUE-010`, following the authoritative issue order.
+- Not available yet: authentication, PostgreSQL infrastructure, CI/hooks, or business features.
 - Production deployment and public exposure are not authorized.
 
 See [PLANS.md](./PLANS.md) for authoritative scope and status.
@@ -33,12 +33,12 @@ Travel-provider integration, LangGraph workflows, vector retrieval, refresh-toke
 | Area | Choice | State |
 | --- | --- | --- |
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8 | Available |
-| Web | Next.js 16.2.12 + React 19.2.8 | Minimal scaffold available |
-| UI | MUI v9 | Planned in W-01 |
+| Web | Next.js 16.2.12 + React 19.2.8 | Minimal scaffold with MUI SSR/theme foundation |
+| UI | MUI Material/Icons 9.2.0 | SSR/CSS-variable foundation available |
 | API | NestJS 11.1.28 REST + TypeScript | Minimal scaffold available |
 | Data | PostgreSQL 18 + pgvector + TypeORM 1.1 | Planned in F-05/B-01 |
 | Agent | TypeScript LangGraph inside the API boundary | Later |
-| Tests | Jest/Supertest, Vitest/React Testing Library, Playwright | API Jest/Supertest available; Web and browser suites planned |
+| Tests | Jest/Supertest, Vitest/React Testing Library, Playwright | API checks and one Web render regression available; browser E2E planned |
 
 Exact pins, compatibility evidence, and update policy live in [docs/toolchain.md](./docs/toolchain.md).
 
@@ -51,7 +51,7 @@ pnpm install --frozen-lockfile
 pnpm --filter web dev
 ```
 
-Open http://localhost:3000. The current page displays only the minimal Web scaffold.
+Open http://localhost:3000. The current page displays a minimal MUI SSR/theme proof without product navigation or custom branding.
 
 Start the API in a separate terminal:
 
@@ -71,12 +71,12 @@ pnpm test
 pnpm build
 ```
 
-At the current scaffold stage, `pnpm format` completes without package tasks; F-04 will add shared formatting tooling. `pnpm test` runs the API unit and HTTP checks. No database service is required until F-05.
+At the current scaffold stage, `pnpm format` completes without package tasks; F-04 will add shared formatting tooling. `pnpm test` runs the API unit/HTTP checks and the Web render regression. No database service is required until F-05.
 
 ## Repository layout
 
 ```text
-apps/web/              Minimal Next.js application
+apps/web/              Minimal Next.js application with MUI theme/render regression
 apps/api/              Minimal NestJS application and liveness endpoint
 docs/toolchain*.md     Exact version and compatibility evidence
 AGENTS*.md             Repository rules for contributors and agents
