@@ -2,15 +2,15 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03、F-01 至 F-04 与 W-01 已在本地完成，当前依赖已满足的工作还包括 ISSUE-007、ISSUE-009 与 ISSUE-010**\
+状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03、F-01 至 F-05 与 W-01 已在本地完成，当前依赖已满足的工作还包括 ISSUE-009 与 ISSUE-010**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
-授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。
+授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。2026-08-05，Owner 明确 F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
 
 授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。统一的根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围的共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8、精确的 MUI v9 App Router SSR/CSS-variable Theme Foundation，以及一项 Vitest/React Testing Library Render Regression。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。Next.js、Node、Jest 与 Vitest 的应用特定关注点仍保留在各应用本地。TypeORM、CI 自动化、Hook、迁移、基础设施配置、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。统一的根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围的共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8、精确的 MUI v9 App Router SSR/CSS-variable Theme Foundation，以及一项 Vitest/React Testing Library Render Regression。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施现已提供仅 Loopback 发布的 Healthy Service、具名 Volume、Atomic Privileged Bootstrap，以及相互分离的 Provisioner/Migrator/Runtime Role。Next.js、Node、Jest 与 Vitest 的应用特定关注点仍保留在各应用本地。TypeORM、CI 自动化、Hook、Application Migration、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -248,7 +248,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 动作：从 Primary Source 维护 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 16、React/React DOM、MUI v9 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 1.1、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
 - 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
 - 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 D-25 的 Next.js 16/MUI v9/TypeORM 1.1 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-02 证明已安装 Next Line，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称尚不存在的下游检查。
-- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence；W-01 于 2026-08-05 提供 MUI v9 Installation、SSR、Hydration、Navigation 与 Render-test Evidence。TypeORM/PostgreSQL Runtime Evidence 仍由 B-01 负责。
+- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence；W-01 于 2026-08-05 提供 MUI v9 Installation、SSR、Hydration、Navigation 与 Render-test Evidence。F-05 于 2026-08-05 提供精确 Database-image Digest，以及 PostgreSQL/pgvector Bootstrap、Version、Persistence 与 Role-boundary Evidence；TypeORM Integration 仍由 B-01 负责。
 
 ### Phase 1 — Monorepo 与本地环境
 
@@ -284,12 +284,13 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 验收：Web/API 不复制冲突规则；缓存任务声明正确；生成物和环境文件不进入 Git。
 - 完成证据（2026-08-05）：两个应用均通过 `workspace:*` 消费窄范围的 `@trip/config-typescript` 与 `@trip/config-eslint` Package；统一的精确根 Prettier 3.9.6 Policy 及标准化 `format`、`format:check`、`lint`、`typecheck`、`test`、`build` Task 已启用，而 Next.js、Node、Jest 与 Vitest 关注点仍保留在应用本地。精确 Node/pnpm Check、Frozen Install、Formatting Check、强制 Lint/Typecheck/Test/Build Task、Web Render Test、API Unit 与 HTTP Test、Production Build、Shared-config Loading、五类故意违规的 Negative Rule Probe、Ignore Allow/Deny Matrix、Lockfile/Package-boundary Audit，以及两次命中的 Local-cache Output-restoration Run 均通过。Remote Cache 保持关闭，且未发现竞争 Lockfile、Deep/Circular Config Import、推测性 `test-utils`、Probe Residue 或被隐藏的 Source/Contract File。
 
-#### F-05 建立本地 PostgreSQL/pgvector 环境 — `TODO`
+#### F-05 建立本地 PostgreSQL/pgvector 环境 — `DONE`
 
 - 前置：D-09、D-12、D-18、F-03
 - 动作：通过 Docker Compose 提供固定 PostgreSQL + pgvector 镜像、健康检查、具名开发卷和相互分离的非生产 Provisioner/Migrator/Runtime 凭据；高权限 Bootstrap 启用 `vector` 并记录 `extversion`；建立 `.env.example` 并忽略 `.env`。此阶段不把 Web/API 放入 Compose。
 - 产出：开发者可重复启动的 PostgreSQL + pgvector。
-- 验收：数据库可独立重复启停并健康；分别验证扩展可用性和启用状态；只有 Migrator 可从空库迁移；API 使用不能执行 DDL/扩展操作的最小权限 Runtime 用户；无真实密钥；不引入 Redis。
+- 验收：数据库可独立重复启停并健康；分别验证 Extension 可用性和启用状态；在 Clean Database 上，Migration-shaped Transactional DDL Probe 以 Migrator 成功且不留下 Object，直接 TCP/SCRAM Runtime Connection 成功，而 Runtime DDL/Extension 操作被拒绝；不存在真实 Secret；不引入 Redis。实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
+- 完成证据（2026-08-05）：`infra/docker/compose.yaml` 将 `pgvector/pgvector:0.8.5-pg18-trixie` 固定到 OCI Index Digest `sha256:9d2e61c7352b9e9f4798df5fd9a498f043f4cda1cdacc707de3d198650f4321e`，仅在 Loopback 发布 PostgreSQL，配置 Health Check 并保留具名 Volume；Web/API 保持 Host-run，Redis 未加入。全新的 Disposable Project 达到 Healthy PostgreSQL `18.4`（`server_version_num=180004`），分别验证 Vector `0.8.5` 的 Available 与 Installed 状态，并输出 Sanitized Bootstrap Record。Atomic Privileged Bootstrap 创建相互分离且使用 SCRAM Verifier 的 Provisioner/Migrator/Runtime Role、由 Provisioner 所有且位于 `public` 的 Vector Extension，以及由 Migrator 所有的 `app` Schema。Fixed-output Probe 证明三个 TCP Identity、仅 Migrator 可执行且 Rollback 的批准 Application DDL、Runtime 及 Subordinate Role/Extension/Public-schema/Database/Temp 操作以 SQLSTATE `42501` 被拒绝、没有 Persistent Probe Object、Password-statement Failure Redaction、真实 Password 不出现在 Log/Image Metadata，以及 Container Recreation 后保持同一 Cluster。Static Shell/Compose/Scope/Secret Check、Frozen Install、Formatting、Local Markdown Link，以及强制 Uncached Lint/Typecheck/Test/Build 均通过。
 
 #### F-06 建立 GitHub Actions Pull Request CI — `TODO`
 
@@ -670,7 +671,7 @@ D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo`
 
 D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 TypeORM 1.1；P-03 与 `docs/toolchain.md` 记录精确且经 Review 的 Stable Pin 与 Owner-task Installation Boundary。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010` 是剩余依赖已满足的工作，权威 Issue 顺序仍是安全默认值。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`F-05` 已于 2026-08-05 在本地完成，提供 Digest-pinned PostgreSQL/pgvector 基础设施、Atomic Bootstrap、分离 Role、Clean-start/Security/Persistence Evidence，以及经 Owner 批准的 B-01/B-02 Boundary。`ISSUE-009` 与 `ISSUE-010` 是剩余依赖已满足的工作，权威 Issue 顺序仍是安全默认值。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 

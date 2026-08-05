@@ -1,6 +1,6 @@
 # Trip Agent Full Stack
 
-A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation, shared TypeScript/ESLint/Prettier engineering configuration, minimal Next.js Web and NestJS API applications, and a simple MUI SSR/theme foundation; the authentication flow, database infrastructure, and agent capabilities are planned but not implemented yet.
+A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation, shared TypeScript/ESLint/Prettier engineering configuration, minimal Next.js Web and NestJS API applications, a simple MUI SSR/theme foundation, and local PostgreSQL/pgvector infrastructure with separated database roles. The authentication flow, TypeORM integration, and agent capabilities are planned but not implemented yet.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
 
@@ -8,10 +8,10 @@ Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authori
 
 As of 2026-08-05:
 
-- Available: the pnpm/Turborepo root, one lockfile, one root Prettier policy, shared strict TypeScript and typed ESLint packages, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, and a minimal NestJS 11 API scaffold with process liveness.
-- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-04`/`ISSUE-003` through `ISSUE-006`, and `W-01`/`ISSUE-008`.
-- Next: `ISSUE-007`, `ISSUE-009`, and `ISSUE-010`, following the authoritative issue order.
-- Not available yet: authentication, PostgreSQL infrastructure, CI/hooks, or business features.
+- Available: the pnpm/Turborepo root, one lockfile, one root Prettier policy, shared strict TypeScript and typed ESLint packages, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, a minimal NestJS 11 API scaffold with process liveness, and digest-pinned local PostgreSQL 18.4/pgvector 0.8.5 infrastructure.
+- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-05`/`ISSUE-003` through `ISSUE-007`, and `W-01`/`ISSUE-008`.
+- Next: `ISSUE-009` and `ISSUE-010`, following the authoritative issue order.
+- Not available yet: authentication, TypeORM/API database integration, CI/hooks, or business features.
 - Production deployment and public exposure are not authorized.
 
 See [PLANS.md](./PLANS.md) for authoritative scope and status.
@@ -36,7 +36,7 @@ Travel-provider integration, LangGraph workflows, vector retrieval, refresh-toke
 | Web       | Next.js 16.2.12 + React 19.2.8                           | Minimal scaffold with MUI SSR/theme foundation                          |
 | UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable foundation available                                   |
 | API       | NestJS 11.1.28 REST + TypeScript                         | Minimal scaffold available                                              |
-| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Planned in F-05/B-01                                                    |
+| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Local database infrastructure available; TypeORM planned in B-01        |
 | Agent     | TypeScript LangGraph inside the API boundary             | Later                                                                   |
 | Tests     | Jest/Supertest, Vitest/React Testing Library, Playwright | API checks and one Web render regression available; browser E2E planned |
 
@@ -61,6 +61,25 @@ pnpm --filter api dev
 
 Its process-only liveness endpoint is http://localhost:3001/api/v1/health/live.
 
+Start local PostgreSQL separately. If `.env` does not exist, create it from `.env.example` without overwriting an existing file. Fill each blank password with a different 64-character lowercase hexadecimal development value (for example, run `openssl rand -hex 32` three times), then keep the file ignored and mode `0600`.
+
+```sh
+test -e .env || cp .env.example .env
+chmod 600 .env
+docker compose --env-file .env -f infra/docker/compose.yaml up --detach --wait postgres
+docker compose --env-file .env -f infra/docker/compose.yaml ps
+docker compose --env-file .env -f infra/docker/compose.yaml exec --no-tty postgres \
+  /opt/trip-db/verify/capabilities.sh
+```
+
+Stop the database container while preserving its named development volume:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml down
+```
+
+The provisioner is bootstrap-only, the migrator owns approved application DDL, and the runtime role is the later API connection identity. Issue 7 deliberately adds no TypeORM connection or business migration; B-01 and B-02 own those steps.
+
 Run the repository checks from the root:
 
 ```sh
@@ -72,7 +91,7 @@ pnpm test
 pnpm build
 ```
 
-`pnpm format` formats files with the root Prettier policy, and `pnpm format:check` verifies that policy without mutation. `pnpm test` runs the API unit/HTTP checks and the Web render regression. No database service is required until F-05.
+`pnpm format` formats files with the root Prettier policy, and `pnpm format:check` verifies that policy without mutation. `pnpm test` runs the API unit/HTTP checks and the Web render regression. The current application checks still do not require the database service; database verification is run explicitly through Compose until B-01 integrates TypeORM.
 
 ## Repository layout
 
@@ -81,6 +100,7 @@ apps/web/                   Minimal Next.js application with MUI theme/render re
 apps/api/                   Minimal NestJS application and liveness endpoint
 packages/config-eslint/     Shared typed ESLint configuration
 packages/config-typescript/ Shared strict TypeScript configuration
+infra/docker/               Local PostgreSQL/pgvector Compose, bootstrap, and verification
 docs/toolchain*.md          Exact version and compatibility evidence
 AGENTS*.md                  Repository rules for contributors and agents
 PLANS*.md                   Decisions, scope, status, and acceptance criteria
@@ -90,7 +110,7 @@ pnpm-workspace.yaml         Workspace and install policy
 turbo.json                  Cross-package task graph
 ```
 
-Directories such as `infra/docker` are created only when their owning task begins.
+Application containers, Redis, and production database selection remain absent.
 
 ## Architecture guardrails
 
