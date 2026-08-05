@@ -6,7 +6,7 @@
 
 构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 16 App Router、TypeScript、MUI v9；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 1.1；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
 
-D-01 至 D-25 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01`/`ISSUE-003`、`F-02`/`ISSUE-004`、`F-03`/`ISSUE-005`、`F-04`/`ISSUE-006` 与 `W-01`/`ISSUE-008` 已在本地完成；继续按权威 Issue 顺序推进 `ISSUE-007`、`ISSUE-009` 与 `ISSUE-010`，不得超出该切片。
+D-01 至 D-25 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`，以及 `W-01`/`ISSUE-008` 已在本地完成；继续按权威 Issue 顺序推进 `ISSUE-009` 与 `ISSUE-010`，不得超出该切片。2026-08-05，Owner 明确 F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 仍归 B-01，首个真实 Application Migration 仍归 B-02。
 
 2026-08-03，Owner 通过 D-25 明确取代此前的 Web/ORM 版本约束：使用当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线，同时保留 PostgreSQL 18 和已选测试系列。经 Review 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。将这些视为明确约束：使用精确 Stable Pin，不得静默替换其他 Major 或 Prerelease，并将版本升级与 Feature Work 隔离。已安装 Dependency 立即迁移；尚未进入所属实施任务的 Dependency 在该任务开始时采用新 Pin。每季度、公开暴露前，以及出现严重且无补丁的安全或兼容性阻断时重新 Review Support/Compatibility。再次变更 Major 仍需 Owner 明确批准。
 

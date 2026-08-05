@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-006 and ISSUE-008 are complete locally; ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-008 are complete locally; ISSUE-009 and ISSUE-010 remain in the dependency-eligible wave**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03. Shared engineering configuration completed `F-04`, and the MUI SSR/theme foundation completed `W-01`, on 2026-08-05. `ISSUE-001` through `ISSUE-006` and `ISSUE-008` are therefore `DONE` locally; `ISSUE-007`, `ISSUE-009`, and `ISSUE-010` remain in the dependency-eligible wave.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03. Shared engineering configuration completed `F-04`, the local PostgreSQL/pgvector infrastructure completed `F-05`, and the MUI SSR/theme foundation completed `W-01` on 2026-08-05. `ISSUE-001` through `ISSUE-008` are therefore `DONE` locally; `ISSUE-009` and `ISSUE-010` remain in the dependency-eligible wave.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -341,7 +341,7 @@ Remove conflicting application-local engineering rules while keeping shared pack
 
 ### ISSUE-007 — [F-05] Add local PostgreSQL and pgvector infrastructure
 
-- **Status:** `TODO`
+- **Status:** `DONE`
 - **Labels:** `type:task`, `area:database`, `area:infrastructure`, `priority:p0`
 - **Blocked by:** ISSUE-005
 - **PR boundary:** one local-infrastructure PR
@@ -352,18 +352,19 @@ Provide repeatable local PostgreSQL/pgvector while preserving provisioner, migra
 
 **Work**
 
-- [ ] Add pinned Docker Compose database infrastructure, health check, named development volume, and `.env.example`.
-- [ ] Use distinct non-production provisioner/migrator/runtime credentials; privileged bootstrap enables and verifies `vector` and records `extversion`.
-- [ ] Keep Web/API host-run and exclude Redis.
+- [x] Add pinned Docker Compose database infrastructure, health check, named development volume, and `.env.example`.
+- [x] Use distinct non-production provisioner/migrator/runtime credentials; privileged bootstrap enables and verifies `vector` and records `extversion`.
+- [x] Keep Web/API host-run and exclude Redis.
 
 **Review / acceptance**
 
-- [ ] A clean environment starts, becomes healthy, verifies pgvector, stops, and restarts predictably.
-- [ ] Only the provisioner can manage extensions/roles; only the migrator can perform approved DDL; runtime DDL/extension operations fail.
-- [ ] No real credential is committed, logged, or embedded in an image.
-- [ ] Tests/commands do not depend on a developer's existing volume.
+- [x] A clean environment starts, becomes healthy, verifies pgvector, stops, and restarts predictably.
+- [x] Only the provisioner can manage extensions/roles; a migration-shaped transactional DDL probe succeeds as migrator and rolls back; direct TCP/SCRAM runtime connection succeeds while runtime DDL/extension operations fail. Actual NestJS/TypeORM connection/readiness remains B-01, and the first real application migration remains B-02.
+- [x] No real credential is committed, logged, or embedded in an image.
+- [x] Tests/commands do not depend on a developer's existing volume.
 
-**Evidence:** clean-start health/extension output and role-capability matrix.  
+**Evidence:** on 2026-08-05, the exact `pgvector/pgvector:0.8.5-pg18-trixie` OCI index digest started healthy in a new disposable Compose project on loopback with a named volume. Executable bootstrap assertions and independent reports proved PostgreSQL `180004`, vector `0.8.5` availability/installation, provisioner-owned extension/role work, a migrator-owned `app` schema, all three TCP/SCRAM identities, migrator-only approved application DDL with rollback, runtime/subordinate denials with SQLSTATE `42501`, no persistent probe objects, password-failure log redaction, no real password in logs/image metadata, and the same cluster across container recreation. Shell/Compose/scope/secret checks, frozen install, formatting, Markdown links, and forced uncached lint/typecheck/test/build passed.
+
 **Non-goals:** application containers, Redis, vector schema, or production database selection.
 
 ### ISSUE-008 — [W-01] Integrate MUI v9 with App Router SSR

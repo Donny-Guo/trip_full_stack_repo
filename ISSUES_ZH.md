@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-006 与 ISSUE-008 已在本地完成，当前依赖已满足的工作还包括 ISSUE-007、ISSUE-009 与 ISSUE-010**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-008 已在本地完成，当前依赖已满足的工作还包括 ISSUE-009 与 ISSUE-010**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 于 2026-08-03 完成 `F-03`。Shared Engineering Configuration 于 2026-08-05 完成 `F-04`，MUI SSR/Theme Foundation 也于同日完成 `W-01`。因此 `ISSUE-001` 至 `ISSUE-006` 与 `ISSUE-008` 在本地为 `DONE`；`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010` 仍属于依赖已满足的工作。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 于 2026-08-03 完成 `F-03`。Shared Engineering Configuration 于 2026-08-05 完成 `F-04`，Local PostgreSQL/pgvector Infrastructure 完成 `F-05`，MUI SSR/Theme Foundation 同日完成 `W-01`。因此 `ISSUE-001` 至 `ISSUE-008` 在本地为 `DONE`；`ISSUE-009` 与 `ISSUE-010` 仍属于依赖已满足的工作。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -341,7 +341,7 @@
 
 ### ISSUE-007 — [F-05] 添加本地 PostgreSQL 与 pgvector
 
-- **状态：** `TODO`
+- **状态：** `DONE`
 - **Labels：** `type:task`、`area:database`、`area:infrastructure`、`priority:p0`
 - **Blocked by：** ISSUE-005
 - **PR Boundary：** 一个 Local-infrastructure PR
@@ -352,18 +352,19 @@
 
 **工作**
 
-- [ ] 加入固定版本 Docker Compose、Health Check、具名开发 Volume 和 `.env.example`。
-- [ ] 使用不同的非生产 Provisioner/Migrator/Runtime Credential；高权限 Bootstrap 启用并验证 `vector`，记录 `extversion`。
-- [ ] Web/API 保持宿主机运行，不加入 Redis。
+- [x] 加入固定版本 Docker Compose、Health Check、具名开发 Volume 和 `.env.example`。
+- [x] 使用不同的非生产 Provisioner/Migrator/Runtime Credential；高权限 Bootstrap 启用并验证 `vector`，记录 `extversion`。
+- [x] Web/API 保持宿主机运行，不加入 Redis。
 
 **审核/验收**
 
-- [ ] Clean Environment 可预测地启动、健康、验证 pgvector、停止和重启。
-- [ ] 只有 Provisioner 能管理 Extension/Role；只有 Migrator 能执行批准 DDL；Runtime DDL/Extension 操作失败。
-- [ ] 不提交、记录或嵌入真实 Credential。
-- [ ] Test/Command 不依赖已有 Developer Volume。
+- [x] Clean Environment 可预测地启动、健康、验证 pgvector、停止和重启。
+- [x] 只有 Provisioner 能管理 Extension/Role；Migration-shaped Transactional DDL Probe 以 Migrator 成功并 Rollback；直接 TCP/SCRAM Runtime Connection 成功，而 Runtime DDL/Extension 操作失败。实际 NestJS/TypeORM Connection/Readiness 仍归 B-01，首个真实 Application Migration 仍归 B-02。
+- [x] 不提交、记录或嵌入真实 Credential。
+- [x] Test/Command 不依赖已有 Developer Volume。
 
-**证据：** Clean-start Health/Extension Output 与 Role-capability Matrix。  
+**证据：** 2026-08-05，精确的 `pgvector/pgvector:0.8.5-pg18-trixie` OCI Index Digest 在新的 Disposable Compose Project 中通过 Loopback 与具名 Volume 达到 Healthy。Executable Bootstrap Assertion 与独立 Report 证明 PostgreSQL `180004`、Vector `0.8.5` Available/Installed 状态、Provisioner-owned Extension/Role 工作、Migrator-owned `app` Schema、三个 TCP/SCRAM Identity、仅 Migrator 可执行且 Rollback 的批准 Application DDL、Runtime/Subordinate 操作以 SQLSTATE `42501` 被拒绝、没有 Persistent Probe Object、Password-failure Log Redaction、真实 Password 不出现在 Log/Image Metadata，以及 Container Recreation 后保持同一 Cluster。Shell/Compose/Scope/Secret Check、Frozen Install、Formatting、Markdown Link，以及强制 Uncached Lint/Typecheck/Test/Build 均通过。
+
 **非目标：** 应用容器、Redis、Vector Schema 或生产数据库选择。
 
 ### ISSUE-008 — [W-01] 集成 MUI v9 与 App Router SSR
