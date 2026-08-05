@@ -1,16 +1,17 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
-  "globalDependencies": [".node-version"],
+  "globalDependencies": [
+    ".node-version",
+    "packages/config-eslint/index.mjs",
+    "packages/config-typescript/base.json"
+  ],
   "remoteCache": {
     "enabled": false
   },
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
-    },
-    "format": {
-      "cache": false
+      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]

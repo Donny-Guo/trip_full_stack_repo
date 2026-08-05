@@ -1,6 +1,6 @@
 # Ordered GitHub Issue Drafts
 
-Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-005 and ISSUE-008 are complete locally; ISSUE-006, ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
+Status: **first-slice implementation authorized on 2026-08-02; ISSUE-002 through ISSUE-006 and ISSUE-008 are complete locally; ISSUE-007, ISSUE-009, and ISSUE-010 remain in the dependency-eligible wave**\
 Plan date: 2026-07-30  
 Source of scope: [`PLANS.md`](./PLANS.md)  
 Repository owner: `@Donny-Guo`
@@ -17,7 +17,7 @@ Authority and synchronization rules:
 2. `PLANS.md` defines authoritative decisions, scope, task status, and acceptance.
 3. This file defines the ordered issue packaging derived from `PLANS.md`; it may add stricter sequencing or evidence requirements but may not relax the plan.
 4. Each `ISSUE-nnn` key is a stable draft identifier, not a GitHub issue number. When remote issues are explicitly authorized and created, record their URLs without replacing the stable keys.
-5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03, and the MUI SSR/theme foundation completed `W-01` on 2026-08-05. `ISSUE-001` through `ISSUE-005` and `ISSUE-008` are therefore `DONE` locally; `ISSUE-006`, `ISSUE-007`, `ISSUE-009`, and `ISSUE-010` remain in the dependency-eligible wave.
+5. `P-01` is already `DONE` and is intentionally not backfilled as a synthetic issue. The owner explicitly satisfied `P-02`, the version-policy evidence completed `P-03`, and the monorepo-root evidence completed `F-01` on 2026-08-02. The Web scaffold completed `F-02` and was reverified on the D-25 Next.js 16 baseline on 2026-08-03. The API scaffold completed `F-03` on 2026-08-03. Shared engineering configuration completed `F-04`, and the MUI SSR/theme foundation completed `W-01`, on 2026-08-05. `ISSUE-001` through `ISSUE-006` and `ISSUE-008` are therefore `DONE` locally; `ISSUE-007`, `ISSUE-009`, and `ISSUE-010` remain in the dependency-eligible wave.
 6. An issue status changes only with evidence. Closing a GitHub issue must be followed by the matching `PLANS.md`/`PLANS_ZH.md` status update.
 
 ### 1.1 Remote issue registry
@@ -26,35 +26,35 @@ On 2026-07-30, the owner explicitly authorized remote creation of `ISSUE-001` th
 
 The repository is public. Its visibility and the remote issue registry do not authorize implementation or deployment.
 
-| Draft | Plan task | GitHub issue |
-| --- | --- | --- |
-| ISSUE-001 | P-02 | [#1](https://github.com/Donny-Guo/trip_full_stack_repo/issues/1) |
-| ISSUE-002 | P-03 | [#2](https://github.com/Donny-Guo/trip_full_stack_repo/issues/2) |
-| ISSUE-003 | F-01 | [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3) |
-| ISSUE-004 | F-02 | [#4](https://github.com/Donny-Guo/trip_full_stack_repo/issues/4) |
-| ISSUE-005 | F-03 | [#5](https://github.com/Donny-Guo/trip_full_stack_repo/issues/5) |
-| ISSUE-006 | F-04 | [#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues/6) |
-| ISSUE-007 | F-05 | [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7) |
-| ISSUE-008 | W-01 | [#8](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8) |
-| ISSUE-009 | B-04 | [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9) |
-| ISSUE-010 | B-09 | [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10) |
-| ISSUE-011 | F-06 | [#11](https://github.com/Donny-Guo/trip_full_stack_repo/issues/11) |
-| ISSUE-012 | F-07 | [#12](https://github.com/Donny-Guo/trip_full_stack_repo/issues/12) |
-| ISSUE-013 | B-01 | [#13](https://github.com/Donny-Guo/trip_full_stack_repo/issues/13) |
-| ISSUE-014 | W-02 | [#14](https://github.com/Donny-Guo/trip_full_stack_repo/issues/14) |
-| ISSUE-015 | W-04 | [#15](https://github.com/Donny-Guo/trip_full_stack_repo/issues/15) |
-| ISSUE-016 | F-08 | [#16](https://github.com/Donny-Guo/trip_full_stack_repo/issues/16) |
-| ISSUE-017 | B-02 | [#17](https://github.com/Donny-Guo/trip_full_stack_repo/issues/17) |
-| ISSUE-018 | B-05 | [#18](https://github.com/Donny-Guo/trip_full_stack_repo/issues/18) |
-| ISSUE-019 | W-03 | [#19](https://github.com/Donny-Guo/trip_full_stack_repo/issues/19) |
-| ISSUE-020 | B-03 | [#20](https://github.com/Donny-Guo/trip_full_stack_repo/issues/20) |
-| ISSUE-021 | B-06 | [#21](https://github.com/Donny-Guo/trip_full_stack_repo/issues/21) |
-| ISSUE-022 | B-07 | [#22](https://github.com/Donny-Guo/trip_full_stack_repo/issues/22) |
-| ISSUE-023 | B-08 | [#23](https://github.com/Donny-Guo/trip_full_stack_repo/issues/23) |
-| ISSUE-024 | B-10 | [#24](https://github.com/Donny-Guo/trip_full_stack_repo/issues/24) |
-| ISSUE-025 | W-05 | [#25](https://github.com/Donny-Guo/trip_full_stack_repo/issues/25) |
-| ISSUE-026 | W-06 | [#26](https://github.com/Donny-Guo/trip_full_stack_repo/issues/26) |
-| ISSUE-027 | W-07 | [#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues/27) |
+| Draft     | Plan task | GitHub issue                                                       |
+| --------- | --------- | ------------------------------------------------------------------ |
+| ISSUE-001 | P-02      | [#1](https://github.com/Donny-Guo/trip_full_stack_repo/issues/1)   |
+| ISSUE-002 | P-03      | [#2](https://github.com/Donny-Guo/trip_full_stack_repo/issues/2)   |
+| ISSUE-003 | F-01      | [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3)   |
+| ISSUE-004 | F-02      | [#4](https://github.com/Donny-Guo/trip_full_stack_repo/issues/4)   |
+| ISSUE-005 | F-03      | [#5](https://github.com/Donny-Guo/trip_full_stack_repo/issues/5)   |
+| ISSUE-006 | F-04      | [#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues/6)   |
+| ISSUE-007 | F-05      | [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)   |
+| ISSUE-008 | W-01      | [#8](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)   |
+| ISSUE-009 | B-04      | [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)   |
+| ISSUE-010 | B-09      | [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10) |
+| ISSUE-011 | F-06      | [#11](https://github.com/Donny-Guo/trip_full_stack_repo/issues/11) |
+| ISSUE-012 | F-07      | [#12](https://github.com/Donny-Guo/trip_full_stack_repo/issues/12) |
+| ISSUE-013 | B-01      | [#13](https://github.com/Donny-Guo/trip_full_stack_repo/issues/13) |
+| ISSUE-014 | W-02      | [#14](https://github.com/Donny-Guo/trip_full_stack_repo/issues/14) |
+| ISSUE-015 | W-04      | [#15](https://github.com/Donny-Guo/trip_full_stack_repo/issues/15) |
+| ISSUE-016 | F-08      | [#16](https://github.com/Donny-Guo/trip_full_stack_repo/issues/16) |
+| ISSUE-017 | B-02      | [#17](https://github.com/Donny-Guo/trip_full_stack_repo/issues/17) |
+| ISSUE-018 | B-05      | [#18](https://github.com/Donny-Guo/trip_full_stack_repo/issues/18) |
+| ISSUE-019 | W-03      | [#19](https://github.com/Donny-Guo/trip_full_stack_repo/issues/19) |
+| ISSUE-020 | B-03      | [#20](https://github.com/Donny-Guo/trip_full_stack_repo/issues/20) |
+| ISSUE-021 | B-06      | [#21](https://github.com/Donny-Guo/trip_full_stack_repo/issues/21) |
+| ISSUE-022 | B-07      | [#22](https://github.com/Donny-Guo/trip_full_stack_repo/issues/22) |
+| ISSUE-023 | B-08      | [#23](https://github.com/Donny-Guo/trip_full_stack_repo/issues/23) |
+| ISSUE-024 | B-10      | [#24](https://github.com/Donny-Guo/trip_full_stack_repo/issues/24) |
+| ISSUE-025 | W-05      | [#25](https://github.com/Donny-Guo/trip_full_stack_repo/issues/25) |
+| ISSUE-026 | W-06      | [#26](https://github.com/Donny-Guo/trip_full_stack_repo/issues/26) |
+| ISSUE-027 | W-07      | [#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues/27) |
 
 When a draft is created on GitHub:
 
@@ -89,68 +89,68 @@ The issue-specific review checklist is additive to this global gate. A reviewer 
 
 Minimum evidence by change type:
 
-| Change type | Required review evidence |
-| --- | --- |
-| UI | Desktop and narrow-layout evidence, keyboard path, focus/error behavior, automated accessibility result |
-| API/security | Contract tests, negative cases, redaction check, request/correlation ID, relevant header/cookie evidence |
-| Database | Forward migration from empty state, constraint/concurrency tests, least-privilege role check, repair/down guidance |
-| CI/governance | Workflow/event/permission review, immutable dependency references, fork/untrusted-code test, repository-setting screenshots or export |
-| Documentation | Local-link validation, English-primary check, stable task/decision/issue ID and status parity |
-| Deployment/agent Epic | Closed child issues, threat model, runbooks, evaluation/operational evidence, explicit release authorization where required |
+| Change type           | Required review evidence                                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| UI                    | Desktop and narrow-layout evidence, keyboard path, focus/error behavior, automated accessibility result                               |
+| API/security          | Contract tests, negative cases, redaction check, request/correlation ID, relevant header/cookie evidence                              |
+| Database              | Forward migration from empty state, constraint/concurrency tests, least-privilege role check, repair/down guidance                    |
+| CI/governance         | Workflow/event/permission review, immutable dependency references, fork/untrusted-code test, repository-setting screenshots or export |
+| Documentation         | Local-link validation, English-primary check, stable task/decision/issue ID and status parity                                         |
+| Deployment/agent Epic | Closed child issues, threat model, runbooks, evaluation/operational evidence, explicit release authorization where required           |
 
 ## 4. Recommended execution sequence
 
 The sequence below is the safe default. Items in the same wave may proceed in parallel only when their listed dependencies remain satisfied and shared-contract ownership is clear.
 
-| Order | Draft | Plan task | Wave | Milestone | Blocked by |
-| ---: | --- | --- | --- | --- | --- |
-| 1 | ISSUE-001 | P-02 | Gate | MVP | P-01 (`DONE`) |
-| 2 | ISSUE-002 | P-03 | 1 | MVP | ISSUE-001 |
-| 3 | ISSUE-003 | F-01 | 2 | MVP | ISSUE-001, ISSUE-002 |
-| 4 | ISSUE-004 | F-02 | 3 | MVP | ISSUE-003 |
-| 5 | ISSUE-005 | F-03 | 3 | MVP | ISSUE-003 |
-| 6 | ISSUE-006 | F-04 | 4 | MVP | ISSUE-004, ISSUE-005 |
-| 7 | ISSUE-007 | F-05 | 4 | MVP | ISSUE-005 |
-| 8 | ISSUE-008 | W-01 | 4 | MVP | ISSUE-004 |
-| 9 | ISSUE-009 | B-04 | 4 | MVP | ISSUE-005 |
-| 10 | ISSUE-010 | B-09 | 4 | MVP | ISSUE-005 |
-| 11 | ISSUE-011 | F-06 | 5 | MVP | ISSUE-006, ISSUE-007 |
-| 12 | ISSUE-012 | F-07 | 5 | MVP | ISSUE-003, ISSUE-006 |
-| 13 | ISSUE-013 | B-01 | 5 | MVP | ISSUE-005, ISSUE-007 |
-| 14 | ISSUE-014 | W-02 | 5 | MVP | ISSUE-008 |
-| 15 | ISSUE-015 | W-04 | 5 | MVP | ISSUE-008, ISSUE-010 |
-| 16 | ISSUE-016 | F-08 | 6 | MVP | ISSUE-011, ISSUE-012 |
-| 17 | ISSUE-017 | B-02 | 6 | MVP | ISSUE-013 |
-| 18 | ISSUE-018 | B-05 | 6 | MVP | ISSUE-013 |
-| 19 | ISSUE-019 | W-03 | 6 | MVP | ISSUE-014 |
-| 20 | ISSUE-020 | B-03 | 7 | MVP | ISSUE-017 |
-| 21 | ISSUE-021 | B-06 | 8 | MVP | ISSUE-009, ISSUE-010, ISSUE-018, ISSUE-020 |
-| 22 | ISSUE-022 | B-07 | 8 | MVP | ISSUE-009, ISSUE-010, ISSUE-018, ISSUE-020 |
-| 23 | ISSUE-023 | B-08 | 8 | MVP | ISSUE-010, ISSUE-018, ISSUE-020 |
-| 24 | ISSUE-024 | B-10 | 9 | MVP | ISSUE-021, ISSUE-022, ISSUE-023 |
-| 25 | ISSUE-025 | W-05 | 9 | MVP | ISSUE-014, ISSUE-023 |
-| 26 | ISSUE-026 | W-06 | 10 | MVP | ISSUE-015, ISSUE-021, ISSUE-025 |
-| 27 | ISSUE-027 | W-07 | 10 | MVP | ISSUE-015, ISSUE-022, ISSUE-025 |
-| 28 | ISSUE-028 | W-08 | 11 | MVP | ISSUE-019, ISSUE-026, ISSUE-027 |
-| 29 | ISSUE-029 | I-01 | 11 | MVP | ISSUE-021, ISSUE-026 |
-| 30 | ISSUE-030 | I-02 | 11 | MVP | ISSUE-022, ISSUE-025, ISSUE-027 |
-| 31 | ISSUE-031 | E2E-01 | 12 | MVP | ISSUE-019, ISSUE-029, ISSUE-030 |
-| 32 | ISSUE-032 | Q-01 | 13 | MVP | ISSUE-016, ISSUE-024, ISSUE-028, ISSUE-031 |
-| 33 | ISSUE-033 | H-01 | 14 | MVP | ISSUE-032 |
-| 34 | ISSUE-034 | R-01 | Later 1 | Production Hardening | ISSUE-033 |
-| 35 | ISSUE-035 | R-02 | Later 2 | Production Hardening | ISSUE-033; ISSUE-034 recommended |
-| 36 | ISSUE-036 | R-03 | Later 3 | Production Hardening | ISSUE-033, ISSUE-035; approved session semantics |
-| 37 | ISSUE-037 | R-04 | Later 3 | Production Hardening | ISSUE-034, ISSUE-035; approved mail design |
-| 38 | ISSUE-038 | R-05 | Later 4 | Production Hardening | ISSUE-035, ISSUE-036, ISSUE-037 |
-| 39 | ISSUE-039 | R-06 | Later 2 | Production Hardening | ISSUE-033; approved lifecycle semantics |
-| 40 | ISSUE-040 | R-07 | Later 3 | Production Hardening | ISSUE-033; approved restricted operation; ISSUE-039 if status-dependent |
-| 41 | ISSUE-041 | R-08 | Later 2 | Production Hardening | ISSUE-014, ISSUE-033 |
-| 42 | ISSUE-042 | R-10 | Later 2 | Production Hardening | ISSUE-033 |
-| 43 | ISSUE-043 | R-09 | Later 3 | Production Hardening | ISSUE-033; approved platform/operations inputs |
-| 44 | ISSUE-044 | R-11 | Later 3 | Travel Agent | ISSUE-042; approved retrieval inputs |
-| 45 | ISSUE-045 | R-12 | Later 4 | Travel Agent | ISSUE-042; ISSUE-044 only when retrieval is required |
-| 46 | ISSUE-046 | R-13 | Later evidence-driven | Production Hardening | ISSUE-033; approved usage/compliance evidence |
-| 47 | ISSUE-047 | R-14 | Release gate | Public Exposure | ISSUE-032, ISSUE-033, ISSUE-035, ISSUE-042, ISSUE-043, and all release features |
+| Order | Draft     | Plan task | Wave                  | Milestone            | Blocked by                                                                      |
+| ----: | --------- | --------- | --------------------- | -------------------- | ------------------------------------------------------------------------------- |
+|     1 | ISSUE-001 | P-02      | Gate                  | MVP                  | P-01 (`DONE`)                                                                   |
+|     2 | ISSUE-002 | P-03      | 1                     | MVP                  | ISSUE-001                                                                       |
+|     3 | ISSUE-003 | F-01      | 2                     | MVP                  | ISSUE-001, ISSUE-002                                                            |
+|     4 | ISSUE-004 | F-02      | 3                     | MVP                  | ISSUE-003                                                                       |
+|     5 | ISSUE-005 | F-03      | 3                     | MVP                  | ISSUE-003                                                                       |
+|     6 | ISSUE-006 | F-04      | 4                     | MVP                  | ISSUE-004, ISSUE-005                                                            |
+|     7 | ISSUE-007 | F-05      | 4                     | MVP                  | ISSUE-005                                                                       |
+|     8 | ISSUE-008 | W-01      | 4                     | MVP                  | ISSUE-004                                                                       |
+|     9 | ISSUE-009 | B-04      | 4                     | MVP                  | ISSUE-005                                                                       |
+|    10 | ISSUE-010 | B-09      | 4                     | MVP                  | ISSUE-005                                                                       |
+|    11 | ISSUE-011 | F-06      | 5                     | MVP                  | ISSUE-006, ISSUE-007                                                            |
+|    12 | ISSUE-012 | F-07      | 5                     | MVP                  | ISSUE-003, ISSUE-006                                                            |
+|    13 | ISSUE-013 | B-01      | 5                     | MVP                  | ISSUE-005, ISSUE-007                                                            |
+|    14 | ISSUE-014 | W-02      | 5                     | MVP                  | ISSUE-008                                                                       |
+|    15 | ISSUE-015 | W-04      | 5                     | MVP                  | ISSUE-008, ISSUE-010                                                            |
+|    16 | ISSUE-016 | F-08      | 6                     | MVP                  | ISSUE-011, ISSUE-012                                                            |
+|    17 | ISSUE-017 | B-02      | 6                     | MVP                  | ISSUE-013                                                                       |
+|    18 | ISSUE-018 | B-05      | 6                     | MVP                  | ISSUE-013                                                                       |
+|    19 | ISSUE-019 | W-03      | 6                     | MVP                  | ISSUE-014                                                                       |
+|    20 | ISSUE-020 | B-03      | 7                     | MVP                  | ISSUE-017                                                                       |
+|    21 | ISSUE-021 | B-06      | 8                     | MVP                  | ISSUE-009, ISSUE-010, ISSUE-018, ISSUE-020                                      |
+|    22 | ISSUE-022 | B-07      | 8                     | MVP                  | ISSUE-009, ISSUE-010, ISSUE-018, ISSUE-020                                      |
+|    23 | ISSUE-023 | B-08      | 8                     | MVP                  | ISSUE-010, ISSUE-018, ISSUE-020                                                 |
+|    24 | ISSUE-024 | B-10      | 9                     | MVP                  | ISSUE-021, ISSUE-022, ISSUE-023                                                 |
+|    25 | ISSUE-025 | W-05      | 9                     | MVP                  | ISSUE-014, ISSUE-023                                                            |
+|    26 | ISSUE-026 | W-06      | 10                    | MVP                  | ISSUE-015, ISSUE-021, ISSUE-025                                                 |
+|    27 | ISSUE-027 | W-07      | 10                    | MVP                  | ISSUE-015, ISSUE-022, ISSUE-025                                                 |
+|    28 | ISSUE-028 | W-08      | 11                    | MVP                  | ISSUE-019, ISSUE-026, ISSUE-027                                                 |
+|    29 | ISSUE-029 | I-01      | 11                    | MVP                  | ISSUE-021, ISSUE-026                                                            |
+|    30 | ISSUE-030 | I-02      | 11                    | MVP                  | ISSUE-022, ISSUE-025, ISSUE-027                                                 |
+|    31 | ISSUE-031 | E2E-01    | 12                    | MVP                  | ISSUE-019, ISSUE-029, ISSUE-030                                                 |
+|    32 | ISSUE-032 | Q-01      | 13                    | MVP                  | ISSUE-016, ISSUE-024, ISSUE-028, ISSUE-031                                      |
+|    33 | ISSUE-033 | H-01      | 14                    | MVP                  | ISSUE-032                                                                       |
+|    34 | ISSUE-034 | R-01      | Later 1               | Production Hardening | ISSUE-033                                                                       |
+|    35 | ISSUE-035 | R-02      | Later 2               | Production Hardening | ISSUE-033; ISSUE-034 recommended                                                |
+|    36 | ISSUE-036 | R-03      | Later 3               | Production Hardening | ISSUE-033, ISSUE-035; approved session semantics                                |
+|    37 | ISSUE-037 | R-04      | Later 3               | Production Hardening | ISSUE-034, ISSUE-035; approved mail design                                      |
+|    38 | ISSUE-038 | R-05      | Later 4               | Production Hardening | ISSUE-035, ISSUE-036, ISSUE-037                                                 |
+|    39 | ISSUE-039 | R-06      | Later 2               | Production Hardening | ISSUE-033; approved lifecycle semantics                                         |
+|    40 | ISSUE-040 | R-07      | Later 3               | Production Hardening | ISSUE-033; approved restricted operation; ISSUE-039 if status-dependent         |
+|    41 | ISSUE-041 | R-08      | Later 2               | Production Hardening | ISSUE-014, ISSUE-033                                                            |
+|    42 | ISSUE-042 | R-10      | Later 2               | Production Hardening | ISSUE-033                                                                       |
+|    43 | ISSUE-043 | R-09      | Later 3               | Production Hardening | ISSUE-033; approved platform/operations inputs                                  |
+|    44 | ISSUE-044 | R-11      | Later 3               | Travel Agent         | ISSUE-042; approved retrieval inputs                                            |
+|    45 | ISSUE-045 | R-12      | Later 4               | Travel Agent         | ISSUE-042; ISSUE-044 only when retrieval is required                            |
+|    46 | ISSUE-046 | R-13      | Later evidence-driven | Production Hardening | ISSUE-033; approved usage/compliance evidence                                   |
+|    47 | ISSUE-047 | R-14      | Release gate          | Public Exposure      | ISSUE-032, ISSUE-033, ISSUE-035, ISSUE-042, ISSUE-043, and all release features |
 
 ## 5. First-slice issue specifications
 
@@ -278,14 +278,14 @@ Create `apps/web` as a clean, independently buildable Next.js App Router TypeScr
 - [x] No API secret/internal origin is exposed to the client bundle.
 - [x] The scaffold contains no fake business behavior or unused generated example.
 
-**Evidence:** on 2026-08-03, exact Next.js 16 installation, ESLint, route type generation, strict TypeScript, Turbopack production build, and a production `GET /` smoke returning `200` with `Trip Agent` passed. Next 16 generated its mandatory `react-jsx` setting and development route-type include. No test was generated; F-04 and later Web test tasks own test tooling.
+**Evidence:** on 2026-08-03, exact Next.js 16 installation, ESLint, route type generation, strict TypeScript, Turbopack production build, and a production `GET /` smoke returning `200` with `Trip Agent` passed. Next 16 generated its mandatory `react-jsx` setting and development route-type include. F-02 generated no test; W-01 later added app-local Vitest tooling and one render regression, while later Web test tasks own further coverage.
 
 **Non-goals:** MUI integration, route groups, forms, or authentication.
 
 ### ISSUE-005 — [F-03] Scaffold the NestJS application
 
 - **Status:** `DONE`
-- **Remote state:** GitHub issue #5 remains open; no remote update was authorized or performed.
+- **Remote state:** GitHub issue #5 is closed as completed; its closure was observed on 2026-08-03.
 - **Labels:** `type:task`, `area:api`, `priority:p0`
 - **Blocked by:** ISSUE-003
 - **PR boundary:** one minimal API scaffold PR
@@ -312,7 +312,8 @@ Create `apps/api` as a strict, independently buildable NestJS REST application w
 
 ### ISSUE-006 — [F-04] Establish shared engineering configuration
 
-- **Status:** `TODO`
+- **Status:** `DONE`
+- **Remote state:** GitHub issue #6 remained open when checked on 2026-08-05; no remote update was authorized or performed.
 - **Labels:** `type:task`, `area:foundation`, `area:quality`, `priority:p0`
 - **Blocked by:** ISSUE-004, ISSUE-005
 - **PR boundary:** one shared-config PR
@@ -323,18 +324,19 @@ Remove conflicting application-local engineering rules while keeping shared pack
 
 **Work**
 
-- [ ] Establish one Prettier policy and shared strict TypeScript/ESLint configuration where both applications genuinely consume it.
-- [ ] Standardize root/package task names and Turbo outputs.
-- [ ] Define generated, secret, environment, build, test, and cache ignore rules.
+- [x] Establish one Prettier policy and shared strict TypeScript/ESLint configuration where both applications genuinely consume it.
+- [x] Standardize root/package task names and Turbo outputs.
+- [x] Define generated, secret, environment, build, test, and cache ignore rules.
 
 **Review / acceptance**
 
-- [ ] Web/API use the same applicable rules without circular or deep configuration imports.
-- [ ] `format:check`, lint, typecheck, test, and build work from the root and fail on intentional violations.
-- [ ] Generated/environment files are ignored without hiding source or contract files.
-- [ ] No speculative utility/test package is created without two consumers.
+- [x] Web/API use the same applicable rules without circular or deep configuration imports.
+- [x] `format:check`, lint, typecheck, test, and build work from the root and fail on intentional violations.
+- [x] Generated/environment files are ignored without hiding source or contract files.
+- [x] No speculative utility/test package is created without two consumers.
 
-**Evidence:** successful root checks plus one documented negative check per enforceable rule class.  
+**Evidence:** on 2026-08-05, both applications consumed narrow `@trip/config-typescript` and `@trip/config-eslint` packages through `workspace:*`; one exact root Prettier 3.9.6 policy and standardized root/package tasks were active while Next.js, Node, Jest, and Vitest concerns remained application-local. The exact Node/pnpm check, frozen install, `format:check`, forced lint/typecheck/test/build tasks, one Web render test, one API unit test, two API HTTP assertions, production builds, shared-config loading, five intentional negative rule probes, ignore allow/deny matrix, package-boundary audit, and a two-hit local-cache output-restoration run passed. One root lockfile remained, remote cache stayed disabled, and no competing lockfile, deep/circular config import, speculative `test-utils`, probe residue, or hidden source/contract file was found.
+
 **Non-goals:** feature code, dependency upgrades unrelated to configuration, or remote cache.
 
 ### ISSUE-007 — [F-05] Add local PostgreSQL and pgvector infrastructure
@@ -370,7 +372,7 @@ Provide repeatable local PostgreSQL/pgvector while preserving provisioner, migra
 - **Labels:** `type:task`, `area:web`, `area:ui`, `priority:p0`
 - **Blocked by:** ISSUE-004
 - **PR boundary:** one theme/SSR integration PR
-- **Remote state:** GitHub issue #8 remains open; no remote update was authorized or performed.
+- **Remote state:** GitHub issue #8 is closed as completed; its closure was observed on 2026-08-05.
 
 **Outcome**
 

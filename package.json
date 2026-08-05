@@ -9,13 +9,15 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "format": "turbo run format",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "turbo run lint",
     "prepare": "node -e \"\"",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
+    "prettier": "3.9.6",
     "turbo": "2.10.8",
     "typescript": "5.9.3"
   }

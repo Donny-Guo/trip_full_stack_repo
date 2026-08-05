@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-005 与 ISSUE-008 已在本地完成，当前依赖已满足的工作还包括 ISSUE-006、ISSUE-007、ISSUE-009 与 ISSUE-010**\
+状态：**首切片已于 2026-08-02 授权实施；ISSUE-002 至 ISSUE-006 与 ISSUE-008 已在本地完成，当前依赖已满足的工作还包括 ISSUE-007、ISSUE-009 与 ISSUE-010**\
 计划日期：2026-07-30  
 范围来源：[`PLANS.md`](./PLANS.md)  
 仓库 Owner：`@Donny-Guo`
@@ -17,7 +17,7 @@
 2. `PLANS.md` 是决策、范围、任务状态与验收标准的权威来源。
 3. 本文件定义从 `PLANS.md` 派生的有序 Issue 包装；可以增加更严格的顺序或证据要求，但不得放宽计划。
 4. 每个 `ISSUE-nnn` 是稳定草案 ID，不是真实 GitHub Issue Number。明确授权并创建远程 Issue 后，应记录 URL，但保留稳定 ID。
-5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 于 2026-08-03 完成 `F-03`，MUI SSR/Theme Foundation 于 2026-08-05 完成 `W-01`。因此 `ISSUE-001` 至 `ISSUE-005` 与 `ISSUE-008` 在本地为 `DONE`；`ISSUE-006`、`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010` 仍属于依赖已满足的工作。
+5. `P-01` 已为 `DONE`，不事后伪造一个 Issue。Owner 已于 2026-08-02 明确满足 `P-02`，Version-policy Evidence 完成 `P-03`，Monorepo-root Evidence 完成 `F-01`。Web Scaffold 已完成 `F-02`，并于 2026-08-03 在 D-25 的 Next.js 16 Baseline 上重新验证；API Scaffold 于 2026-08-03 完成 `F-03`。Shared Engineering Configuration 于 2026-08-05 完成 `F-04`，MUI SSR/Theme Foundation 也于同日完成 `W-01`。因此 `ISSUE-001` 至 `ISSUE-006` 与 `ISSUE-008` 在本地为 `DONE`；`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010` 仍属于依赖已满足的工作。
 6. Issue 状态只能依据证据改变。关闭 GitHub Issue 后，必须同步更新 `PLANS.md`/`PLANS_ZH.md` 中的对应状态。
 
 ### 1.1 远程 Issue Registry
@@ -26,35 +26,35 @@
 
 仓库当前为 Public。Repository Visibility 和远程 Issue Registry 均不授权实施或部署。
 
-| 草案 | Plan Task | GitHub Issue |
-| --- | --- | --- |
-| ISSUE-001 | P-02 | [#1](https://github.com/Donny-Guo/trip_full_stack_repo/issues/1) |
-| ISSUE-002 | P-03 | [#2](https://github.com/Donny-Guo/trip_full_stack_repo/issues/2) |
-| ISSUE-003 | F-01 | [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3) |
-| ISSUE-004 | F-02 | [#4](https://github.com/Donny-Guo/trip_full_stack_repo/issues/4) |
-| ISSUE-005 | F-03 | [#5](https://github.com/Donny-Guo/trip_full_stack_repo/issues/5) |
-| ISSUE-006 | F-04 | [#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues/6) |
-| ISSUE-007 | F-05 | [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7) |
-| ISSUE-008 | W-01 | [#8](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8) |
-| ISSUE-009 | B-04 | [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9) |
-| ISSUE-010 | B-09 | [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10) |
-| ISSUE-011 | F-06 | [#11](https://github.com/Donny-Guo/trip_full_stack_repo/issues/11) |
-| ISSUE-012 | F-07 | [#12](https://github.com/Donny-Guo/trip_full_stack_repo/issues/12) |
-| ISSUE-013 | B-01 | [#13](https://github.com/Donny-Guo/trip_full_stack_repo/issues/13) |
-| ISSUE-014 | W-02 | [#14](https://github.com/Donny-Guo/trip_full_stack_repo/issues/14) |
-| ISSUE-015 | W-04 | [#15](https://github.com/Donny-Guo/trip_full_stack_repo/issues/15) |
-| ISSUE-016 | F-08 | [#16](https://github.com/Donny-Guo/trip_full_stack_repo/issues/16) |
-| ISSUE-017 | B-02 | [#17](https://github.com/Donny-Guo/trip_full_stack_repo/issues/17) |
-| ISSUE-018 | B-05 | [#18](https://github.com/Donny-Guo/trip_full_stack_repo/issues/18) |
-| ISSUE-019 | W-03 | [#19](https://github.com/Donny-Guo/trip_full_stack_repo/issues/19) |
-| ISSUE-020 | B-03 | [#20](https://github.com/Donny-Guo/trip_full_stack_repo/issues/20) |
-| ISSUE-021 | B-06 | [#21](https://github.com/Donny-Guo/trip_full_stack_repo/issues/21) |
-| ISSUE-022 | B-07 | [#22](https://github.com/Donny-Guo/trip_full_stack_repo/issues/22) |
-| ISSUE-023 | B-08 | [#23](https://github.com/Donny-Guo/trip_full_stack_repo/issues/23) |
-| ISSUE-024 | B-10 | [#24](https://github.com/Donny-Guo/trip_full_stack_repo/issues/24) |
-| ISSUE-025 | W-05 | [#25](https://github.com/Donny-Guo/trip_full_stack_repo/issues/25) |
-| ISSUE-026 | W-06 | [#26](https://github.com/Donny-Guo/trip_full_stack_repo/issues/26) |
-| ISSUE-027 | W-07 | [#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues/27) |
+| 草案      | Plan Task | GitHub Issue                                                       |
+| --------- | --------- | ------------------------------------------------------------------ |
+| ISSUE-001 | P-02      | [#1](https://github.com/Donny-Guo/trip_full_stack_repo/issues/1)   |
+| ISSUE-002 | P-03      | [#2](https://github.com/Donny-Guo/trip_full_stack_repo/issues/2)   |
+| ISSUE-003 | F-01      | [#3](https://github.com/Donny-Guo/trip_full_stack_repo/issues/3)   |
+| ISSUE-004 | F-02      | [#4](https://github.com/Donny-Guo/trip_full_stack_repo/issues/4)   |
+| ISSUE-005 | F-03      | [#5](https://github.com/Donny-Guo/trip_full_stack_repo/issues/5)   |
+| ISSUE-006 | F-04      | [#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues/6)   |
+| ISSUE-007 | F-05      | [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)   |
+| ISSUE-008 | W-01      | [#8](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)   |
+| ISSUE-009 | B-04      | [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)   |
+| ISSUE-010 | B-09      | [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10) |
+| ISSUE-011 | F-06      | [#11](https://github.com/Donny-Guo/trip_full_stack_repo/issues/11) |
+| ISSUE-012 | F-07      | [#12](https://github.com/Donny-Guo/trip_full_stack_repo/issues/12) |
+| ISSUE-013 | B-01      | [#13](https://github.com/Donny-Guo/trip_full_stack_repo/issues/13) |
+| ISSUE-014 | W-02      | [#14](https://github.com/Donny-Guo/trip_full_stack_repo/issues/14) |
+| ISSUE-015 | W-04      | [#15](https://github.com/Donny-Guo/trip_full_stack_repo/issues/15) |
+| ISSUE-016 | F-08      | [#16](https://github.com/Donny-Guo/trip_full_stack_repo/issues/16) |
+| ISSUE-017 | B-02      | [#17](https://github.com/Donny-Guo/trip_full_stack_repo/issues/17) |
+| ISSUE-018 | B-05      | [#18](https://github.com/Donny-Guo/trip_full_stack_repo/issues/18) |
+| ISSUE-019 | W-03      | [#19](https://github.com/Donny-Guo/trip_full_stack_repo/issues/19) |
+| ISSUE-020 | B-03      | [#20](https://github.com/Donny-Guo/trip_full_stack_repo/issues/20) |
+| ISSUE-021 | B-06      | [#21](https://github.com/Donny-Guo/trip_full_stack_repo/issues/21) |
+| ISSUE-022 | B-07      | [#22](https://github.com/Donny-Guo/trip_full_stack_repo/issues/22) |
+| ISSUE-023 | B-08      | [#23](https://github.com/Donny-Guo/trip_full_stack_repo/issues/23) |
+| ISSUE-024 | B-10      | [#24](https://github.com/Donny-Guo/trip_full_stack_repo/issues/24) |
+| ISSUE-025 | W-05      | [#25](https://github.com/Donny-Guo/trip_full_stack_repo/issues/25) |
+| ISSUE-026 | W-06      | [#26](https://github.com/Donny-Guo/trip_full_stack_repo/issues/26) |
+| ISSUE-027 | W-07      | [#27](https://github.com/Donny-Guo/trip_full_stack_repo/issues/27) |
 
 将草案创建到 GitHub 时：
 
@@ -89,68 +89,68 @@
 
 各类变更的最小证据：
 
-| 变更类型 | 必需审核证据 |
-| --- | --- |
-| UI | 桌面/窄屏证据、键盘路径、焦点/错误行为、自动 Accessibility 结果 |
-| API/Security | Contract Test、Negative Case、Redaction Check、Request/Correlation ID、相关 Header/Cookie 证据 |
-| Database | 空库 Forward Migration、Constraint/Concurrency Test、Least-privilege Role Check、Repair/Down Guidance |
-| CI/Governance | Workflow Event/Permission Review、不可变依赖引用、Fork/Untrusted-code Test、Repository Setting 截图或导出 |
-| Documentation | Local-link Validation、English-primary Check、稳定 Task/Decision/Issue ID 与 Status 一致性 |
+| 变更类型              | 必需审核证据                                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| UI                    | 桌面/窄屏证据、键盘路径、焦点/错误行为、自动 Accessibility 结果                                                  |
+| API/Security          | Contract Test、Negative Case、Redaction Check、Request/Correlation ID、相关 Header/Cookie 证据                   |
+| Database              | 空库 Forward Migration、Constraint/Concurrency Test、Least-privilege Role Check、Repair/Down Guidance            |
+| CI/Governance         | Workflow Event/Permission Review、不可变依赖引用、Fork/Untrusted-code Test、Repository Setting 截图或导出        |
+| Documentation         | Local-link Validation、English-primary Check、稳定 Task/Decision/Issue ID 与 Status 一致性                       |
 | Deployment/Agent Epic | 已关闭的 Child Issue、Threat Model、Runbook、Evaluation/Operational Evidence，以及所需显式 Release Authorization |
 
 ## 4. 推荐实施顺序
 
 下表是安全的默认顺序。同一 Wave 的任务只有在依赖继续满足且 Shared Contract Owner 明确时才可并行。
 
-| 顺序 | 草案 | Plan Task | Wave | Milestone | Blocked by |
-| ---: | --- | --- | --- | --- | --- |
-| 1 | ISSUE-001 | P-02 | Gate | MVP | P-01 (`DONE`) |
-| 2 | ISSUE-002 | P-03 | 1 | MVP | ISSUE-001 |
-| 3 | ISSUE-003 | F-01 | 2 | MVP | ISSUE-001、ISSUE-002 |
-| 4 | ISSUE-004 | F-02 | 3 | MVP | ISSUE-003 |
-| 5 | ISSUE-005 | F-03 | 3 | MVP | ISSUE-003 |
-| 6 | ISSUE-006 | F-04 | 4 | MVP | ISSUE-004、ISSUE-005 |
-| 7 | ISSUE-007 | F-05 | 4 | MVP | ISSUE-005 |
-| 8 | ISSUE-008 | W-01 | 4 | MVP | ISSUE-004 |
-| 9 | ISSUE-009 | B-04 | 4 | MVP | ISSUE-005 |
-| 10 | ISSUE-010 | B-09 | 4 | MVP | ISSUE-005 |
-| 11 | ISSUE-011 | F-06 | 5 | MVP | ISSUE-006、ISSUE-007 |
-| 12 | ISSUE-012 | F-07 | 5 | MVP | ISSUE-003、ISSUE-006 |
-| 13 | ISSUE-013 | B-01 | 5 | MVP | ISSUE-005、ISSUE-007 |
-| 14 | ISSUE-014 | W-02 | 5 | MVP | ISSUE-008 |
-| 15 | ISSUE-015 | W-04 | 5 | MVP | ISSUE-008、ISSUE-010 |
-| 16 | ISSUE-016 | F-08 | 6 | MVP | ISSUE-011、ISSUE-012 |
-| 17 | ISSUE-017 | B-02 | 6 | MVP | ISSUE-013 |
-| 18 | ISSUE-018 | B-05 | 6 | MVP | ISSUE-013 |
-| 19 | ISSUE-019 | W-03 | 6 | MVP | ISSUE-014 |
-| 20 | ISSUE-020 | B-03 | 7 | MVP | ISSUE-017 |
-| 21 | ISSUE-021 | B-06 | 8 | MVP | ISSUE-009、ISSUE-010、ISSUE-018、ISSUE-020 |
-| 22 | ISSUE-022 | B-07 | 8 | MVP | ISSUE-009、ISSUE-010、ISSUE-018、ISSUE-020 |
-| 23 | ISSUE-023 | B-08 | 8 | MVP | ISSUE-010、ISSUE-018、ISSUE-020 |
-| 24 | ISSUE-024 | B-10 | 9 | MVP | ISSUE-021、ISSUE-022、ISSUE-023 |
-| 25 | ISSUE-025 | W-05 | 9 | MVP | ISSUE-014、ISSUE-023 |
-| 26 | ISSUE-026 | W-06 | 10 | MVP | ISSUE-015、ISSUE-021、ISSUE-025 |
-| 27 | ISSUE-027 | W-07 | 10 | MVP | ISSUE-015、ISSUE-022、ISSUE-025 |
-| 28 | ISSUE-028 | W-08 | 11 | MVP | ISSUE-019、ISSUE-026、ISSUE-027 |
-| 29 | ISSUE-029 | I-01 | 11 | MVP | ISSUE-021、ISSUE-026 |
-| 30 | ISSUE-030 | I-02 | 11 | MVP | ISSUE-022、ISSUE-025、ISSUE-027 |
-| 31 | ISSUE-031 | E2E-01 | 12 | MVP | ISSUE-019、ISSUE-029、ISSUE-030 |
-| 32 | ISSUE-032 | Q-01 | 13 | MVP | ISSUE-016、ISSUE-024、ISSUE-028、ISSUE-031 |
-| 33 | ISSUE-033 | H-01 | 14 | MVP | ISSUE-032 |
-| 34 | ISSUE-034 | R-01 | Later 1 | Production Hardening | ISSUE-033 |
-| 35 | ISSUE-035 | R-02 | Later 2 | Production Hardening | ISSUE-033；建议 ISSUE-034 |
-| 36 | ISSUE-036 | R-03 | Later 3 | Production Hardening | ISSUE-033、ISSUE-035；已批准 Session Semantics |
-| 37 | ISSUE-037 | R-04 | Later 3 | Production Hardening | ISSUE-034、ISSUE-035；已批准 Mail Design |
-| 38 | ISSUE-038 | R-05 | Later 4 | Production Hardening | ISSUE-035、ISSUE-036、ISSUE-037 |
-| 39 | ISSUE-039 | R-06 | Later 2 | Production Hardening | ISSUE-033；已批准 Lifecycle Semantics |
-| 40 | ISSUE-040 | R-07 | Later 3 | Production Hardening | ISSUE-033；已批准 Restricted Operation；若依赖状态则加 ISSUE-039 |
-| 41 | ISSUE-041 | R-08 | Later 2 | Production Hardening | ISSUE-014、ISSUE-033 |
-| 42 | ISSUE-042 | R-10 | Later 2 | Production Hardening | ISSUE-033 |
-| 43 | ISSUE-043 | R-09 | Later 3 | Production Hardening | ISSUE-033；已批准 Platform/Operations Input |
-| 44 | ISSUE-044 | R-11 | Later 3 | Travel Agent | ISSUE-042；已批准 Retrieval Input |
-| 45 | ISSUE-045 | R-12 | Later 4 | Travel Agent | ISSUE-042；只有需要 Retrieval 时才加 ISSUE-044 |
-| 46 | ISSUE-046 | R-13 | Later evidence-driven | Production Hardening | ISSUE-033；已批准 Usage/Compliance Evidence |
-| 47 | ISSUE-047 | R-14 | Release gate | Public Exposure | ISSUE-032、ISSUE-033、ISSUE-035、ISSUE-042、ISSUE-043 及全部 Release Feature |
+| 顺序 | 草案      | Plan Task | Wave                  | Milestone            | Blocked by                                                                   |
+| ---: | --------- | --------- | --------------------- | -------------------- | ---------------------------------------------------------------------------- |
+|    1 | ISSUE-001 | P-02      | Gate                  | MVP                  | P-01 (`DONE`)                                                                |
+|    2 | ISSUE-002 | P-03      | 1                     | MVP                  | ISSUE-001                                                                    |
+|    3 | ISSUE-003 | F-01      | 2                     | MVP                  | ISSUE-001、ISSUE-002                                                         |
+|    4 | ISSUE-004 | F-02      | 3                     | MVP                  | ISSUE-003                                                                    |
+|    5 | ISSUE-005 | F-03      | 3                     | MVP                  | ISSUE-003                                                                    |
+|    6 | ISSUE-006 | F-04      | 4                     | MVP                  | ISSUE-004、ISSUE-005                                                         |
+|    7 | ISSUE-007 | F-05      | 4                     | MVP                  | ISSUE-005                                                                    |
+|    8 | ISSUE-008 | W-01      | 4                     | MVP                  | ISSUE-004                                                                    |
+|    9 | ISSUE-009 | B-04      | 4                     | MVP                  | ISSUE-005                                                                    |
+|   10 | ISSUE-010 | B-09      | 4                     | MVP                  | ISSUE-005                                                                    |
+|   11 | ISSUE-011 | F-06      | 5                     | MVP                  | ISSUE-006、ISSUE-007                                                         |
+|   12 | ISSUE-012 | F-07      | 5                     | MVP                  | ISSUE-003、ISSUE-006                                                         |
+|   13 | ISSUE-013 | B-01      | 5                     | MVP                  | ISSUE-005、ISSUE-007                                                         |
+|   14 | ISSUE-014 | W-02      | 5                     | MVP                  | ISSUE-008                                                                    |
+|   15 | ISSUE-015 | W-04      | 5                     | MVP                  | ISSUE-008、ISSUE-010                                                         |
+|   16 | ISSUE-016 | F-08      | 6                     | MVP                  | ISSUE-011、ISSUE-012                                                         |
+|   17 | ISSUE-017 | B-02      | 6                     | MVP                  | ISSUE-013                                                                    |
+|   18 | ISSUE-018 | B-05      | 6                     | MVP                  | ISSUE-013                                                                    |
+|   19 | ISSUE-019 | W-03      | 6                     | MVP                  | ISSUE-014                                                                    |
+|   20 | ISSUE-020 | B-03      | 7                     | MVP                  | ISSUE-017                                                                    |
+|   21 | ISSUE-021 | B-06      | 8                     | MVP                  | ISSUE-009、ISSUE-010、ISSUE-018、ISSUE-020                                   |
+|   22 | ISSUE-022 | B-07      | 8                     | MVP                  | ISSUE-009、ISSUE-010、ISSUE-018、ISSUE-020                                   |
+|   23 | ISSUE-023 | B-08      | 8                     | MVP                  | ISSUE-010、ISSUE-018、ISSUE-020                                              |
+|   24 | ISSUE-024 | B-10      | 9                     | MVP                  | ISSUE-021、ISSUE-022、ISSUE-023                                              |
+|   25 | ISSUE-025 | W-05      | 9                     | MVP                  | ISSUE-014、ISSUE-023                                                         |
+|   26 | ISSUE-026 | W-06      | 10                    | MVP                  | ISSUE-015、ISSUE-021、ISSUE-025                                              |
+|   27 | ISSUE-027 | W-07      | 10                    | MVP                  | ISSUE-015、ISSUE-022、ISSUE-025                                              |
+|   28 | ISSUE-028 | W-08      | 11                    | MVP                  | ISSUE-019、ISSUE-026、ISSUE-027                                              |
+|   29 | ISSUE-029 | I-01      | 11                    | MVP                  | ISSUE-021、ISSUE-026                                                         |
+|   30 | ISSUE-030 | I-02      | 11                    | MVP                  | ISSUE-022、ISSUE-025、ISSUE-027                                              |
+|   31 | ISSUE-031 | E2E-01    | 12                    | MVP                  | ISSUE-019、ISSUE-029、ISSUE-030                                              |
+|   32 | ISSUE-032 | Q-01      | 13                    | MVP                  | ISSUE-016、ISSUE-024、ISSUE-028、ISSUE-031                                   |
+|   33 | ISSUE-033 | H-01      | 14                    | MVP                  | ISSUE-032                                                                    |
+|   34 | ISSUE-034 | R-01      | Later 1               | Production Hardening | ISSUE-033                                                                    |
+|   35 | ISSUE-035 | R-02      | Later 2               | Production Hardening | ISSUE-033；建议 ISSUE-034                                                    |
+|   36 | ISSUE-036 | R-03      | Later 3               | Production Hardening | ISSUE-033、ISSUE-035；已批准 Session Semantics                               |
+|   37 | ISSUE-037 | R-04      | Later 3               | Production Hardening | ISSUE-034、ISSUE-035；已批准 Mail Design                                     |
+|   38 | ISSUE-038 | R-05      | Later 4               | Production Hardening | ISSUE-035、ISSUE-036、ISSUE-037                                              |
+|   39 | ISSUE-039 | R-06      | Later 2               | Production Hardening | ISSUE-033；已批准 Lifecycle Semantics                                        |
+|   40 | ISSUE-040 | R-07      | Later 3               | Production Hardening | ISSUE-033；已批准 Restricted Operation；若依赖状态则加 ISSUE-039             |
+|   41 | ISSUE-041 | R-08      | Later 2               | Production Hardening | ISSUE-014、ISSUE-033                                                         |
+|   42 | ISSUE-042 | R-10      | Later 2               | Production Hardening | ISSUE-033                                                                    |
+|   43 | ISSUE-043 | R-09      | Later 3               | Production Hardening | ISSUE-033；已批准 Platform/Operations Input                                  |
+|   44 | ISSUE-044 | R-11      | Later 3               | Travel Agent         | ISSUE-042；已批准 Retrieval Input                                            |
+|   45 | ISSUE-045 | R-12      | Later 4               | Travel Agent         | ISSUE-042；只有需要 Retrieval 时才加 ISSUE-044                               |
+|   46 | ISSUE-046 | R-13      | Later evidence-driven | Production Hardening | ISSUE-033；已批准 Usage/Compliance Evidence                                  |
+|   47 | ISSUE-047 | R-14      | Release gate          | Public Exposure      | ISSUE-032、ISSUE-033、ISSUE-035、ISSUE-042、ISSUE-043 及全部 Release Feature |
 
 ## 5. 首个切片 Issue 规格
 
@@ -278,14 +278,14 @@
 - [x] Client Bundle 不暴露 API Secret/Internal Origin。
 - [x] 无假业务行为或未使用的生成示例。
 
-**证据：** 2026-08-03，精确 Next.js 16 Installation、ESLint、Route Type Generation、Strict TypeScript、Turbopack Production Build，以及返回 `200` 和 `Trip Agent` 的 Production `GET /` Smoke 均通过。Next 16 生成其必需的 `react-jsx` Setting 与 Development Route-type Include。未生成 Test；F-04 与后续 Web Test Task 负责 Test Tooling。
+**证据：** 2026-08-03，精确 Next.js 16 Installation、ESLint、Route Type Generation、Strict TypeScript、Turbopack Production Build，以及返回 `200` 和 `Trip Agent` 的 Production `GET /` Smoke 均通过。Next 16 生成其必需的 `react-jsx` Setting 与 Development Route-type Include。F-02 未生成 Test；W-01 后续加入 App-local Vitest Tooling 与一项 Render Regression，进一步 Coverage 仍由后续 Web Test Task 负责。
 
 **非目标：** MUI、Route Group、Form 或认证。
 
 ### ISSUE-005 — [F-03] 创建 NestJS 应用脚手架
 
 - **状态：** `DONE`
-- **远程状态：** GitHub Issue #5 仍为 Open；未获得或执行远程更新授权。
+- **远程状态：** GitHub Issue #5 已按 Completed 关闭；于 2026-08-03 观察到该关闭状态。
 - **Labels：** `type:task`、`area:api`、`priority:p0`
 - **Blocked by：** ISSUE-003
 - **PR Boundary：** 一个最小 API Scaffold PR
@@ -312,7 +312,8 @@
 
 ### ISSUE-006 — [F-04] 建立共享工程配置
 
-- **状态：** `TODO`
+- **状态：** `DONE`
+- **远程状态：** 2026-08-05 检查时 GitHub Issue #6 仍为 Open；未获得或执行远程更新授权。
 - **Labels：** `type:task`、`area:foundation`、`area:quality`、`priority:p0`
 - **Blocked by：** ISSUE-004、ISSUE-005
 - **PR Boundary：** 一个 Shared-config PR
@@ -323,18 +324,19 @@
 
 **工作**
 
-- [ ] 建立统一 Prettier，并在两个应用确有使用时建立共享严格 TypeScript/ESLint Config。
-- [ ] 标准化 Root/Package Task 名与 Turbo Output。
-- [ ] 定义 Generated、Secret、Environment、Build、Test 和 Cache Ignore。
+- [x] 建立统一 Prettier，并在两个应用确有使用时建立共享严格 TypeScript/ESLint Config。
+- [x] 标准化 Root/Package Task 名与 Turbo Output。
+- [x] 定义 Generated、Secret、Environment、Build、Test 和 Cache Ignore。
 
 **审核/验收**
 
-- [ ] Web/API 使用一致适用规则，无 Circular 或 Deep Config Import。
-- [ ] `format:check`、lint、typecheck、test、build 在 Root 可运行，并会对故意违规失败。
-- [ ] Generated/Environment File 被忽略，但不隐藏 Source 或 Contract。
-- [ ] 没有在少于两个 Consumer 时创建 Speculative Utility/Test Package。
+- [x] Web/API 使用一致适用规则，无 Circular 或 Deep Config Import。
+- [x] `format:check`、lint、typecheck、test、build 在 Root 可运行，并会对故意违规失败。
+- [x] Generated/Environment File 被忽略，但不隐藏 Source 或 Contract。
+- [x] 没有在少于两个 Consumer 时创建 Speculative Utility/Test Package。
 
-**证据：** Root Check 成功输出及每类可执行规则的一个 Negative Check。  
+**证据：** 2026-08-05，两个应用均通过 `workspace:*` 消费窄范围的 `@trip/config-typescript` 与 `@trip/config-eslint` Package；统一的精确根 Prettier 3.9.6 Policy 与标准化 Root/Package Task 已启用，而 Next.js、Node、Jest 与 Vitest 关注点仍保留在应用本地。精确 Node/pnpm Check、Frozen Install、`format:check`、强制 Lint/Typecheck/Test/Build Task、一个 Web Render Test、一个 API Unit Test、两个 API HTTP Assertion、Production Build、Shared-config Loading、五类故意违规的 Negative Rule Probe、Ignore Allow/Deny Matrix、Package-boundary Audit，以及两次命中的 Local-cache Output-restoration Run 均通过。仓库保持唯一根 Lockfile，Remote Cache 保持关闭，且未发现竞争 Lockfile、Deep/Circular Config Import、推测性 `test-utils`、Probe Residue 或被隐藏的 Source/Contract File。
+
 **非目标：** Feature Code、无关依赖升级或 Remote Cache。
 
 ### ISSUE-007 — [F-05] 添加本地 PostgreSQL 与 pgvector
@@ -370,7 +372,7 @@
 - **Labels：** `type:task`、`area:web`、`area:ui`、`priority:p0`
 - **Blocked by：** ISSUE-004
 - **PR Boundary：** 一个 Theme/SSR Integration PR
-- **远程状态：** GitHub Issue #8 仍为 Open；未获授权且未执行任何远程更新。
+- **远程状态：** GitHub Issue #8 已按 Completed 关闭；于 2026-08-05 观察到该关闭状态。
 
 **目标**
 
