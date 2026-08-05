@@ -2,23 +2,23 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03、F-01 至 F-05 与 W-01 已在本地完成，当前依赖已满足的工作还包括 ISSUE-009 与 ISSUE-010**\
+状态：**D-01 至 D-26 已确认；首切片已于 2026-08-02 授权实施并于 2026-08-05 合并范围；P-03、F-01 至 F-05 与 W-01 已在本地完成；仅剩 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
-范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
-授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。2026-08-05，Owner 明确 F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
+范围来源：用户要求的项目目录、Sign Up/Login、User 表、Auth API、受保护 Dashboard 与限时演示\
+授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。2026-08-05，Owner 授权 D-26：保留核心本地 Auth Path 的生产级要求，同时把 ISSUE-007 之后全部实施压缩为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02，并把低优先级宽度移入本文档 Backlog。Owner 同时明确授权改写远程 #9/#10、关闭 #11-#27，并保持 #7 不变；该一次性远程整理已完成。F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
 
-授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
+授权排除项：Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及超出 2026-08-05 已完成整理的任何远程 Issue 操作，仍需另行明确授权。
 
 当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。统一的根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围的共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8、精确的 MUI v9 App Router SSR/CSS-variable Theme Foundation，以及一项 Vitest/React Testing Library Render Regression。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施现已提供仅 Loopback 发布的 Healthy Service、具名 Volume、Atomic Privileged Bootstrap，以及相互分离的 Provisioner/Migrator/Runtime Role。Next.js、Node、Jest 与 Vitest 的应用特定关注点仍保留在各应用本地。TypeORM、CI 自动化、Hook、Application Migration、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
-完成一个可测试的最小纵向切片：开发者能在 pnpm Monorepo 中于宿主机启动 Web/API，并通过容器启动本地 PostgreSQL + pgvector；用户能注册、收到真实 API 成功反馈、使用同一组凭据登录，并在应用壳中看到可扩展 Navigation。
+完成一个可测试的最小纵向切片：开发者能在 pnpm Monorepo 中于宿主机启动 Web/API，并通过容器启动本地 PostgreSQL + pgvector；用户能注册、收到真实 API 成功反馈、进入并刷新受保护 Dashboard、退出，并使用同一组凭据再次登录。
 
 “生产级”在本计划中意味着首个切片具备正确边界、输入校验、安全密码存储、数据库迁移、稳定错误契约和自动化测试，而不是一次性实现所有后续平台能力。
 
-该切片是由多个可独立 Review 的变更集组成的里程碑。“首个切片”表示执行顺序，不是一个自然日内完成全部工作的承诺。
+ISSUE-007 之后，该切片只包装为两个 Outcome-focused 执行 Issue。Issue 合并减少管理开销，但不强迫形成无法 Review 的 PR，也不豁免保留的验收标准。
 
 ## 2. 首个切片完成后的用户路径
 
@@ -30,7 +30,6 @@
 6. 页面通过 `/auth/me` 恢复登录态；未认证用户不能进入受保护的应用路由。
 7. 用户退出后 Cookie 被清除，可在 Login 页面使用同一组凭据重新登录。
 8. 登录失败统一返回稳定错误码；成功重新设置 Cookie 并进入 Dashboard。
-9. Navigation 可前往 Dashboard、Flight Info、User。
 
 ## 3. 范围
 
@@ -44,12 +43,10 @@
 - `POST /api/v1/auth/sign-up` 和 `POST /api/v1/auth/login`。
 - 最小 Access JWT、同源 HttpOnly Cookie、`GET /auth/me`、`POST /auth/logout` 和受保护路由。
 - Sign Up、Login 页面与完整表单状态。
-- 可扩展、响应式、可访问的 Navigation Bar。
-- Dashboard、Flight Info、User 的最小路由落点。
-- 首版英文界面，以及集中消息 key/英文 catalog/locale formatter 组成的 i18n-ready 边界。
+- 用于证明认证边界的最小受保护 Dashboard Route。
+- 可访问的英文 Sign Up/Login/Dashboard UI；完整本地化架构延期。
 - 与本功能相称的单元、集成、组件和关键 E2E 测试。
 - 环境变量示例、本地运行说明、根 Pre-commit/Commit-message Hook 和 GitHub Actions CI 质量门。
-- GitHub 仓库治理：受保护的 `main`、Pull Request Ownership/Template、MIT License、Dependabot 和可用的安全扫描。
 
 ### 首个切片明确不做
 
@@ -58,8 +55,9 @@
 - Embedding 模型、向量生成、向量列或 pgvector 索引；高权限本地 Bootstrap 会启用并验证镜像中的扩展以保证环境一致，但不创建无用途的向量 Schema。
 - Refresh Token、Token 轮换/服务端撤销、Redis、缓存、队列或分布式锁。
 - 邮箱验证、忘记/重置密码、社交登录、多因素认证、账户状态或 RBAC。
-- 中文翻译、语言切换器和 locale URL；首版只建立不硬编码英文文案的本地化边界。
-- 完整 User Profile 功能；User 页面仅为导航落点。
+- Product Localization Infrastructure、简体中文产品文案、Language Switcher 或 Locale URL。
+- Extensible Product Navigation、Flight Info/User 页面、最终 Branding 或完整 User Profile。
+- 保留的最小 PR CI 与本地 Hook 之外的完整 GitHub Repository Governance/Security Administration。
 - 完整 Swagger 文档与生成客户端。
 - 生产部署、云资源、应用镜像、Registry 发布和启用 Continuous Delivery。未来 GitHub CD 契约现在进入计划，但只在 R-09 实施。
 
@@ -69,35 +67,36 @@
 
 ## 4. 决策记录
 
-D-01 至 D-25 全部已确认并作为当前权威。D-14 至 D-19 是已接受的独立审计建议；D-20 至 D-24 记录用户提出的 GitHub Identity、治理、CI/CD、本地 Hook、License 和 AI Review 要求；D-25 记录 Owner 授权的 Framework/ORM Major-line Revision。首切片实施在既定排除项内已获授权。
+D-01 至 D-26 全部已确认并作为当前权威。D-14 至 D-19 是已接受的独立审计建议；D-20 至 D-24 记录用户提出的 GitHub Identity、治理、CI/CD、本地 Hook、License 和 AI Review 要求；D-25 记录 Owner 授权的 Framework/ORM Major-line Revision；D-26 记录 Owner 授权的限时 Issue/Scope 合并。首切片实施在既定排除项内已获授权。
 
-| ID   | 状态        | 决策                                                                                                                                                                                                                                                                                                                                                                                                     | 影响范围                        |
-| ---- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| D-01 | `CONFIRMED` | 使用 TypeORM；只用 migration，生产禁用 `synchronize`                                                                                                                                                                                                                                                                                                                                                     | B-01 起                         |
-| D-02 | `CONFIRMED` | pnpm workspace 管依赖，Turborepo 管任务图与本地缓存；远程缓存后续审计后再启用                                                                                                                                                                                                                                                                                                                            | F-01 起                         |
-| D-03 | `CONFIRMED` | 首个切片实现短期 Access JWT，并通过同源 HttpOnly Cookie 传输；Refresh、轮换、撤销和 Redis 后续实现                                                                                                                                                                                                                                                                                                       | B-05、W-05、I-02、R-03          |
-| D-04 | `CONFIRMED` | 登录对外统一“邮箱或密码错误”与 `INVALID_CREDENTIALS`                                                                                                                                                                                                                                                                                                                                                     | B-07、W-07                      |
-| D-05 | `CONFIRMED` | 注册成功后签发同样的 Access JWT 并自动进入 Dashboard                                                                                                                                                                                                                                                                                                                                                     | B-06、W-06、E2E-01              |
-| D-06 | `CONFIRMED` | 首个 Agent 用例开始时在 NestJS `AgentModule` 中使用 TypeScript LangGraph；Web 只消费已认证流式事件；需要独立扩缩容时再拆 `apps/agent`；本切片不创建空模块                                                                                                                                                                                                                                                | R-12                            |
-| D-07 | `CONFIRMED` | UUID 主键、物理表名 `users`、邮箱 trim + 小写规范化后唯一                                                                                                                                                                                                                                                                                                                                                | B-02 起                         |
-| D-08 | `CONFIRMED` | 首版密码为 8–20 个 ASCII 字符，只允许 `A-Z`、`a-z`、`0-9` 和 `$#@%`，且至少包含一个大写字母、一个小写字母、一个数字和一个 `$#@%` 字符；不 trim；保留常见/已泄露密码阻止与经基准测试的 Argon2id                                                                                                                                                                                                           | B-04、B-06、W-04、R-13          |
-| D-09 | `CONFIRMED` | Next.js/NestJS 独立部署；浏览器通过同一公开 origin 的 `/api/v1` 访问 Gateway 后的 NestJS                                                                                                                                                                                                                                                                                                                 | F-05、B-05、W-05                |
-| D-10 | `CONFIRMED` | 首版界面使用英文；从第一天集中管理消息 key 和英文 catalog，后续至少支持简体中文 `zh-CN`；首版不做语言切换器或 locale URL                                                                                                                                                                                                                                                                                 | W-02 起、R-08                   |
-| D-11 | `CONFIRMED` | 首个迁移不加入邮箱验证、账户状态或角色；相关能力通过按序前滚迁移加入                                                                                                                                                                                                                                                                                                                                     | B-02 起、R-04/R-06/R-07         |
-| D-12 | `CONFIRMED` | 本地内循环由宿主机运行 Next.js/NestJS；PostgreSQL + pgvector 等基础设施容器化；应用镜像在纵向切片稳定后加入，生产优先托管数据服务                                                                                                                                                                                                                                                                        | F-02、F-03、F-05、R-09          |
-| D-13 | `CONFIRMED` | 无后缀项目文档是英文权威版本；对应 `_ZH.md` 是同步的简体中文跟随版；冲突时英文为准                                                                                                                                                                                                                                                                                                                       | 所有文档任务                    |
-| D-14 | `CONFIRMED` | 首版 JWT/Cookie：`HS256`、至少 256-bit 托管密钥、15 分钟 TTL、User UUID `sub`、`iss=trip-api`、`aud=trip-web`、必需 `iat`/`exp`、最多 30 秒时钟容差；生产 Cookie 为 `__Host-trip_access`、`HttpOnly`、`Secure`、`SameSite=Lax`、`Path=/`、无 `Domain`、`Max-Age=900`；本地 HTTP 使用 900 秒的 `trip_access_dev`；退出以匹配属性发送 `Max-Age=0`                                                          | B-05、B-08、W-05、I-02          |
-| D-15 | `CONFIRMED` | 仅浏览器的不安全认证请求只接受 JSON，要求精确受信 Origin，同源 Referer 可回退，缺失/`null` 来源拒绝；首个受保护业务写接口或拓扑扩大前加入 CSRF Token                                                                                                                                                                                                                                                     | B-05 至 B-10、I-01/I-02         |
-| D-16 | `CONFIRMED` | 已认证/用户私有响应与 Next 服务端认证请求全部 `no-store`；Gateway 不缓存 `Set-Cookie` 或私有响应                                                                                                                                                                                                                                                                                                         | B-05、B-08、W-05、I-01/I-02     |
-| D-17 | `CONFIRMED` | 首版邮箱采用 trim 后的小写 ASCII 规范形式，最长 254；数据库使用规范形式 CHECK + UNIQUE；国际化邮箱后续另定策略                                                                                                                                                                                                                                                                                           | B-02、B-03、B-06/B-07           |
-| D-18 | `CONFIRMED` | 数据库 Provisioner、Migrator、Runtime 角色分离；高权限 Bootstrap 负责扩展启用；迁移是明确 Job，不在应用启动时自动执行                                                                                                                                                                                                                                                                                    | F-05、B-01、B-02、R-09          |
-| D-19 | `CONFIRMED` | 本地切片完成不等于允许公开发布；发布门必须完成 R-02、R-09、R-10 并重新获得安全/运维批准                                                                                                                                                                                                                                                                                                                  | Q-01、H-01、R-02/R-09/R-10/R-14 |
-| D-20 | `CONFIRMED` | GitHub 是源码与自动化平台。Public 仓库由 `@Donny-Guo` 所有。`main` 只能通过 Pull Request 修改，要求稳定 Required CI、已解决对话、线性历史、默认 Squash Merge，并禁止 Force Push/删除。Bootstrap 期间 Approval Requirement 必须可满足，且不设置通用 Check Bypass；存在合格 Reviewer 时，至少要求一个非作者 Owned-path Approval                                                                            | F-06、F-08、Q-01                |
-| D-21 | `CONFIRMED` | 根 Husky Hook 使用 lint-staged 对 Staged Files 格式化/lint，并在 `commit-msg` 以 commitlint 执行 Conventional Commits；CI 是权威并校验 Squash Pull Request Title；Pre-commit 不执行网络、数据库、构建或全量测试                                                                                                                                                                                          | F-04、F-07、F-08                |
-| D-22 | `CONFIRMED` | GitHub CD 受 R-09 和已批准部署目标约束：从可信代码构建一次并 Attest/发布不可变 Web/API Image Digest，通过 OIDC 将同一 Digest 推进受保护的 `staging`/`production` Environments，生产必须由他人批准且禁用 Self-review，部署串行化并支持回滚；Pull Request 代码不获得部署 Secret                                                                                                                            | R-09、R-14                      |
-| D-23 | `CONFIRMED` | 仓库 Owner 及初始 `CODEOWNERS` Identity 为 `@Donny-Guo`。MIT 是已确认的 Open-source License 选择；标准根 License 使用 `Copyright (c) 2026 Donny-Guo`，需要 Owner 明确授权，且不强制每个 Source File 加 License Header。F-08 负责验证与维护该 Artifact                                                                                                                                                    | F-08、文档                      |
-| D-24 | `CONFIRMED` | 初始最多启用一个辅助 AI Reviewer。只有 Pull Request 已 Ready for Review、确定性 CI 全绿并完成 Self-review 后才手动请求。用三个有代表性且承载风险的 Pull Request 评估它；不自动 Review Draft/每次 Push，不启用重叠 Reviewer，也不赋予 Merge Gate 权限；调整 Policy 前记录有效发现、False Positive、漏检和 Latency。Public Repository 不记录 Provider 与 Account Detail                                    | F-08、Q-01                      |
-| D-25 | `CONFIRMED` | 以当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线取代原有 Web/ORM 版本约束，同时保留 React 19、PostgreSQL 18 与已批准测试系列。2026-08-03 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。已安装 Dependency 立即迁移；尚未进入 Owner Task 的 Dependency 在任务开始时使用这些 Pin。保持精确 Stable Pin、隔离 Upgrade，再次变更 Major 需明确批准 | P-03、F-02、W-01、B-01          |
+| ID   | 状态        | 决策                                                                                                                                                                                                                                                                                                                                                                                                     | 影响范围                                  |
+| ---- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| D-01 | `CONFIRMED` | 使用 TypeORM；只用 migration，生产禁用 `synchronize`                                                                                                                                                                                                                                                                                                                                                     | B-01 起                                   |
+| D-02 | `CONFIRMED` | pnpm workspace 管依赖，Turborepo 管任务图与本地缓存；远程缓存后续审计后再启用                                                                                                                                                                                                                                                                                                                            | F-01 起                                   |
+| D-03 | `CONFIRMED` | 首个切片实现短期 Access JWT，并通过同源 HttpOnly Cookie 传输；Refresh、轮换、撤销和 Redis 后续实现                                                                                                                                                                                                                                                                                                       | B-05、W-05、I-02、R-03                    |
+| D-04 | `CONFIRMED` | 登录对外统一“邮箱或密码错误”与 `INVALID_CREDENTIALS`                                                                                                                                                                                                                                                                                                                                                     | B-07、W-07                                |
+| D-05 | `CONFIRMED` | 注册成功后签发同样的 Access JWT 并自动进入 Dashboard                                                                                                                                                                                                                                                                                                                                                     | B-06、W-06、E2E-01                        |
+| D-06 | `CONFIRMED` | 首个 Agent 用例开始时在 NestJS `AgentModule` 中使用 TypeScript LangGraph；Web 只消费已认证流式事件；需要独立扩缩容时再拆 `apps/agent`；本切片不创建空模块                                                                                                                                                                                                                                                | R-12                                      |
+| D-07 | `CONFIRMED` | UUID 主键、物理表名 `users`、邮箱 trim + 小写规范化后唯一                                                                                                                                                                                                                                                                                                                                                | B-02 起                                   |
+| D-08 | `CONFIRMED` | 首版密码为 8–20 个 ASCII 字符，只允许 `A-Z`、`a-z`、`0-9` 和 `$#@%`，且至少包含一个大写字母、一个小写字母、一个数字和一个 `$#@%` 字符；不 trim；保留常见/已泄露密码阻止与经基准测试的 Argon2id                                                                                                                                                                                                           | B-04、B-06、W-04、R-13                    |
+| D-09 | `CONFIRMED` | Next.js/NestJS 独立部署；浏览器通过同一公开 origin 的 `/api/v1` 访问 Gateway 后的 NestJS                                                                                                                                                                                                                                                                                                                 | F-05、B-05、W-05                          |
+| D-10 | `CONFIRMED` | 首版 Product UI 使用英文，后续至少加入 `zh-CN`。D-26 将完整 Message Catalog/Localization Boundary、Switcher 与 Locale URL 延期到本地 Auth Demo 之后                                                                                                                                                                                                                                                      | W-02、R-08、D-26                          |
+| D-11 | `CONFIRMED` | 首个迁移不加入邮箱验证、账户状态或角色；相关能力通过按序前滚迁移加入                                                                                                                                                                                                                                                                                                                                     | B-02 起、R-04/R-06/R-07                   |
+| D-12 | `CONFIRMED` | 本地内循环由宿主机运行 Next.js/NestJS；PostgreSQL + pgvector 等基础设施容器化；应用镜像在纵向切片稳定后加入，生产优先托管数据服务                                                                                                                                                                                                                                                                        | F-02、F-03、F-05、R-09                    |
+| D-13 | `CONFIRMED` | 无后缀项目文档是英文权威版本；对应 `_ZH.md` 是同步的简体中文跟随版；冲突时英文为准                                                                                                                                                                                                                                                                                                                       | 所有文档任务                              |
+| D-14 | `CONFIRMED` | 首版 JWT/Cookie：`HS256`、至少 256-bit 托管密钥、15 分钟 TTL、User UUID `sub`、`iss=trip-api`、`aud=trip-web`、必需 `iat`/`exp`、最多 30 秒时钟容差；生产 Cookie 为 `__Host-trip_access`、`HttpOnly`、`Secure`、`SameSite=Lax`、`Path=/`、无 `Domain`、`Max-Age=900`；本地 HTTP 使用 900 秒的 `trip_access_dev`；退出以匹配属性发送 `Max-Age=0`                                                          | B-05、B-08、W-05、I-02                    |
+| D-15 | `CONFIRMED` | 仅浏览器的不安全认证请求只接受 JSON，要求精确受信 Origin，同源 Referer 可回退，缺失/`null` 来源拒绝；首个受保护业务写接口或拓扑扩大前加入 CSRF Token                                                                                                                                                                                                                                                     | B-05 至 B-10、I-01/I-02                   |
+| D-16 | `CONFIRMED` | 已认证/用户私有响应与 Next 服务端认证请求全部 `no-store`；Gateway 不缓存 `Set-Cookie` 或私有响应                                                                                                                                                                                                                                                                                                         | B-05、B-08、W-05、I-01/I-02               |
+| D-17 | `CONFIRMED` | 首版邮箱采用 trim 后的小写 ASCII 规范形式，最长 254；数据库使用规范形式 CHECK + UNIQUE；国际化邮箱后续另定策略                                                                                                                                                                                                                                                                                           | B-02、B-03、B-06/B-07                     |
+| D-18 | `CONFIRMED` | 数据库 Provisioner、Migrator、Runtime 角色分离；高权限 Bootstrap 负责扩展启用；迁移是明确 Job，不在应用启动时自动执行                                                                                                                                                                                                                                                                                    | F-05、B-01、B-02、R-09                    |
+| D-19 | `CONFIRMED` | 本地切片完成不等于允许公开发布；发布门必须完成 R-02、R-09、R-10 并重新获得安全/运维批准                                                                                                                                                                                                                                                                                                                  | Q-01、H-01、R-02/R-09/R-10/R-14           |
+| D-20 | `CONFIRMED` | GitHub 是源码与自动化平台。Public 仓库由 `@Donny-Guo` 所有。`main` 只能通过 Pull Request 修改，要求稳定 Required CI、已解决对话、线性历史、默认 Squash Merge，并禁止 Force Push/删除。Bootstrap 期间 Approval Requirement 必须可满足，且不设置通用 Check Bypass；存在合格 Reviewer 时，至少要求一个非作者 Owned-path Approval                                                                            | F-06、F-08、Q-01                          |
+| D-21 | `CONFIRMED` | 根 Husky Hook 使用 lint-staged 对 Staged Files 格式化/lint，并在 `commit-msg` 以 commitlint 执行 Conventional Commits；CI 是权威并校验 Squash Pull Request Title；Pre-commit 不执行网络、数据库、构建或全量测试                                                                                                                                                                                          | F-04、F-07、F-08                          |
+| D-22 | `CONFIRMED` | GitHub CD 受 R-09 和已批准部署目标约束：从可信代码构建一次并 Attest/发布不可变 Web/API Image Digest，通过 OIDC 将同一 Digest 推进受保护的 `staging`/`production` Environments，生产必须由他人批准且禁用 Self-review，部署串行化并支持回滚；Pull Request 代码不获得部署 Secret                                                                                                                            | R-09、R-14                                |
+| D-23 | `CONFIRMED` | 仓库 Owner 及初始 `CODEOWNERS` Identity 为 `@Donny-Guo`。MIT 是已确认的 Open-source License 选择；标准根 License 使用 `Copyright (c) 2026 Donny-Guo`，需要 Owner 明确授权，且不强制每个 Source File 加 License Header。F-08 负责验证与维护该 Artifact                                                                                                                                                    | F-08、文档                                |
+| D-24 | `CONFIRMED` | 初始最多启用一个辅助 AI Reviewer。只有 Pull Request 已 Ready for Review、确定性 CI 全绿并完成 Self-review 后才手动请求。用三个有代表性且承载风险的 Pull Request 评估它；不自动 Review Draft/每次 Push，不启用重叠 Reviewer，也不赋予 Merge Gate 权限；调整 Policy 前记录有效发现、False Positive、漏检和 Latency。Public Repository 不记录 Provider 与 Account Detail                                    | F-08、Q-01                                |
+| D-25 | `CONFIRMED` | 以当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线取代原有 Web/ORM 版本约束，同时保留 React 19、PostgreSQL 18 与已批准测试系列。2026-08-03 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。已安装 Dependency 立即迁移；尚未进入 Owner Task 的 Dependency 在任务开始时使用这些 Pin。保持精确 Stable Pin、隔离 Upgrade，再次变更 Major 需明确批准 | P-03、F-02、W-01、B-01                    |
+| D-26 | `CONFIRMED` | 对限时本地演示，保留 PostgreSQL-backed Auth API、JWT-cookie Session、可访问 Sign Up/Login/Protected Dashboard、关键 Test、本地 Hook 与最小 PR CI 的生产级要求。ISSUE-007 之后仅包装为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02。Localization、Extensible Navigation、完整 GitHub Governance/Security Administration 与其他产品/发布宽度移入文档 Backlog。合并不授权公开暴露，也不豁免保留的 Security Control | ISSUE-009、ISSUE-010、F-08、W-03、R-01 起 |
 
 ### 密码策略变更契约
 
@@ -222,7 +221,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 适合直接实施的 Issue 包装、顺序、审核标准和所需证据维护在英文权威 [`ISSUES.md`](./ISSUES.md) 中；若文档发生冲突，仍以本计划为准。
 
-状态图例：决策 `CONFIRMED` 是当前权威。任务 `TODO` 未开始；`BLOCKED` 等待外部决策或授权；`DONE` 已有证据完成；`TODO（后续）` 是首个切片权限之外的 Backlog；`BLOCKED（后续）` 是同时等待前置条件与明确授权的未来 Gate。
+状态图例：决策 `CONFIRMED` 是当前权威。任务 `TODO` 未开始；`OWNER-ACTIVE` 表示 Owner 正在实施；`TRACKED BY ISSUE-009` 与 `TRACKED BY ISSUE-010` 表示保留的 Task-level 要求由对应合并 Issue 包装；`BLOCKED` 等待外部决策或授权；`DONE` 已有证据完成；`TODO（后续）` 是压缩演示之外的 Backlog；`BLOCKED（后续）` 是同时等待前置条件与明确授权的未来 Gate。
 
 ### Phase 0 — Review 与实施门
 
@@ -239,7 +238,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 前置：P-01
 - 动作：获取用户明确要求开始实施的指令；Review 意见和规划文档修改不等于开工授权。
 - 产出：Owner 于 2026-08-02 发出的无歧义实施开始指令。
-- 验收：已于 2026-08-02 满足——Owner 明确授权计划内的首个本地认证切片，覆盖代码、脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。Post-MVP 工作、生产部署/CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍为排除项。
+- 验收：已于 2026-08-02 满足——Owner 明确授权计划内的首个本地认证切片，覆盖代码、脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。在该 Gate 当时，Post-MVP 工作、生产部署/CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及全部远程 Issue Mutation 仍为排除项；D-26 后来只授权已经完成的 2026-08-05 整理。
 
 #### P-03 冻结兼容版本矩阵 — `DONE`
 
@@ -292,21 +291,21 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 验收：数据库可独立重复启停并健康；分别验证 Extension 可用性和启用状态；在 Clean Database 上，Migration-shaped Transactional DDL Probe 以 Migrator 成功且不留下 Object，直接 TCP/SCRAM Runtime Connection 成功，而 Runtime DDL/Extension 操作被拒绝；不存在真实 Secret；不引入 Redis。实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
 - 完成证据（2026-08-05）：`infra/docker/compose.yaml` 将 `pgvector/pgvector:0.8.5-pg18-trixie` 固定到 OCI Index Digest `sha256:9d2e61c7352b9e9f4798df5fd9a498f043f4cda1cdacc707de3d198650f4321e`，仅在 Loopback 发布 PostgreSQL，配置 Health Check 并保留具名 Volume；Web/API 保持 Host-run，Redis 未加入。全新的 Disposable Project 达到 Healthy PostgreSQL `18.4`（`server_version_num=180004`），分别验证 Vector `0.8.5` 的 Available 与 Installed 状态，并输出 Sanitized Bootstrap Record。Atomic Privileged Bootstrap 创建相互分离且使用 SCRAM Verifier 的 Provisioner/Migrator/Runtime Role、由 Provisioner 所有且位于 `public` 的 Vector Extension，以及由 Migrator 所有的 `app` Schema。Fixed-output Probe 证明三个 TCP Identity、仅 Migrator 可执行且 Rollback 的批准 Application DDL、Runtime 及 Subordinate Role/Extension/Public-schema/Database/Temp 操作以 SQLSTATE `42501` 被拒绝、没有 Persistent Probe Object、Password-statement Failure Redaction、真实 Password 不出现在 Log/Image Metadata，以及 Container Recreation 后保持同一 Cluster。Static Shell/Compose/Scope/Secret Check、Frozen Install、Formatting、Local Markdown Link，以及强制 Uncached Lint/Typecheck/Test/Build 均通过。
 
-#### F-06 建立 GitHub Actions Pull Request CI — `TODO`
+#### F-06 建立 GitHub Actions Pull Request CI — `TRACKED BY ISSUE-010`
 
 - 前置：D-20、F-04、F-05
 - 动作：创建最小权限 Workflow，监听 `pull_request`、可信 `main` Push，并在启用 Merge Queue 后监听 `merge_group`。在选定的有明确版本标准 GitHub-hosted Ubuntu Runner 上安装固定 Node/pnpm Toolchain，使用 Frozen Lockfile，直接通过 Turbo 执行 Format Check、lint、typecheck、单元/集成测试和 Build，而不是把这些任务放入 Alpine 应用镜像；启动临时且固定版本的 PostgreSQL + pgvector Service；校验 Markdown 链接、英文主文档语言规则，以及现有 `_ZH` 跟随版中的决策/任务/Issue ID 与状态一致性。第三方 Action 固定完整 SHA，设置 Timeout/Concurrency Cancellation，隔离不可信 Cache，并提供即使 Path Filter 跳过 Job 也始终上报的稳定 `ci-required` 聚合结果。轻量 Runner 只可针对短且无需 Docker 的文档/Metadata Job 评估。
 - 产出：`.github/workflows/ci.yml` 和 Required-check 名称文档。
 - 验收：每个 Required Result 都会上报，失败阻止合并；Fork Pull Request 无需 Secret 即可运行；没有 `pull_request_target` Job 执行不可信代码；不可信 Artifact/Cache 不能进入可信 Job；Cache 不掩盖 Lockfile 或生成物漂移；不使用生产凭据或真实第三方 API。
 
-#### F-07 增加本地 Git Hook 与 Commit 约定 — `TODO`
+#### F-07 增加本地 Git Hook 与 Commit 约定 — `TRACKED BY ISSUE-010`
 
 - 前置：D-21、F-01、F-04
 - 动作：配置根 Husky Hook；`pre-commit` 只对 Staged Files 执行 lint-staged Prettier/ESLint；`commit-msg` 通过 commitlint 执行 Conventional Commits；CI 校验用于 Squash 的 Pull Request Title。Hook 保持确定性、兼容部分暂存，并排除网络、数据库、Build 和全量测试。
 - 产出：`.husky/` Hook、lint-staged/commitlint 配置、根脚本与贡献指南。
 - 验收：合法 Staged Change 和 Commit Message 通过；格式/lint/消息错误可操作；部分暂存文件不被破坏；文档允许的 `--no-verify` 绕过会被 CI/PR-title 检查捕获；正常根 pnpm Install 后 Hook 能正确安装。
 
-#### F-08 建立 GitHub 仓库治理与安全自动化 — `TODO`
+#### F-08 建立 GitHub 仓库治理与安全自动化 — `TODO（后续）`
 
 - 前置：D-20、D-21、D-23、D-24、F-06、F-07
 - 动作：加入把初始敏感路径分配给 `@Donny-Guo` 的 `CODEOWNERS`、贡献/安全指南、Pull Request/Issue Template，以及同时覆盖 pnpm/npm 与 GitHub Actions 的 Dependabot 配置；验证并维护版权声明为 `Copyright (c) 2026 Donny-Guo` 的标准 MIT `LICENSE`。为 Public 仓库配置 `main` Ruleset：仅 Pull Request、Squash/线性历史、对话已解决、稳定 Required Checks、禁止 Force Push/删除。Bootstrap 期间 Approval Requirement 必须可满足，且不允许 Owner 通用绕过 Required Check；记录存在合格 Reviewer 时改为一个非作者 Owned-path Approval 的触发条件。验证当前设置后启用 Public-repository Dependency Review、CodeQL/Code Scanning、Secret Scanning 和 Push Protection。如启用辅助 AI Reviewer，只在 Pull Request 已 Ready、确定性 CI 全绿并完成 Self-review 后手动请求；排除 Draft、每个 PR/每次 Push 自动 Review、纯文档/纯生成物和常规依赖更新。用三个有代表性的认证、迁移或 Workflow Pull Request 评估它；只有出现影响风险的实质变更时才重新请求。记录有效发现、False Positive、漏检、Latency、Availability 和相关 Data-handling Setting。不启用重叠 AI Reviewer；替代方案必须另行 Review Permission、Data/Retention/Reliability。Public Repository 不记录 Provider 或 Account Detail。
@@ -315,77 +314,77 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### Phase 2 — Database、Users 与 Auth API
 
-#### B-01 接入配置校验与 ORM — `TODO`
+#### B-01 接入配置校验与 ORM — `TRACKED BY ISSUE-009`
 
 - 前置：D-01、F-03、F-05
 - 动作：启动时校验端口、Runtime/Migration 数据库 URL、Proxy Trust、CORS/受信 Origin、请求限制和认证配置；建立连接生命周期、依赖感知 Readiness、Graceful Shutdown 和明确 Migration Job 边界。
 - 产出：DatabaseModule/ConfigModule 基础。
 - 验收：关键配置缺失时快速失败；Liveness 不依赖 PostgreSQL 而 Readiness 依赖；生产关闭 `synchronize` 和启动时自动迁移；测试可注入隔离配置。
 
-#### B-02 创建 `users` 迁移 — `TODO`
+#### B-02 创建 `users` 迁移 — `TRACKED BY ISSUE-009`
 
 - 前置：D-07、D-11、B-01
 - 动作：由 Migrator 按第 7 节创建表、邮箱规范形式 CHECK、唯一约束和时间字段。
 - 产出：首个可审查迁移。
 - 验收：空库 Migration 成功；Schema 与计划一致；直接非规范邮箱写入和并发重复均被数据库拒绝；Runtime DDL 失败；有前滚修复/降级说明。
 
-#### B-03 实现 UsersModule 持久化边界 — `TODO`
+#### B-03 实现 UsersModule 持久化边界 — `TRACKED BY ISSUE-009`
 
 - 前置：B-02
 - 动作：实现 User Entity/Repository/Service 的窄接口；区分安全 User 视图与含 hash 的内部凭据查询。
 - 产出：创建用户、按规范化邮箱查凭据的内部能力。
 - 验收：普通查询默认不选择/返回 `password_hash`；唯一冲突映射稳定；Repository 使用真实 PostgreSQL 集成测试。
 
-#### B-04 实现密码服务 — `TODO`
+#### B-04 实现密码服务 — `TRACKED BY ISSUE-009`
 
 - 前置：D-08
 - 动作：集中实现已确认的 8–20 ASCII 允许集合和四类字符规则；为每个失败原因定义稳定错误码；固定一个具备许可证、版本和 checksum 的本地完整密码 Blocklist，并记录来源、更新与失败策略；封装 Argon2id hash/verify，基准测试参数并限制并发成本。不得用候选密码或其派生 Hash 调用远程密码检查服务。
 - 产出：可替换、可测试的 `PasswordPolicy` 和 `PasswordHasher`。
 - 验收：覆盖 7/8/20/21 边界和每一种缺失类别；穷举可打印 ASCII 补集，并覆盖空白与 Unicode，证明不允许输入均被拒绝；粘贴输入不被改写；常见密码被拒绝；同一密码产生不同盐值哈希；正确/错误密码验证符合预期；明文和 hash 不写日志；算法、基准、rehash 和未来策略变更行为有记录。
 
-#### B-05 建立最小 Access JWT 会话边界 — `TODO`
+#### B-05 建立最小 Access JWT 会话边界 — `TRACKED BY ISSUE-009`
 
 - 前置：D-03、D-09、D-14、D-15、D-16、B-01
 - 动作：建立 TokenIssuer、JWT Guard、Cookie Adapter 和不安全请求来源 Guard；实现第 6 节精确 JWT/Cookie 配置、JSON-only/Body Limit、Origin/Referer、Fetch Metadata 纵深防御、no-store Header 和密钥/轮换配置边界。
 - 产出：注册与登录可复用的 Access JWT 签发/验证能力。
 - 验收：只接受预期算法/Claims；生产和本地 Profile 的 Cookie 设置/删除属性一致；密钥缺失或过弱时启动失败；不受信/缺失来源、不支持 Content-Type 或过大 Body 安全失败；认证响应 no-store；Token 不进入响应体、Web Storage、缓存或日志。
 
-#### B-06 实现注册与自动登录 API — `TODO`
+#### B-06 实现注册与自动登录 API — `TRACKED BY ISSUE-009`
 
 - 前置：D-05、B-03、B-04、B-05、B-09
 - 动作：创建 DTO、全局输入校验、规范邮箱、密码策略检查、密码哈希和 User 创建；映射校验/Blocklist/重复错误；成功后复用 TokenIssuer，并返回冻结的安全 User + `messageCode` 契约。
 - 产出：`POST /api/v1/auth/sign-up`。
 - 验收：成功 `201` 并建立真实登录态；空值/格式/长度/缺失类别/不允许字符/常见或已泄露密码/未知字段返回安全、可定位的 `400`；重复邮箱为 `409`；响应和日志无 hash/明文/Token；并发重复注册只成功一次。
 
-#### B-07 实现登录 API — `TODO`
+#### B-07 实现登录 API — `TRACKED BY ISSUE-009`
 
 - 前置：D-04、B-03、B-04、B-05、B-09
 - 动作：校验传输结构和 1,024-byte 密码传输上限；规范邮箱；对已有 Hash 验证原样密码且不执行创建规则；未知账户对固定 dummy Argon2id Hash 验证一次；两条路径对外等价；成功设置 Access Cookie。
 - 产出：`POST /api/v1/auth/login`。
 - 验收：已有凭据在未来创建策略变化后仍可登录；未知邮箱和错误密码执行可比验证路径并返回结构相同的 `401 INVALID_CREDENTIALS`；测试不要求精确耗时相等；缺失字段/传输超限返回 `400`；无敏感字段。
 
-#### B-08 实现当前用户、退出与授权保护 — `TODO`
+#### B-08 实现当前用户、退出与授权保护 — `TRACKED BY ISSUE-009`
 
 - 前置：B-03、B-05、B-09
 - 动作：实现 `/auth/me`、幂等退出、精确 Cookie 删除、JWT Guard 和 no-store 私有响应；建立未来受保护业务 Controller 的统一授权入口。
 - 产出：`GET /api/v1/auth/me`、`POST /api/v1/auth/logout` 和可复用 Guard。
 - 验收：有效 Token 返回当前安全 User；缺失/无效/过期 Token 返回 `401`；退出正确清 Cookie；NestJS 是最终授权边界；测试记录首版无主动撤销的限制。
 
-#### B-09 统一异常与响应关联 — `TODO`
+#### B-09 统一异常与响应关联 — `TRACKED BY ISSUE-009`
 
 - 前置：F-03；必须先于 B-06、B-07 完成
 - 动作：冻结稳定成功/错误码；定义数组形式 `fieldErrors`、安全英文回退消息、安全 User 序列化、全局异常 Filter、request ID、日志脱敏、JSON Content-Type/Body Size 处理和 no-store 策略；区分公开与内部错误。
 - 产出：第 6 节错误契约的实现基础。
 - 验收：预期错误稳定且可携带多个字段错误；Web 无需解析文案；密码输入不回显；未知错误不泄露内部信息；日志可按 request ID 关联；认证/私有缓存 Header 可测试。
 
-#### B-10 API 自动化测试 — `TODO`
+#### B-10 API 自动化测试 — `TRACKED BY ISSUE-009`
 
 - 前置：B-06、B-07、B-08、B-09
 - 动作：覆盖 DTO/规范化/密码策略/Argon2id/JWT 单元测试，Repository + PostgreSQL 集成测试，注册登录会话 API E2E。
 - 产出：独立、可重复的 API 测试套件。
 - 验收：覆盖成功、空值、非法/非规范邮箱、7/8/20/21 边界、各缺失类别、允许字符、可打印 ASCII 补集、空白/Unicode 拒绝、固定 Blocklist 行为、未知字段/Content-Type/过大 Body、重复/并发注册、Cookie 设置/删除属性、受信/不受信/缺失 Origin 和 Referer、no-store、JWT Claims/到期、自动登录/恢复/退出/无效 Token、未知用户 dummy-hash、错误密码、旧策略登录兼容、数据库角色边界和敏感字段/日志泄露；测试不依赖顺序。
 
-### Phase 3 — Web 基础与 Navigation
+### Phase 3 — Web 认证演示
 
 #### W-01 集成 MUI v9 与 App Router SSR — `DONE`
 
@@ -395,82 +394,82 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 验收：开发/生产渲染无 hydration/style 警告；主题 token 生效；不混入第二套组件库。
 - 完成证据：2026-08-05，精确 MUI/Emotion 与所需 Web Render-test Pin 已写入根 Lockfile。Root Layout 使用 `v16-appRouter` 的 `AppRouterCacheProvider`、唯一 Client `ThemeProvider`/`CssBaseline` Boundary、MUI CSS Variable，并通过 `next/font` 自托管 Roboto。最小 Server Component 页面消费 Theme Spacing 与 Palette Token。Frozen Install、Web Render Test、Root Lint/Typecheck/Test/Build、Production SSR Style Placement（`head` 中三个 Emotion Style Element，`body` 中为零）及两轮重复 Client-navigation Cycle 均通过，Style Count 保持稳定且 Browser Console 无相关错误。未加入 Custom Palette、第二套 UI System、Auth Form 或 Product Navigation。
 
-#### W-02 创建路由组与应用壳 — `TODO`
+#### W-02 创建最小 Auth 与 Protected Dashboard Shell — `TRACKED BY ISSUE-010`
 
 - 前置：W-01
-- 动作：建立 `(auth)` 与 `(app)` route groups；认证页不显示应用 Navigation，应用页共享 App Shell；建立稳定消息 key、默认英文 catalog 和 locale-aware formatter，用户可见英文不散落硬编码。
-- 产出：Login、Sign Up、Dashboard、Flight Info、User 路由落点。
-- 验收：URL 不包含 route group 名；刷新/直达各路由正常；404、loading/error 边界范围清晰；`html lang` 与默认 locale 一致；切换到其他 catalog 不需改组件结构。
+- 动作：为 `/sign-up`、`/login` 与受保护 `/dashboard` 建立 `(auth)`、`(app)` Route Group；认证页不显示受保护内容。D-26 将 Extensible Navigation、Flight Info/User 页面与 Localization Catalog Boundary 延期。
+- 产出：最小 Login、Sign Up 与受保护 Dashboard Route。
+- 验收：URL 不包含 Route Group 名；刷新/直达正常；404、Loading/Error Boundary 清晰；`html lang` 与英文演示一致；Private Content 不闪现。
 
-#### W-03 实现可扩展 Navigation Bar — `TODO`
+#### W-03 实现可扩展 Navigation Bar — `TODO（后续）`
 
 - 前置：D-10、W-02
 - 动作：用 MUI AppBar/Toolbar/Tabs 或 Buttons 构建桌面导航，用 Drawer/Menu 处理窄屏；导航项来自 typed config，label 使用消息 key。
 - 产出：Dashboard、Flight Info、User 三项导航。
 - 验收：当前页明确高亮；鼠标/键盘/触屏可用；移动端不溢出；语义是链接、刷新后路由正确；未来可附加权限和 feature flag。
 
-#### W-04 建立表单校验与 API 访问边界 — `TODO`
+#### W-04 建立表单校验与 API 访问边界 — `TRACKED BY ISSUE-010`
 
 - 前置：D-08、D-16、W-01、B-09，以及已批准的第 6 节契约
 - 动作：选定表单/Schema 方案；集中浏览器相对 `/api/v1`、仅服务端内部 API Origin、超时、Credentials 和基于 Code 的错误映射；通过结构化约束镜像 `PasswordPolicy` 意图；保留密码粘贴和自动填充。
 - 产出：Auth 表单基础和 typed API adapter。
-- 验收：组件不拼接 URL 或解析 API 文案；内部 Origin 不进入客户端 Bundle；客户端与服务端意图一致但服务端仍为权威；清单覆盖长度/大小写/数字/`$#@%`；网络、超时、解析和多个服务端字段码分别处理；文案来自 Catalog。
+- 验收：组件不拼接 URL 或解析 API 文案；内部 Origin 不进入客户端 Bundle；客户端与服务端意图一致但服务端仍为权威；清单覆盖长度/大小写/数字/`$#@%`；网络、超时、解析和多个服务端字段码分别处理；初始文案保持一致英文，不要求已延期的 Localization Framework。
 
-#### W-05 会话恢复、退出与受保护路由 — `TODO`
+#### W-05 会话恢复、退出与受保护路由 — `TRACKED BY ISSUE-010`
 
 - 前置：D-03、D-09、D-16、B-08、W-02
 - 动作：在服务端 Layout 保护 `(app)`；通过仅服务端内部 API Origin 调用同源 `/auth/me`，转发入站 Cookie 并显式 no-store；实现退出并清洗相对返回路径；NestJS Guard 保持最终权威。
 - 产出：认证表单可使用的真实 App Shell 访问控制。
 - 验收：未登录用户不能访问私有页面；`401` 跳转 Login，而 API 故障显示可恢复错误；过期/无效凭据不循环；私有内容不闪现或进入共享缓存；拒绝开放重定向；浏览器不可读 Token；退出清除完全一致的 Cookie 属性和客户端 User 状态。
 
-#### W-06 实现 Sign Up 页面与自动登录 — `TODO`
+#### W-06 实现 Sign Up 页面与自动登录 — `TRACKED BY ISSUE-010`
 
 - 前置：D-05、W-04、W-05、B-06
 - 动作：构建 email/password 表单、label、password visibility、密码规则清单、loading、禁用重复提交、字段错误、表单级 Alert 和真实成功反馈。
 - 产出：可用的 `/sign-up`。
 - 验收：空值、非法邮箱及每一项密码规则都获得即时、可访问反馈；常见/已泄露密码和 `409` 服务端错误清晰；API 成功设置 Cookie 后自动进入 Dashboard；键盘提交、粘贴、密码管理器、焦点和错误播报可用；不记录密码或读取 Token。
 
-#### W-07 实现 Login 页面 — `TODO`
+#### W-07 实现 Login 页面 — `TRACKED BY ISSUE-010`
 
 - 前置：D-04、W-04、W-05、B-07
 - 动作：构建 email/password 表单及完整请求状态；映射 `INVALID_CREDENTIALS` 为统一提示；登录不执行注册密码组合规则。
 - 产出：可用的 `/login`。
 - 验收：空值/邮箱格式错误就近显示；未知邮箱和密码错误显示同一外部提示；后续策略演进后仍可提交旧密码；提交中不重复请求；成功后进入 Dashboard；密码和 Token 不进入 URL、日志或前端持久化状态。
 
-#### W-08 Web 组件与可访问性测试 — `TODO`
+#### W-08 聚焦 Web 组件与可访问性测试 — `TRACKED BY ISSUE-010`
 
-- 前置：W-03、W-06、W-07
-- 动作：测试表单状态、密码规则清单、API 错误映射、Navigation 当前态/移动态、消息 key 完整性，并执行自动可访问性检查和键盘手测。
+- 前置：W-06、W-07
+- 动作：测试 Auth Form State、密码规则清单、API Error Mapping、Protected Dashboard Behavior、自动 Accessibility 与 Keyboard Flow；更广泛的 Navigation/Localization Matrix 留待后续。
 - 产出：Web 测试套件与手测记录。
 - 验收：关键交互不只由实现细节断言；无严重可访问性违规；布局覆盖窄屏和桌面宽度。
 
 ### Phase 4 — 端到端集成与交付
 
-#### I-01 联调注册链路 — `TODO`
+#### I-01 联调注册链路 — `TRACKED BY ISSUE-010`
 
 - 前置：B-06、W-06
 - 动作：真实 Web → Gateway `/api/v1/*` → API → PostgreSQL 联调；检查 Proxy Trust、Origin/Referer、Content-Type/Body Limit、Cookie/缓存 Header、环境配置、错误码、规范化和密码边界。
 - 验收：注册成功进入 Dashboard；密码规则/Blocklist、重复邮箱、来源失败和 API 故障符合契约；Gateway 不缓存私有/`Set-Cookie` 响应；数据库无明文密码；Web 不可读取 JWT。
 
-#### I-02 联调登录链路 — `TODO`
+#### I-02 联调登录链路 — `TRACKED BY ISSUE-010`
 
 - 前置：B-07、W-07、W-05
 - 动作：联调真实凭据成功/失败、Cookie 设置/删除一致性、跳转/会话/缓存、未知用户 dummy-hash，以及创建策略变化后的旧密码登录。
 - 验收：成功进入 Dashboard；两类错误凭据外部一致；刷新恢复 no-store 会话；过期后无循环地回 Login；API 故障不当作 `401`；返回 URL 保持同源；已有密码不被创建规则拒绝。
 
-#### E2E-01 浏览器主路径测试 — `TODO`
+#### E2E-01 浏览器主路径测试 — `TRACKED BY ISSUE-010`
 
-- 前置：I-01、I-02、W-03
-- 动作：自动化“注册 → 自动进入 Dashboard → 三项 Navigation → 刷新恢复 → 退出 → 重新登录”主路径，并覆盖重复注册、错误凭据和未认证访问。
+- 前置：I-01、I-02
+- 动作：自动化“注册 → 自动进入 Dashboard → 刷新恢复 → 退出 → 重新登录”主路径，并覆盖重复注册、Password-policy Failure、错误凭据和未认证访问。
 - 验收：使用隔离测试数据；可在 CI 重复运行；失败保留安全的截图/trace 且不泄露密码。
 
-#### Q-01 全量质量与安全检查 — `TODO`
+#### Q-01 本地演示质量与安全检查 — `TRACKED BY ISSUE-010`
 
-- 前置：F-01 至 F-08、B-01 至 B-10、W-01 至 W-08、I-01、I-02、E2E-01
-- 动作：运行 Format、lint、typecheck、unit/integration/E2E、production build；检查依赖、Action SHA Pin、Workflow Permission/Event/Cache Trust、Required-check 行为、Repository Rule、Ownership、Proxy/CORS/Origin、Cookie/缓存、数据库权限、敏感日志、响应字段、环境文件、密码数据集/策略和英文 Catalog 完整性。
-- 验收：本地与 GitHub 门禁全部通过；Required Check 不会因 Path Skip 意外保持 Pending；无跳过测试、可变 Workflow Dependency、硬编码密钥或未解释 TODO；可用的 Dependency/CodeQL/Secret Check 无未解决高危问题；风险有 Owner；结果只授权本地交接，不授权公开发布。
+- 前置：F-06、F-07、B-01 至 B-10、W-01、W-02、W-04 至 W-08、I-01、I-02、E2E-01
+- 动作：运行 Format、Lint、Typecheck、Unit/Integration/E2E 与 Production Build；检查 Dependency、Action SHA Pin、Workflow Permission/Event/Cache Trust、Required-check 行为、Proxy/CORS/Origin、Cookie/Cache、Database Privilege、Sensitive Log、Response Field、Environment File 与 Password Dataset/Policy Boundary。完整 F-08 Repository Governance Administration 留待后续。
+- 验收：保留的本地与 GitHub CI Gate 全部通过；Required Check 不会因 Path Skip 意外保持 Pending；无 Skipped Test、Mutable Workflow Dependency、Hard-coded Secret 或无法解释的 Production-path TODO；风险有 Owner；结果只授权本地交接，不授权公开发布。
 
-#### H-01 文档与交接 — `TODO`
+#### H-01 同步文档并交接本地演示 — `TRACKED BY ISSUE-010`
 
 - 前置：Q-01
 - 动作：把实际版本、目录、命令、环境变量、迁移、API 契约和测试方式同步到英文权威 README/AGENTS 等文档；同步所有已有 `_ZH.md` 跟随版并更新计划状态。
@@ -478,7 +477,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### Post-MVP — 已登记的递进任务（非首个切片范围）
 
-以下任务只有在首个纵向切片验收后才启动；每项都应独立 Review、迁移、测试和发布，不能因为列在这里就视为已授权实施。
+以下任务只有在首个纵向切片验收后或获得单独明确授权后才启动。F-08 完整 Repository Governance、W-03 Extensible Navigation 与已延期 Localization Boundary 与 R 系列一起进入本文档 Backlog。每项都应独立 Review、迁移、测试和发布；列出不代表实施授权或远程 Issue 创建授权。
 
 #### R-01 建立 Swagger/OpenAPI 契约和生成客户端 — `TODO（后续）`
 
@@ -522,10 +521,10 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 动作：从权限矩阵推导 Role/Permission/Assignment；实现 deny-by-default NestJS 授权、管理边界和 Web 导航过滤。
 - 验收：隐藏导航不被当作安全；API 独立拒绝提权；角色变更可审计；矩阵、迁移和测试一致。
 
-#### R-08 增加简体中文与语言切换 — `TODO（后续）`
+#### R-08 建立 Product Localization 并增加简体中文 — `TODO（后续）`
 
-- 前置：W-02 消息边界稳定
-- 动作：基于 SEO 与偏好决定 Locale URL/持久化；增加 `zh-CN` Catalog、切换器、Fallback、日期/货币格式和翻译 QA。
+- 前置：H-01 与已批准 Localization Boundary
+- 动作：建立已延期的 Message-catalog Boundary；基于 SEO 与偏好决定 Locale URL/持久化；增加 `zh-CN` Catalog、切换器、Fallback、日期/货币格式和翻译 QA。
 - 验收：英文/简中 Catalog 完整；缺失/多余 Key 导致 CI 失败；偏好刷新后保留；窄屏能容纳更长文案。
 
 #### R-09 容器化应用并建立 GitHub Delivery/运维就绪基线 — `TODO（后续）`
@@ -567,39 +566,23 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 ## 9. 推荐执行顺序与并行点
 
 ```text
-P-01 → P-02 → P-03 → F-01
-F-01 → F-02 ───────────────────────→ W-01 → W-02 → W-03
-     └→ F-03 → F-05 → B-01 ───────┬→ B-02 → B-03
-           │                        └→ B-05
-           └→ B-09
-F-02 + F-03 → F-04 ───────────────→ F-07
-F-04 + F-05 ──────────────────────→ F-06
-F-06 + F-07 ──────────────────────→ F-08
-
-B-03 + B-04 + B-05 + B-09 ───────→ B-06 与 B-07
-B-03 + B-05 + B-09 ──────────────→ B-08
-W-01 + B-09 ─────────────────────→ W-04
-W-02 + B-08 ─────────────────────→ W-05
-B-06 + W-04 + W-05 ──────────────→ W-06 → I-01
-B-07 + W-04 + W-05 ──────────────→ W-07 → I-02
-W-03 + W-06 + W-07 ──────────────→ W-08
-W-03 + I-01 + I-02 ──────────────→ E2E-01
-F-01..F-08 + B-01..B-10 + W-01..W-08 + I/E2E → Q-01 → H-01
+已完成 Foundation：P-01..P-03、F-01..F-04、W-01
+Owner-active：ISSUE-007 / F-05
+ISSUE-007 → ISSUE-009 / MVP-01
+ISSUE-009 → ISSUE-010 / MVP-02
 ```
 
-安全并行方式：Monorepo 根完成后，Web 基础和 API/数据库基础可并行；API 契约冻结后再实现对应前端请求映射。迁移、共享配置和根文件由单一负责人协调，避免并发冲突。
+ISSUE-009 内按 Configuration/Data、Password/JWT Security、Endpoint 与 Test 分层 Commit。ISSUE-010 中 Hook/CI 可在 Backend Review 期间开始，但真实 Web/Session/E2E 验收依赖 ISSUE-009。Migration、英文权威文档与 `_ZH` 跟随版由单一 Owner 协调，避免漂移。
 
 ## 10. 建议拆分为可 Review 的变更集
 
-必须保持以下 Review 与回滚边界；完整清单不是单日承诺：
+在合并 Issue 内保持以下 Review 与回滚边界：
 
-1. **Foundation**：pnpm workspace、Web/API 脚手架、共享配置、本地 PostgreSQL、快速本地 Hook、GitHub PR CI 和仓库治理/安全自动化。
-2. **Backend auth**：users migration、Users/Auth 模块、Access JWT/Cookie、`me`/logout、错误契约、API 测试。
-3. **Web shell**：MUI SSR/theme、route groups、Navigation、路由落点。
-4. **Web auth**：表单 Schema、Sign Up/Login、API adapter、组件测试。
-5. **Integration**：会话恢复与受保护路由、E2E、文档与质量门。
+1. **ISSUE-007 Infrastructure**：本地 PostgreSQL/pgvector 与 Role Boundary；由 Owner 控制该 Issue。
+2. **ISSUE-009 Backend Auth**：Configuration/ORM 与 Migration；Users/Password/JWT Boundary；Endpoint 与真实 PostgreSQL Test。
+3. **ISSUE-010 Local Demo**：同源 Web Boundary 与最小 Auth Route；Sign Up/Login/Session；Hook 与 PR CI；Component/E2E Verification 与同步交接文档。
 
-每个变更集都应可构建、可测试，不把数据库迁移与不相关 UI 修改混在一起。
+每层都应可 Review、可测试。若单个 Diff 不安全，一个 Issue 可通过多个聚焦 PR 关闭；不得仅为保持两个 Issue 而把 Migration 与无关 UI 混在一起。
 
 ## 11. 验收矩阵
 
@@ -625,7 +608,6 @@ F-01..F-08 + B-01..B-10 + W-01..W-08 + I/E2E → Q-01 → H-01
 | 未认证访问                | 返回 Login，不闪现私有内容         | API Guard 返回 `401`                                   | 无变化                      |
 | 不安全请求的来源缺失/非法 | 显示可操作错误，不产生重定向循环   | 在写入前拒绝                                           | 无变化                      |
 | 认证/私有响应缓存         | 私有状态不来自共享缓存             | `Cache-Control: no-store`；Gateway 不缓存 `Set-Cookie` | 无变化                      |
-| 导航                      | 当前项高亮、可键盘操作             | 不需要 API                                             | 无变化                      |
 | API/网络故障              | 可重试的通用错误，表单恢复         | request ID 可追踪                                      | 无部分注册写入              |
 
 ## 12. 风险与控制
@@ -671,7 +653,9 @@ D-20 至 D-24 已确认：GitHub 作为源码/自动化平台；由 `@Donny-Guo`
 
 D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 TypeORM 1.1；P-03 与 `docs/toolchain.md` 记录精确且经 Review 的 Stable Pin 与 Owner-task Installation Boundary。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`F-05` 已于 2026-08-05 在本地完成，提供 Digest-pinned PostgreSQL/pgvector 基础设施、Atomic Bootstrap、分离 Role、Clean-start/Security/Persistence Evidence，以及经 Owner 批准的 B-01/B-02 Boundary。`ISSUE-009` 与 `ISSUE-010` 是剩余依赖已满足的工作，权威 Issue 顺序仍是安全默认值。独立的公开发布门仍然 Blocked，首切片授权不延伸至 Post-MVP 或生产工作。
+D-26 已确认：限时本地演示保留核心认证路径的生产级要求，同时把基础设施之后的实施合并为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02。Localization、Extensible Navigation 与完整 GitHub Governance/Security Administration 是文档化后续工作；该 Scope Compression 不改变 Public-release Gate。
+
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`F-05` 已于 2026-08-05 在本地完成，提供 Digest-pinned PostgreSQL/pgvector 基础设施、Atomic Bootstrap、分离 Role、Clean-start/Security/Persistence Evidence，以及经 Owner 批准的 B-01/B-02 Boundary。仅 `ISSUE-009`/MVP-01 与 `ISSUE-010`/MVP-02 保持开放，并按该顺序实施。GitHub #11-#27 因被取代或延期而关闭，不是 Implementation Evidence。独立 Public-release Gate 仍然 Blocked，首切片授权不延伸至后续或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 
@@ -684,9 +668,10 @@ D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 Typ
 - D-14 至 D-19 的安全、数据和发布边界已接受。
 - D-20 至 D-24 的 GitHub Identity/治理、Hook/CI 权威、受控 CD 边界、MIT License 与辅助 AI Review Policy 已接受。
 - D-25 的 Next.js 16/MUI v9/TypeORM 1.1 Major-line Revision 及其 Owner-task Boundary 已接受。
+- D-26 的两个执行 Issue 合并与文档化延期已接受。
 - 英文权威和 `_ZH` 跟随规则已接受。
 
-Owner 已于 2026-08-02 发出独立的实施开始指令。该指令只授权计划内的首个本地认证切片及其列明的仓库治理工作，不授权 Post-MVP 范围、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或远程更新/关闭任何 GitHub Issue。
+Owner 已于 2026-08-02 发出独立实施开始指令。2026-08-05，Owner 进一步授权 D-26，以及一次性远程改写 #9/#10、关闭 #11-#27，同时排除 #7；这些远程操作已经完成。两次授权均不允许 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，或没有新明确请求的后续远程 Issue Mutation。
 
 ## 15. 实施阶段待提供信息
 
