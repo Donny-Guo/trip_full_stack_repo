@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**Owner 已授权的 Issue 合并于 2026-08-05 完成远程操作；ISSUE-007 仍由 Owner 实施；后续仅 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02 为开放执行 Issue**\
+状态：**Owner 已授权的 Issue 合并于 2026-08-05 完成远程操作；ISSUE-007 已完成；仅 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02 为开放执行 Issue**\
 计划日期：2026-07-30\
 合并日期：2026-08-05\
 范围来源：[`PLANS.md`](./PLANS.md)\
@@ -27,7 +27,7 @@ Owner 将受时间限制的本地认证演示压缩为基础设施之后的两�
 |  顺序 | GitHub Issue                                                                                                    | 状态                | 处置                                             |
 | ----: | --------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------ |
 |   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                    | 已关闭              | 已完成的历史基础与授权工作                       |
-|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)            | 开放                | Owner 正在实施；2026-08-05 整理未修改它          |
+|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)            | 已关闭              | 已完成本地数据库基础设施                         |
 |     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                        | 已关闭              | 已完成 Web UI 基础                               |
 |     9 | [#9 — MVP-01 认证 API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                              | 开放                | #7 之后第一个合并执行 Issue                      |
 |    10 | [#10 — MVP-02 本地演示与质量门](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                    | 开放                | 第二个合并执行 Issue；Blocked by #9              |
@@ -36,7 +36,7 @@ Owner 将受时间限制的本地认证演示压缩为基础设施之后的两�
 安全执行顺序：
 
 ```text
-ISSUE-007 -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
 ```
 
 已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.2.12、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准。
@@ -60,17 +60,17 @@ ISSUE-007 -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
 ## 4. ISSUE-007 — 本地 PostgreSQL 与 pgvector 基础设施
 
 - **GitHub：** [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)
-- **状态：** `OWNER-ACTIVE`
+- **状态：** `DONE`
 - **Plan Task：** `F-05`
-- **修改规则：** 2026-08-05 的 Issue 整理授权明确排除此 Issue
+- **远程状态：** 2026-08-05 按 completed 关闭
 
-Owner 正在完成 Docker Compose PostgreSQL 18/pgvector、Health Check、本地 Provisioner/Migrator/Runtime Role、Extension 验证、Environment Example 与 Least-privilege Evidence。完成前，其远程正文仍为执行契约。
+已合并实现提供 Digest-pinned PostgreSQL 18.4/pgvector 0.8.5 基础设施、仅 Loopback 的 Compose Access、Health Check、具名 Volume、分离的 Provisioner/Migrator/Runtime Role、高权限 Extension Bootstrap 与 Least-privilege Verification。Migration-shaped Transactional DDL Probe 以 Migrator 成功并 Rollback；直接 TCP/SCRAM Runtime Access 成功，而 Runtime DDL/Extension 操作失败。实际 NestJS/TypeORM Connection/Readiness 仍归 ISSUE-009/B-01，首个真实 Application Migration 仍归 ISSUE-009/B-02。
 
 ## 5. ISSUE-009 / MVP-01 — 构建 PostgreSQL-backed 认证 API
 
 - **GitHub：** [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)
 - **状态：** `TODO`
-- **Blocked by：** ISSUE-007
+- **Blocked by：** ISSUE-007（`DONE`）
 - **合并：** 原 #9、#10、#13、#17、#18 与 #20-#24 的 Task Scope
 - **PR Boundary：** 一个 Outcome-focused Backend PR，按配置/数据、安全边界、Endpoint 与 Test 分层 Commit；仅在 Reviewability 要求时拆为多个 PR
 

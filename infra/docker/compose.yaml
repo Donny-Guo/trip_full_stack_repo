@@ -1,0 +1,46 @@
+name: trip-local
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.5-pg18-trixie@sha256:9d2e61c7352b9e9f4798df5fd9a498f043f4cda1cdacc707de3d198650f4321e
+    environment:
+      POSTGRES_DB: ${TRIP_DB_NAME:?Set TRIP_DB_NAME in .env}
+      POSTGRES_USER: ${TRIP_DB_PROVISIONER_USER:?Set TRIP_DB_PROVISIONER_USER in .env}
+      POSTGRES_PASSWORD: ${TRIP_DB_PROVISIONER_PASSWORD:?Set TRIP_DB_PROVISIONER_PASSWORD in .env}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      TRIP_DB_MIGRATOR_USER: ${TRIP_DB_MIGRATOR_USER:?Set TRIP_DB_MIGRATOR_USER in .env}
+      TRIP_DB_MIGRATOR_PASSWORD: ${TRIP_DB_MIGRATOR_PASSWORD:?Set TRIP_DB_MIGRATOR_PASSWORD in .env}
+      TRIP_DB_RUNTIME_USER: ${TRIP_DB_RUNTIME_USER:?Set TRIP_DB_RUNTIME_USER in .env}
+      TRIP_DB_RUNTIME_PASSWORD: ${TRIP_DB_RUNTIME_PASSWORD:?Set TRIP_DB_RUNTIME_PASSWORD in .env}
+    ports:
+      - target: 5432
+        published: ${TRIP_DB_PORT:?Set TRIP_DB_PORT in .env}
+        host_ip: 127.0.0.1
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql
+      - type: bind
+        source: ./postgres/init
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - type: bind
+        source: ./postgres/verify
+        target: /opt/trip-db/verify
+        read_only: true
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          pg_isready --host=127.0.0.1 --port=5432
+          --username="$${POSTGRES_USER}" --dbname="$${POSTGRES_DB}"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    stop_grace_period: 30s
+
+volumes:
+  postgres_data:

@@ -1,6 +1,6 @@
 # Consolidated GitHub Issues for the Local Authentication Demo
 
-Status: **owner-approved issue consolidation completed remotely on 2026-08-05; ISSUE-007 remains owner-active; ISSUE-009/MVP-01 and ISSUE-010/MVP-02 are the only subsequent open execution issues**\
+Status: **owner-approved issue consolidation completed remotely on 2026-08-05; ISSUE-007 is complete; ISSUE-009/MVP-01 and ISSUE-010/MVP-02 are the only open execution issues**\
 Plan date: 2026-07-30\
 Consolidation date: 2026-08-05\
 Scope source: [`PLANS.md`](./PLANS.md)\
@@ -27,7 +27,7 @@ Production-quality in this slice means the retained authentication path keeps it
 | Order | GitHub issue                                                                                                           | State                 | Disposition                                                                                 |
 | ----: | ---------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------- |
 |   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                           | Closed                | Completed historical foundation and authorization                                           |
-|     7 | [#7 — Local PostgreSQL and pgvector infrastructure](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)        | Open                  | Owner-active; untouched by the 2026-08-05 reorganization                                    |
+|     7 | [#7 — Local PostgreSQL and pgvector infrastructure](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)        | Closed                | Completed local database infrastructure                                                     |
 |     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                               | Closed                | Completed Web UI foundation                                                                 |
 |     9 | [#9 — MVP-01 authentication API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                           | Open                  | First consolidated execution issue after #7                                                 |
 |    10 | [#10 — MVP-02 local demo and quality gates](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)               | Open                  | Second consolidated execution issue; blocked by #9                                          |
@@ -36,7 +36,7 @@ Production-quality in this slice means the retained authentication path keeps it
 Safe execution order:
 
 ```text
-ISSUE-007 -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
 ```
 
 The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.2.12, MUI 9.2.0, and TypeORM 1.1.0.
@@ -60,17 +60,17 @@ One consolidated issue may contain layered commits. If a single pull request bec
 ## 4. ISSUE-007 — Local PostgreSQL and pgvector infrastructure
 
 - **GitHub:** [#7](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)
-- **Status:** `OWNER-ACTIVE`
+- **Status:** `DONE`
 - **Plan task:** `F-05`
-- **Mutation rule:** the 2026-08-05 issue-reorganization authorization explicitly excluded this issue
+- **Remote state:** closed as completed on 2026-08-05
 
-The owner is completing the Docker Compose PostgreSQL 18/pgvector infrastructure, health checks, local provisioner/migrator/runtime roles, extension verification, example environment configuration, and least-privilege evidence. Its remote body remains the execution contract until completion.
+The merged implementation provides digest-pinned PostgreSQL 18.4/pgvector 0.8.5 infrastructure, loopback-only Compose access, health checks, a named volume, separate provisioner/migrator/runtime roles, privileged extension bootstrap, and least-privilege verification. A migration-shaped transactional DDL probe succeeds as migrator and rolls back; direct TCP/SCRAM runtime access succeeds while runtime DDL and extension operations fail. Actual NestJS/TypeORM connection/readiness remains in ISSUE-009/B-01, and the first real application migration remains in ISSUE-009/B-02.
 
 ## 5. ISSUE-009 / MVP-01 — Build the PostgreSQL-backed authentication API
 
 - **GitHub:** [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)
 - **Status:** `TODO`
-- **Blocked by:** ISSUE-007
+- **Blocked by:** ISSUE-007 (`DONE`)
 - **Consolidates:** the former task scopes from #9, #10, #13, #17, #18, and #20-#24
 - **PR boundary:** one outcome-focused backend PR with layered configuration/data, security-boundary, endpoint, and test commits; split into multiple PRs only when reviewability requires it
 
