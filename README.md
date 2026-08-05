@@ -1,6 +1,6 @@
 # Trip Agent Full Stack
 
-A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation, minimal Next.js Web and NestJS API applications, and a simple MUI SSR/theme foundation; the authentication flow, database infrastructure, and agent capabilities are planned but not implemented yet.
+A production-oriented travel-agent monorepo. The repository currently contains the workspace foundation, shared TypeScript/ESLint/Prettier engineering configuration, minimal Next.js Web and NestJS API applications, and a simple MUI SSR/theme foundation; the authentication flow, database infrastructure, and agent capabilities are planned but not implemented yet.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
 
@@ -8,9 +8,9 @@ Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authori
 
 As of 2026-08-05:
 
-- Available: the pnpm/Turborepo root, one lockfile, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, and a minimal NestJS 11 API scaffold with process liveness.
-- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-03`/`ISSUE-003` through `ISSUE-005`, and `W-01`/`ISSUE-008`.
-- Next: `ISSUE-006`, `ISSUE-007`, `ISSUE-009`, and `ISSUE-010`, following the authoritative issue order.
+- Available: the pnpm/Turborepo root, one lockfile, one root Prettier policy, shared strict TypeScript and typed ESLint packages, a minimal Next.js 16 Web scaffold with MUI v9 SSR/theme integration, and a minimal NestJS 11 API scaffold with process liveness.
+- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-04`/`ISSUE-003` through `ISSUE-006`, and `W-01`/`ISSUE-008`.
+- Next: `ISSUE-007`, `ISSUE-009`, and `ISSUE-010`, following the authoritative issue order.
 - Not available yet: authentication, PostgreSQL infrastructure, CI/hooks, or business features.
 - Production deployment and public exposure are not authorized.
 
@@ -30,15 +30,15 @@ Travel-provider integration, LangGraph workflows, vector retrieval, refresh-toke
 
 ## Stack
 
-| Area | Choice | State |
-| --- | --- | --- |
-| Workspace | pnpm 11.18.0 + Turborepo 2.10.8 | Available |
-| Web | Next.js 16.2.12 + React 19.2.8 | Minimal scaffold with MUI SSR/theme foundation |
-| UI | MUI Material/Icons 9.2.0 | SSR/CSS-variable foundation available |
-| API | NestJS 11.1.28 REST + TypeScript | Minimal scaffold available |
-| Data | PostgreSQL 18 + pgvector + TypeORM 1.1 | Planned in F-05/B-01 |
-| Agent | TypeScript LangGraph inside the API boundary | Later |
-| Tests | Jest/Supertest, Vitest/React Testing Library, Playwright | API checks and one Web render regression available; browser E2E planned |
+| Area      | Choice                                                   | State                                                                   |
+| --------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | Available with shared TypeScript/ESLint/Prettier policy                 |
+| Web       | Next.js 16.2.12 + React 19.2.8                           | Minimal scaffold with MUI SSR/theme foundation                          |
+| UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable foundation available                                   |
+| API       | NestJS 11.1.28 REST + TypeScript                         | Minimal scaffold available                                              |
+| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Planned in F-05/B-01                                                    |
+| Agent     | TypeScript LangGraph inside the API boundary             | Later                                                                   |
+| Tests     | Jest/Supertest, Vitest/React Testing Library, Playwright | API checks and one Web render regression available; browser E2E planned |
 
 Exact pins, compatibility evidence, and update policy live in [docs/toolchain.md](./docs/toolchain.md).
 
@@ -65,29 +65,32 @@ Run the repository checks from the root:
 
 ```sh
 pnpm format
+pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-At the current scaffold stage, `pnpm format` completes without package tasks; F-04 will add shared formatting tooling. `pnpm test` runs the API unit/HTTP checks and the Web render regression. No database service is required until F-05.
+`pnpm format` formats files with the root Prettier policy, and `pnpm format:check` verifies that policy without mutation. `pnpm test` runs the API unit/HTTP checks and the Web render regression. No database service is required until F-05.
 
 ## Repository layout
 
 ```text
-apps/web/              Minimal Next.js application with MUI theme/render regression
-apps/api/              Minimal NestJS application and liveness endpoint
-docs/toolchain*.md     Exact version and compatibility evidence
-AGENTS*.md             Repository rules for contributors and agents
-PLANS*.md              Decisions, scope, status, and acceptance criteria
-ISSUES*.md             Ordered implementation issue specifications
-package.json           Root commands and runtime constraints
-pnpm-workspace.yaml    Workspace and install policy
-turbo.json             Cross-package task graph
+apps/web/                   Minimal Next.js application with MUI theme/render regression
+apps/api/                   Minimal NestJS application and liveness endpoint
+packages/config-eslint/     Shared typed ESLint configuration
+packages/config-typescript/ Shared strict TypeScript configuration
+docs/toolchain*.md          Exact version and compatibility evidence
+AGENTS*.md                  Repository rules for contributors and agents
+PLANS*.md                   Decisions, scope, status, and acceptance criteria
+ISSUES*.md                  Ordered implementation issue specifications
+package.json                Root commands and runtime constraints
+pnpm-workspace.yaml         Workspace and install policy
+turbo.json                  Cross-package task graph
 ```
 
-Directories such as `infra/docker` and shared packages are created only when their owning task begins.
+Directories such as `infra/docker` are created only when their owning task begins.
 
 ## Architecture guardrails
 

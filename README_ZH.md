@@ -2,15 +2,15 @@
 
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-这是一个面向生产边界设计的旅游 Agent Monorepo。仓库当前包含 Workspace 基础、最小 Next.js Web 应用、最小 NestJS API 应用，以及简单的 MUI SSR/Theme Foundation；认证流程、数据库基础设施和 Agent 能力仍处于计划阶段。
+这是一个面向生产边界设计的旅游 Agent Monorepo。仓库当前包含 Workspace 基础、共享 TypeScript/ESLint/Prettier 工程配置、最小 Next.js Web 应用、最小 NestJS API 应用，以及简单的 MUI SSR/Theme Foundation；认证流程、数据库基础设施和 Agent 能力仍处于计划阶段。
 
 ## 当前状态
 
 截至 2026-08-05：
 
-- 已存在：pnpm/Turborepo 根、单一 Lockfile、带 MUI v9 SSR/Theme Integration 的最小 Next.js 16 Web Scaffold，以及带 Process Liveness 的最小 NestJS 11 API Scaffold。
-- 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-03`/`ISSUE-003` 至 `ISSUE-005`，以及 `W-01`/`ISSUE-008`。
-- 下一步：按照权威 Issue 顺序推进 `ISSUE-006`、`ISSUE-007`、`ISSUE-009` 与 `ISSUE-010`。
+- 已存在：pnpm/Turborepo 根、单一 Lockfile、统一根 Prettier Policy、共享严格 TypeScript 与类型感知 ESLint Package、带 MUI v9 SSR/Theme Integration 的最小 Next.js 16 Web Scaffold，以及带 Process Liveness 的最小 NestJS 11 API Scaffold。
+- 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-04`/`ISSUE-003` 至 `ISSUE-006`，以及 `W-01`/`ISSUE-008`。
+- 下一步：按照权威 Issue 顺序推进 `ISSUE-007`、`ISSUE-009` 与 `ISSUE-010`。
 - 尚未实现：认证、PostgreSQL 基础设施、CI/Hook 或业务功能。
 - 生产部署和公开暴露尚未授权。
 
@@ -30,15 +30,15 @@
 
 ## 技术栈
 
-| 领域 | 选择 | 状态 |
-| --- | --- | --- |
-| Workspace | pnpm 11.18.0 + Turborepo 2.10.8 | 已存在 |
-| Web | Next.js 16.2.12 + React 19.2.8 | 已有带 MUI SSR/Theme Foundation 的最小 Scaffold |
-| UI | MUI Material/Icons 9.2.0 | SSR/CSS-variable Foundation 已存在 |
-| API | NestJS 11.1.28 REST + TypeScript | 最小 Scaffold 已存在 |
-| Data | PostgreSQL 18 + pgvector + TypeORM 1.1 | 计划于 F-05/B-01 |
-| Agent | API 边界内的 TypeScript LangGraph | 后续 |
-| Tests | Jest/Supertest、Vitest/React Testing Library、Playwright | API Check 与一项 Web Render Regression 已存在；Browser E2E 仍在计划中 |
+| 领域      | 选择                                                     | 状态                                                                  |
+| --------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
+| Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy                  |
+| Web       | Next.js 16.2.12 + React 19.2.8                           | 已有带 MUI SSR/Theme Foundation 的最小 Scaffold                       |
+| UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable Foundation 已存在                                    |
+| API       | NestJS 11.1.28 REST + TypeScript                         | 最小 Scaffold 已存在                                                  |
+| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 计划于 F-05/B-01                                                      |
+| Agent     | API 边界内的 TypeScript LangGraph                        | 后续                                                                  |
+| Tests     | Jest/Supertest、Vitest/React Testing Library、Playwright | API Check 与一项 Web Render Regression 已存在；Browser E2E 仍在计划中 |
 
 精确 Pin、兼容性证据与更新策略见 [docs/toolchain_ZH.md](./docs/toolchain_ZH.md)。
 
@@ -65,29 +65,32 @@ pnpm --filter api dev
 
 ```sh
 pnpm format
+pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-当前 Scaffold 阶段，`pnpm format` 会在没有 Package Task 的情况下完成；F-04 将加入共享 Formatting Tooling。`pnpm test` 会运行 API Unit/HTTP Check 与 Web Render Regression。F-05 前不需要数据库服务。
+`pnpm format` 按根 Prettier Policy 格式化文件，`pnpm format:check` 则以不修改文件的方式验证该 Policy。`pnpm test` 会运行 API Unit/HTTP Check 与 Web Render Regression。F-05 前不需要数据库服务。
 
 ## 仓库结构
 
 ```text
-apps/web/              带 MUI Theme/Render Regression 的最小 Next.js 应用
-apps/api/              最小 NestJS 应用与 Liveness Endpoint
-docs/toolchain*.md     精确版本与兼容性证据
-AGENTS*.md             Contributor 与 Agent 的仓库规则
-PLANS*.md              决策、范围、状态与验收标准
-ISSUES*.md             有序实施 Issue 规格
-package.json           根命令与 Runtime 约束
-pnpm-workspace.yaml    Workspace 与安装策略
-turbo.json             跨 Package Task Graph
+apps/web/                   带 MUI Theme/Render Regression 的最小 Next.js 应用
+apps/api/                   最小 NestJS 应用与 Liveness Endpoint
+packages/config-eslint/     共享类型感知 ESLint 配置
+packages/config-typescript/ 共享严格 TypeScript 配置
+docs/toolchain*.md          精确版本与兼容性证据
+AGENTS*.md                  Contributor 与 Agent 的仓库规则
+PLANS*.md                   决策、范围、状态与验收标准
+ISSUES*.md                  有序实施 Issue 规格
+package.json                根命令与 Runtime 约束
+pnpm-workspace.yaml         Workspace 与安装策略
+turbo.json                  跨 Package Task Graph
 ```
 
-`infra/docker` 与共享 Package 等目录仅在所属任务开始时创建。
+`infra/docker` 等目录仅在所属任务开始时创建。
 
 ## 架构边界
 

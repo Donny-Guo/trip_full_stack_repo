@@ -1,22 +1,17 @@
 // @ts-check
-import js from "@eslint/js";
+import createTypeCheckedConfig, { prettierConfig } from "@trip/config-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
-import tseslint from "typescript-eslint";
 
 export default defineConfig([
   globalIgnores(["node_modules/**", "dist/**", "coverage/**"]),
-
+  ...createTypeCheckedConfig(import.meta.dirname),
+  prettierConfig,
   {
-    name: "api/typescript",
+    name: "api/node",
     files: ["src/**/*.ts", "test/**/*.ts"],
-    extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       globals: globals.node,
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
   },
 
