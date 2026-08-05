@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03 与 F-01 至 F-03 已在本地完成，下一波为依赖已满足的 ISSUE-006 至 ISSUE-010**\
+状态：**D-01 至 D-25 已确认；首切片已于 2026-08-02 授权实施；P-03、F-01 至 F-03 与 W-01 已在本地完成，当前依赖已满足的工作还包括 ISSUE-006、ISSUE-007、ISSUE-009 与 ISSUE-010**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户提供的“创建项目目录、Sign Up/Login、Navigation、User 表和 Auth API”  
@@ -10,7 +10,7 @@
 
 授权排除项：Post-MVP 工作、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及远程更新/关闭任何 GitHub Issue 仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与原生 ESLint Flat Configuration。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、原生类型感知 ESLint、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。MUI、TypeORM、自动化、Hook、迁移、基础设施配置、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8、原生 ESLint Flat Configuration、精确的 MUI v9 App Router SSR/CSS-variable Theme Foundation，以及一项 Vitest/React Testing Library Render Regression。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、原生类型感知 ESLint、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。TypeORM、自动化、Hook、迁移、基础设施配置、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -248,7 +248,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 动作：从 Primary Source 维护 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 16、React/React DOM、MUI v9 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 1.1、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
 - 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
 - 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 D-25 的 Next.js 16/MUI v9/TypeORM 1.1 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-02 证明已安装 Next Line，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称尚不存在的下游检查。
-- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence。MUI SSR 与 TypeORM/PostgreSQL Runtime Evidence 仍由 W-01 与 B-01 负责。
+- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence；W-01 于 2026-08-05 提供 MUI v9 Installation、SSR、Hydration、Navigation 与 Render-test Evidence。TypeORM/PostgreSQL Runtime Evidence 仍由 B-01 负责。
 
 ### Phase 1 — Monorepo 与本地环境
 
@@ -385,12 +385,13 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### Phase 3 — Web 基础与 Navigation
 
-#### W-01 集成 MUI v9 与 App Router SSR — `TODO`
+#### W-01 集成 MUI v9 与 App Router SSR — `DONE`
 
 - 前置：F-02
 - 动作：加入精确的 `@mui/material@9.2.0`、`@mui/icons-material@9.2.0`、`@mui/material-nextjs@9.1.1` 与已批准 Emotion Pin；配置来自 `v16-appRouter` 的 `AppRouterCacheProvider`、ThemeProvider、字体与 CSS Variable Strategy。当 MUI `component` Prop 在 Next.js 16 Boundary 下接收 `next/link` 时，使用 Local Client Wrapper。
 - 产出：稳定无闪烁的应用根 layout 和主题。
 - 验收：开发/生产渲染无 hydration/style 警告；主题 token 生效；不混入第二套组件库。
+- 完成证据：2026-08-05，精确 MUI/Emotion 与所需 Web Render-test Pin 已写入根 Lockfile。Root Layout 使用 `v16-appRouter` 的 `AppRouterCacheProvider`、唯一 Client `ThemeProvider`/`CssBaseline` Boundary、MUI CSS Variable，并通过 `next/font` 自托管 Roboto。最小 Server Component 页面消费 Theme Spacing 与 Palette Token。Frozen Install、Web Render Test、Root Lint/Typecheck/Test/Build、Production SSR Style Placement（`head` 中三个 Emotion Style Element，`body` 中为零）及两轮重复 Client-navigation Cycle 均通过，Style Count 保持稳定且 Browser Console 无相关错误。未加入 Custom Palette、第二套 UI System、Auth Form 或 Product Navigation。
 
 #### W-02 创建路由组与应用壳 — `TODO`
 
