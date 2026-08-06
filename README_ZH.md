@@ -2,7 +2,7 @@
 
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-这是一个面向生产边界设计的旅游 Agent Monorepo。当前 ISSUE-009 Worktree 包含 Workspace 基础、Next.js/MUI Web Scaffold，以及由 TypeORM 与本地 PostgreSQL/pgvector 支撑并使用分离数据库 Role 的 NestJS ESM 认证 API。Web 认证页面与 Agent 能力属于后续工作。
+这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Branch 包含 Workspace 基础、Next.js/MUI Web Scaffold，以及已合并的 ISSUE-009 NestJS ESM 认证 API；该 API 由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。Web 认证页面与 Agent 能力属于后续工作。
 
 ## 当前状态
 
@@ -10,7 +10,7 @@
 
 - 当前 Worktree 已存在：pnpm/Turborepo 根、共享工程配置、Next.js 16/MUI v9 Web Scaffold，以及带 Liveness/Readiness、TypeORM 1.1、显式 `users` Migration、Argon2id、注册/登录、`/auth/me`、退出与 15 分钟 HttpOnly JWT Cookie 的 NestJS 11 ESM API。
 - 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`，以及 `W-01`/`ISSUE-008`。
-- 当前顺序：完成并合并 `ISSUE-009`/`MVP-01`，再实施 `ISSUE-010`/`MVP-02`。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
+- 当前顺序：`ISSUE-009`/`MVP-01` 已合并并按 completed 关闭；下一步实施 `ISSUE-010`/`MVP-02`。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
 - 尚未实现：Web 认证页面/受保护 Dashboard、CI/Hook、Agent 能力或旅行领域业务功能。
 - 生产部署和公开暴露尚未授权。
 
@@ -23,11 +23,11 @@
 - Email/Password 注册与登录。
 - 注册成功后通过同源 HttpOnly Cookie 中的 15 分钟 Access JWT 自动登录。
 - Session 恢复、退出和受保护 Web Route。
-- 用于证明 Session Restore 与 Route Protection 的受保护 Dashboard。
+- 刻意精简的受保护 Dashboard，用于证明 Session Restore、Logout 与 Route Protection；只要求可访问的 Route Identity 与 Logout Control。
 - PostgreSQL User Model、API 权威校验及自动化测试。
 - 快速本地 Husky/lint-staged/commitlint Hook 与最小确定性 Pull-request CI。
 
-Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub Governance/Security Administration、旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为文档化后续工作。
+Dashboard Product Content/Design、Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub Governance/Security Administration、旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为文档化后续工作。
 
 ## 技术栈
 
@@ -36,7 +36,7 @@ Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub G
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy                  |
 | Web       | Next.js 16.2.12 + React 19.2.8                           | 已有带 MUI SSR/Theme Foundation 的最小 Scaffold                       |
 | UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable Foundation 已存在                                    |
-| API       | NestJS 11.1.28 REST + TypeScript                         | ISSUE-009 Worktree 已提供 ESM 认证 API                                |
+| API       | NestJS 11.1.28 REST + TypeScript                         | 已提供合并后的 ESM 认证 API                                           |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 已有显式 Migration 及分离 Runtime/Migrator Connection                 |
 | Agent     | API 边界内的 TypeScript LangGraph                        | 后续                                                                  |
 | Tests     | Jest/Supertest、Vitest/React Testing Library、Playwright | API Check 与一项 Web Render Regression 已存在；Browser E2E 仍在计划中 |

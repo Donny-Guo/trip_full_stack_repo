@@ -1,6 +1,6 @@
 # Trip Agent Full Stack
 
-A production-oriented travel-agent monorepo. The current ISSUE-009 worktree contains the workspace foundation, a Next.js/MUI Web scaffold, and a NestJS ESM authentication API backed by TypeORM and local PostgreSQL/pgvector with separated database roles. Web authentication pages and agent capabilities follow in later work.
+A production-oriented travel-agent monorepo. The current branch contains the workspace foundation, a Next.js/MUI Web scaffold, and the merged ISSUE-009 NestJS ESM authentication API backed by TypeORM and local PostgreSQL/pgvector with separated database roles. Web authentication pages and agent capabilities follow in later work.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
 
@@ -10,7 +10,7 @@ As of 2026-08-06:
 
 - Available in this worktree: the pnpm/Turborepo root, shared engineering configuration, the Next.js 16/MUI v9 Web scaffold, and a NestJS 11 ESM API with liveness/readiness, TypeORM 1.1, an explicit `users` migration, Argon2id password hashing, sign-up/login, `/auth/me`, logout, and a 15-minute HttpOnly JWT cookie.
 - Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-05`/`ISSUE-003` through `ISSUE-007`, and `W-01`/`ISSUE-008`.
-- Current order: finish and merge consolidated `ISSUE-009`/`MVP-01`, then implement `ISSUE-010`/`MVP-02`. GitHub issues #11-#27 are closed as superseded or deferred, not as implementation evidence.
+- Current order: `ISSUE-009`/`MVP-01` is merged and closed as completed; implement `ISSUE-010`/`MVP-02` next. GitHub issues #11-#27 are closed as superseded or deferred, not as implementation evidence.
 - Not available yet: Web authentication pages/protected Dashboard, CI/hooks, agent capabilities, or travel business features.
 - Production deployment and public exposure are not authorized.
 
@@ -23,11 +23,11 @@ The time-limited local demo will provide:
 - Email/password sign-up and login.
 - Automatic login after registration using a 15-minute access JWT in a same-origin HttpOnly cookie.
 - Session restore, logout, and protected Web routes.
-- A protected Dashboard proving session restore and route protection.
+- An intentionally sparse protected Dashboard proving session restore, logout, and route protection; only accessible route identity and a logout control are required.
 - A PostgreSQL-backed User model with API-authoritative validation and automated tests.
 - Fast local Husky/lint-staged/commitlint hooks and minimum deterministic pull-request CI.
 
-Extensible navigation, Flight Info/User pages, localization, full GitHub governance/security administration, travel-provider integration, LangGraph workflows, vector retrieval, refresh-token rotation, Redis, and production deployment are documented later work.
+Dashboard product content and design, extensible navigation, Flight Info/User pages, localization, full GitHub governance/security administration, travel-provider integration, LangGraph workflows, vector retrieval, refresh-token rotation, Redis, and production deployment are documented later work.
 
 ## Stack
 
@@ -36,7 +36,7 @@ Extensible navigation, Flight Info/User pages, localization, full GitHub governa
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | Available with shared TypeScript/ESLint/Prettier policy                 |
 | Web       | Next.js 16.2.12 + React 19.2.8                           | Minimal scaffold with MUI SSR/theme foundation                          |
 | UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable foundation available                                   |
-| API       | NestJS 11.1.28 REST + TypeScript                         | ESM authentication API available in the ISSUE-009 worktree              |
+| API       | NestJS 11.1.28 REST + TypeScript                         | Merged ESM authentication API available                                 |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Explicit migration and separated runtime/migrator connections available |
 | Agent     | TypeScript LangGraph inside the API boundary             | Later                                                                   |
 | Tests     | Jest/Supertest, Vitest/React Testing Library, Playwright | API checks and one Web render regression available; browser E2E planned |
