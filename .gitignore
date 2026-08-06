@@ -6,6 +6,11 @@ node_modules/
 .env
 .env.*
 !.env.example
+!apps/api/.env.runtime.example
+!apps/api/.env.migration.example
+!apps/api/test/config/.env.compose.example
+!apps/api/test/config/.env.runtime.example
+!apps/api/test/config/.env.migration.example
 .envrc
 *.pem
 

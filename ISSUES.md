@@ -20,7 +20,7 @@ Authority order:
 
 On 2026-08-05, the owner explicitly authorized rewriting GitHub issues #9 and #10 and closing #11 through #27 while leaving #7 untouched. The remote reorganization is complete. That authorization does not permit later issue creation, editing, reopening, or closure without another explicit owner request.
 
-Production-quality in this slice means the retained authentication path keeps its security, data-integrity, accessibility, migration, testing, hook, and CI requirements. It does not mean the application is approved for public exposure or production deployment.
+MVP quality in this slice means the retained authentication path keeps the durable controls required for real PostgreSQL persistence, password hashing, cookie sessions, database uniqueness, and safe API failures. Exhaustive pre-release hardening remains deferred, and the application is not approved for public exposure or production deployment.
 
 ## 2. Current remote state and order
 
@@ -69,42 +69,43 @@ The merged implementation provides digest-pinned PostgreSQL 18.4/pgvector 0.8.5 
 ## 5. ISSUE-009 / MVP-01 — Build the PostgreSQL-backed authentication API
 
 - **GitHub:** [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)
-- **Status:** `TODO`
-- **Blocked by:** ISSUE-007 (`DONE`)
+- **Status:** `IN PROGRESS`
+- **Blocked by:** none; ISSUE-007 is `DONE`
 - **Consolidates:** the former task scopes from #9, #10, #13, #17, #18, and #20-#24
 - **PR boundary:** one outcome-focused backend PR with layered configuration/data, security-boundary, endpoint, and test commits; split into multiple PRs only when reviewability requires it
 
 ### Outcome
 
-Deliver a tested NestJS authentication API backed by the Docker Compose PostgreSQL service, with production-quality persistence, password, JWT, cookie, validation, request-security, and failure boundaries.
+Deliver a working, tested NestJS authentication API backed by the Docker Compose PostgreSQL service, with explicit migrations, safe persistence, Argon2id password hashing, a short-lived HttpOnly JWT cookie, and the minimum request-security boundaries needed by the local demo.
 
 ### Work
 
 - [ ] Add fail-fast API configuration, TypeORM 1.1 data sources, dependency-aware database readiness, explicit migration commands, and runtime/migrator separation.
 - [ ] Create the `users` migration with UUID identity, canonical unique email, non-default-selected `password_hash`, and UTC timestamps.
 - [ ] Implement narrow Users repository/service boundaries without returning ORM entities or credential fields.
-- [ ] Implement email normalization, the approved PasswordPolicy, a pinned licensed/checksummed local compromised-password blocklist, Argon2id hashing, dummy-hash verification, and sensitive-value redaction.
+- [ ] Implement email normalization, the approved PasswordPolicy, Argon2id hashing, dummy-hash verification, and sensitive-value redaction. Do not add a local blocklist or remote password lookup in this MVP.
 - [ ] Add stable API errors and field codes, request IDs, global input validation, JSON-only/body limits, no-store headers, and exact trusted Origin/Referer enforcement for unsafe methods.
 - [ ] Implement the approved HS256 access-JWT claims and validation, shared token issuance, local/production cookie profiles, and exact cookie deletion.
 - [ ] Implement `POST /api/v1/auth/sign-up`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, and a reusable NestJS JWT guard.
-- [ ] Add unit and real-PostgreSQL integration tests for the complete critical contract and negative security paths.
+- [ ] Add focused unit and real-PostgreSQL integration tests for the core success path and highest-value failure boundaries; synchronize README, API documentation, environment examples, and English/Chinese authority documents.
 
 ### Acceptance
 
 - [ ] A clean database migrates explicitly; application startup never synchronizes or runs migrations.
-- [ ] The runtime database role cannot perform DDL or extension management.
+- [ ] The runtime role can perform only required application DML and cannot perform DDL or extension management; TypeORM never installs extensions.
 - [ ] Sign-up creates one real user, returns `201`, and sets the approved 15-minute HttpOnly JWT cookie.
-- [ ] Canonical duplicate and concurrent registration are database-safe and map to stable `409` responses.
-- [ ] Valid login succeeds; unknown email and wrong password execute the intended verification paths and return the same `401 INVALID_CREDENTIALS` shape.
+- [ ] Canonical duplicate registration is enforced by PostgreSQL and maps to `409`; one focused concurrent-registration test proves only one request succeeds.
+- [ ] Valid login succeeds; unknown email and wrong password return the same `401 INVALID_CREDENTIALS` contract, with one focused test proving the dummy-hash path.
 - [ ] `/auth/me` returns only safe User fields; logout is idempotent and clears the exact cookie tuple.
-- [ ] Invalid JWT algorithms, signatures, claims, and expiration fail safely.
-- [ ] Unsupported media types, unknown fields, oversized bodies, and untrusted or missing request provenance fail before mutation.
-- [ ] Passwords, hashes, JWTs, and connection secrets never appear in responses, logs, screenshots, or test artifacts.
-- [ ] API format, lint, typecheck, unit/integration tests, and production build pass.
+- [ ] Focused JWT tests reject a tampered signature, expiration, invalid algorithm, and invalid required claims.
+- [ ] Focused request tests reject an unknown field, an oversized body, an unsupported media type, and missing or untrusted provenance before mutation.
+- [ ] Passwords, hashes, JWTs, cookies, and connection secrets do not appear in public response bodies or normal application logs.
+- [ ] API format, lint, typecheck, focused unit/integration tests, and production build pass.
+- [ ] README, API runbook/contracts, environment examples, and English/Chinese issue/plan documentation describe what the implementation actually does.
 
-**Evidence:** migration/role verification, API contract report, JWT/cookie/provenance matrix, concurrent-registration test, dummy-hash-path evidence, sanitized log scan, and root/API quality-command output.
+**Minimum evidence:** clean migration `show/run/show`; focused unit and real-PostgreSQL integration reports; API format/lint/typecheck/build output; and a sanitized Postman or curl sign-up -> `/auth/me` -> logout -> login smoke result.
 
-**Non-goals:** Web pages, refresh tokens, Redis, email verification, password reset, roles, public rate limiting, Swagger/OpenAPI, production deployment, or public exposure.
+**Deliberately deferred:** compromised/common-password blocklist and assets; exhaustive password/JWT/provenance/database/log matrices; formal Argon2 p95/peak-memory benchmarking; Web pages, refresh tokens, Redis, email verification, password reset, roles, public rate limiting, Swagger/OpenAPI, production deployment, and public exposure.
 
 ## 6. ISSUE-010 / MVP-02 — Ship the local sign-up/login demo and developer quality gates
 

@@ -8,6 +8,8 @@
 
 D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`，以及 `W-01`/`ISSUE-008` 已在本地完成。2026-08-05，D-26 在不削弱保留核心控制的前提下压缩限时本地演示：之后只实施 `ISSUE-009`/`MVP-01`，再实施 `ISSUE-010`/`MVP-02`。GitHub #11 至 #27 因被取代或延期而关闭，不是实施完成证据。F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 仍归 B-01，首个真实 Application Migration 仍归 B-02。
 
+2026-08-06，Owner 将 `ISSUE-009` 收窄为务实的本地 MVP，并明确移除 Compromised/Common-password Screening 及其 Vendored Blocklist Asset。该本地 MVP 使用聚焦验收证据，不要求穷举 Matrix 或正式 Argon2 Capacity Benchmark。公开暴露仍由独立 Gate 管理。
+
 2026-08-03，Owner 通过 D-25 明确取代此前的 Web/ORM 版本约束：使用当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线，同时保留 PostgreSQL 18 和已选测试系列。经 Review 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。将这些视为明确约束：使用精确 Stable Pin，不得静默替换其他 Major 或 Prerelease，并将版本升级与 Feature Work 隔离。已安装 Dependency 立即迁移；尚未进入所属实施任务的 Dependency 在该任务开始时采用新 Pin。每季度、公开暴露前，以及出现严重且无补丁的安全或兼容性阻断时重新 Review Support/Compatibility。再次变更 Major 仍需 Owner 明确批准。
 
 该授权不包含 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更或远程创建 `ISSUE-028` 及之后的 Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata。2026-08-05，Owner 明确授权已完成的 #9/#10 改写与 #11-#27 关闭，同时排除 #7。其他远程 Issue 操作都需单独明确请求。
@@ -106,7 +108,7 @@ D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 - 创建密码只接受 8–20 个 ASCII 字符，范围为 `A-Z`、`a-z`、`0-9`、`$#@%`，且至少各含一个大写、小写、数字和 `$#@%`。绝不 Trim/改写密码。允许 Paste/Autofill；提交前显示简明清单，失败后给出具体字段错误。
 - 规则集中在一个可测试 `PasswordPolicy` 边界，通过意图共享；Web 不导入 Nest Runtime DTO，Component/Controller 不复制 Regex。Login 不重用当前创建密码的组成规则，而是原样验证已有用户提交值。
 - 后续放宽长度/字符集时修改 Policy、UI Copy、Contract 和边界测试，不迁移 User Table。更严格规则仅作用于新建/重置密码，除非另行批准 Re-enrollment Plan。
-- 使用固定版本、有 License、带 Checksum 的本地 Server-side Blocklist 拒绝常见/已泄露完整密码；记录来源、更新周期与创建密码时的 Fail-closed 行为。绝不向远程服务发送候选密码或派生 Hash。
+- 本地 MVP 不实现 Compromised/Common-password Screening、Vendored Blocklist 或远程密码查询。仅能通过另行批准的公开发布前 Hardening Decision 重新评估该能力；绝不向远程服务发送候选密码或其派生 Hash。
 - 只存 Salted Argon2id Hash。参数达到当时 OWASP 下限并在目标 Runtime Benchmark。禁止明文/可逆加密及日志记录密码/Hash。Pepper 如有，放在 PostgreSQL 外的 Managed Secret。
 - 并发重复注册以数据库唯一约束为边界；Precheck 只改善 UX。
 - 未知邮箱和错误密码统一返回 `INVALID_CREDENTIALS`。未知账户路径对固定 Dummy Argon2id Hash 验证一次。测试只断言 Dummy 路径执行和公开 Shape 一致，不断言精确耗时。Login 另设与创建策略无关的宽松 Transport Cap。
