@@ -12,11 +12,20 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "turbo run lint",
-    "prepare": "node -e \"\"",
     "test": "turbo run test",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "prepare": "node .husky/install.mjs",
+    "test:unit": "pnpm --filter api test:unit && pnpm --filter web test",
+    "test:integration": "pnpm --filter api test:config:generate && pnpm --filter api test:integration:local",
+    "test:local": "bash ./scripts/run-tests-local.sh",
+    "test:e2e": "pnpm --filter web test:e2e:local",
+    "docs:check": "node ./scripts/check-docs.mjs"
   },
   "devDependencies": {
+    "@commitlint/cli": "21.2.1",
+    "@commitlint/config-conventional": "21.2.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.3.0",
     "prettier": "3.9.6",
     "turbo": "2.10.8",
     "typescript": "5.9.3"

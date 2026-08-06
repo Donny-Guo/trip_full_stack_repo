@@ -1,0 +1,157 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: "true"
+  HUSKY: "0"
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      WEB_INTERNAL_API_ORIGIN: http://localhost:3001
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check pull-request title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Check documentation policy
+        run: pnpm docs:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Run unit and component tests
+        run: pnpm test:unit
+
+      - name: Build production applications
+        run: pnpm build
+
+      - name: Confirm internal API origin is absent from client chunks
+        run: |
+          if rg --fixed-strings \
+            "http://localhost:3001" apps/web/.next/static; then
+            echo "Server-only API origin leaked into a client chunk." >&2
+            exit 1
+          fi
+
+  api-integration:
+    name: api-integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run the uncached root test graph with real PostgreSQL
+        run: pnpm test:local
+
+  browser-e2e:
+    name: browser-e2e
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
+      - name: Run the critical browser journey
+        run: pnpm --filter web test:e2e:local
+
+  ci-required:
+    name: ci-required
+    if: always()
+    needs:
+      - quality
+      - api-integration
+      - browser-e2e
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every CI lane
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          API_INTEGRATION_RESULT: ${{ needs.api-integration.result }}
+          BROWSER_E2E_RESULT: ${{ needs.browser-e2e.result }}
+        run: |
+          if [[ "$QUALITY_RESULT" != "success" ||
+                "$API_INTEGRATION_RESULT" != "success" ||
+                "$BROWSER_E2E_RESULT" != "success" ]]; then
+            echo "One or more required CI lanes did not succeed." >&2
+            exit 1
+          fi

@@ -2,44 +2,44 @@
 
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-这是一个面向生产边界设计的旅游 Agent Monorepo。当前 ISSUE-009 Worktree 包含 Workspace 基础、Next.js/MUI Web Scaffold，以及由 TypeORM 与本地 PostgreSQL/pgvector 支撑并使用分离数据库 Role 的 NestJS ESM 认证 API。Web 认证页面与 Agent 能力属于后续工作。
+这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Worktree 包含 Workspace 基础、已在本地验证的 ISSUE-010 Next.js/MUI 认证路径，以及已合并的 ISSUE-009 NestJS ESM 认证 API；该 API 由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。Agent 能力属于后续工作。
 
 ## 当前状态
 
 截至 2026-08-06：
 
-- 当前 Worktree 已存在：pnpm/Turborepo 根、共享工程配置、Next.js 16/MUI v9 Web Scaffold，以及带 Liveness/Readiness、TypeORM 1.1、显式 `users` Migration、Argon2id、注册/登录、`/auth/me`、退出与 15 分钟 HttpOnly JWT Cookie 的 NestJS 11 ESM API。
-- 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`，以及 `W-01`/`ISSUE-008`。
-- 当前顺序：完成并合并 `ISSUE-009`/`MVP-01`，再实施 `ISSUE-010`/`MVP-02`。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
-- 尚未实现：Web 认证页面/受保护 Dashboard、CI/Hook、Agent 能力或旅行领域业务功能。
+- 当前 Worktree 已存在：pnpm/Turborepo 根、共享工程配置、Next.js 16/MUI v9 注册与登录页、服务端保护的精简 Dashboard、Session Restore/Logout、Session-aware 404、本地 Hook、以 Immutable SHA 固定的 PR CI 配置，以及带 PostgreSQL Boundary 的 NestJS 11 认证 API。
+- 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`、`W-01`/`ISSUE-008`，以及 ISSUE-010 的实现与本地验证。
+- 当前顺序：`ISSUE-009`/`MVP-01` 已合并并按 completed 关闭。`ISSUE-010`/`MVP-02` 仍开放，等待正常 PR CI、Review、Merge 与远程关闭。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
+- 尚未实现：Agent 能力、旅行领域业务功能、Product Dashboard 内容或生产部署。
 - 生产部署和公开暴露尚未授权。
 
 权威范围与状态见 [PLANS.md](./PLANS.md)。
 
 ## 首个切片
 
-限时本地演示将提供：
+限时本地演示已提供：
 
 - Email/Password 注册与登录。
 - 注册成功后通过同源 HttpOnly Cookie 中的 15 分钟 Access JWT 自动登录。
 - Session 恢复、退出和受保护 Web Route。
-- 用于证明 Session Restore 与 Route Protection 的受保护 Dashboard。
+- 刻意精简的受保护 Dashboard，用于证明 Session Restore、Logout 与 Route Protection；只要求可访问的 Route Identity 与 Logout Control。
 - PostgreSQL User Model、API 权威校验及自动化测试。
 - 快速本地 Husky/lint-staged/commitlint Hook 与最小确定性 Pull-request CI。
 
-Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub Governance/Security Administration、旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为文档化后续工作。
+Dashboard Product Content/Design、Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub Governance/Security Administration、旅行供应商集成、LangGraph Workflow、向量检索、Refresh-token Rotation、Redis 和生产部署均为文档化后续工作。
 
 ## 技术栈
 
-| 领域      | 选择                                                     | 状态                                                                  |
-| --------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
-| Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy                  |
-| Web       | Next.js 16.2.12 + React 19.2.8                           | 已有带 MUI SSR/Theme Foundation 的最小 Scaffold                       |
-| UI        | MUI Material/Icons 9.2.0                                 | SSR/CSS-variable Foundation 已存在                                    |
-| API       | NestJS 11.1.28 REST + TypeScript                         | ISSUE-009 Worktree 已提供 ESM 认证 API                                |
-| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 已有显式 Migration 及分离 Runtime/Migrator Connection                 |
-| Agent     | API 边界内的 TypeScript LangGraph                        | 后续                                                                  |
-| Tests     | Jest/Supertest、Vitest/React Testing Library、Playwright | API Check 与一项 Web Render Regression 已存在；Browser E2E 仍在计划中 |
+| 领域      | 选择                                                     | 状态                                                              |
+| --------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
+| Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy              |
+| Web       | Next.js 16.2.12 + React 19.2.8                           | 注册/登录、受保护精简 Dashboard、Logout 与 Session-aware 404      |
+| UI        | MUI Material/Icons 9.2.0                                 | App Router SSR/CSS-variable Theme 与可访问认证表单                |
+| API       | NestJS 11.1.28 REST + TypeScript                         | 已提供合并后的 ESM 认证 API                                       |
+| Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 已有显式 Migration 及分离 Runtime/Migrator Connection             |
+| Agent     | API 边界内的 TypeScript LangGraph                        | 后续                                                              |
+| Tests     | Jest/Supertest、Vitest/React Testing Library、Playwright | 本地已验证 60 个 API Test、73 个 Web Test 与 6 条 Browser Journey |
 
 精确 Pin、兼容性证据与更新策略见 [docs/toolchain_ZH.md](./docs/toolchain_ZH.md)。
 
@@ -49,10 +49,11 @@ Extensible Navigation、Flight Info/User 页面、Localization、完整 GitHub G
 
 ```sh
 pnpm install --frozen-lockfile
+test -e apps/web/.env.local || cp apps/web/.env.example apps/web/.env.local
 pnpm --filter web dev
 ```
 
-打开 http://localhost:3000。当前页面展示最小 MUI SSR/Theme Proof，不包含 Product Navigation 或 Custom Branding。
+打开 http://localhost:3000。使用 `/sign-up` 或 `/login`；已认证用户进入刻意精简的 `/dashboard`。
 
 启动本地 PostgreSQL。若 `.env` 不存在，请从 `.env.example` 创建，但不要覆盖已有文件。将每个空 Password 填为不同的 64 字符小写 Hex 开发值（例如运行三次 `openssl rand -hex 32`），并保持该文件被忽略且 Mode 为 `0600`。
 
@@ -94,27 +95,35 @@ pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:local
+pnpm test:e2e
 pnpm build
+pnpm docs:check
 ```
 
-`pnpm format` 按根 Prettier Policy 格式化文件，`pnpm format:check` 以不修改文件的方式验证。API Integration Test 需要 PostgreSQL。从 `apps/api/test/config/*.example` 创建被忽略的 Test 配置后，以下命令会创建全新隔离数据库、执行 Migration `show/run/show`、运行 Integration Suite，并只删除 Test Project 与 Volume：
+`pnpm format` 按根 Prettier Policy 格式化文件，`pnpm format:check` 以不修改文件的方式验证。`pnpm test:local` 会在三个 Test-only 环境文件都不存在时自动生成它们、限制为 `0600`、创建全新隔离数据库、执行 Migration `show/run/show`、运行 API 与 Web Suite，并只删除其 Test Project 与 Volume；若仅存在部分 Test 配置则拒绝覆盖。
+
+第一次运行本地 Browser Test 前，安装固定版本的 Chromium Runtime：
 
 ```sh
-pnpm --filter api test:integration:local
+pnpm --filter web exec playwright install chromium
+pnpm test:e2e
 ```
 
-普通 `pnpm test` 假定所需 Service 与 Migration 已可用。
+E2E Wrapper 使用隔离的 Web/API Port `43000`/`43001`、位于 `55432` 的独立 PostgreSQL Project，并额外执行 API 不可用场景的 Build。开发仍使用 `3000`/`3001`。普通 `pnpm test` 假定所需 Service 与 Migration 已可用；Clean Root Verification 应优先使用 `pnpm test:local`。
 
 ## 仓库结构
 
 ```text
-apps/web/                   带 MUI Theme/Render Regression 的最小 Next.js 应用
+apps/web/                   Next.js/MUI 认证 UI、受保护 Route 与 Browser Test
 apps/api/                   NestJS ESM 认证 API、Migration 与 Test
 packages/config-eslint/     共享类型感知 ESLint 配置
 packages/config-typescript/ 共享严格 TypeScript 配置
 infra/docker/               本地 PostgreSQL/pgvector Compose、Bootstrap 与 Verification
 docs/toolchain*.md          精确版本与兼容性证据
 docs/api/                   认证 Contract 与本地 Runbook
+.github/                    Least-privilege Pull-request CI 配置
+.husky/                     快速 Staged-file 与 Commit-message Hook
 AGENTS*.md                  Contributor 与 Agent 的仓库规则
 PLANS*.md                   决策、范围、状态与验收标准
 ISSUES*.md                  两个合并执行 Issue、远程处置与文档 Backlog 路由

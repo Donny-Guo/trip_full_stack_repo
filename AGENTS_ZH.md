@@ -6,13 +6,17 @@
 
 构建面向生产的旅游 Agent 应用：pnpm/Turborepo Monorepo；Web 使用 Next.js 16 App Router、TypeScript、MUI v9；API 使用 NestJS、TypeScript、REST；TypeScript LangGraph 初期位于 API 内并保留可抽离边界；使用 TypeORM 1.1；PostgreSQL 18 提供数据存储，pgvector 留待后续向量工作。首个认证切片使用 15 分钟 Access JWT 与同源 HttpOnly Cookie。Refresh/轮换/撤销、Redis、Swagger/OpenAPI、可观测性、Agent 持久化及旅行供应商集成均在后续阶段。
 
-D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`，以及 `W-01`/`ISSUE-008` 已在本地完成。2026-08-05，D-26 在不削弱保留核心控制的前提下压缩限时本地演示：之后只实施 `ISSUE-009`/`MVP-01`，再实施 `ISSUE-010`/`MVP-02`。GitHub #11 至 #27 因被取代或延期而关闭，不是实施完成证据。F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 仍归 B-01，首个真实 Application Migration 仍归 B-02。
+D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证切片，`P-02`/`ISSUE-001` 因此关闭。授权覆盖计划内代码/脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理、迁移、本地 PostgreSQL/pgvector 基础设施及同步文档/状态更新。`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`、`W-01`/`ISSUE-008` 与 `ISSUE-009`/`MVP-01` 已在本地完成；#9 的实现合并后于 2026-08-06 按 completed 关闭。2026-08-05，D-26 在不削弱保留核心控制的前提下压缩限时本地演示：之后只实施 `ISSUE-009`/`MVP-01`，再实施 `ISSUE-010`/`MVP-02`。GitHub #11 至 #27 因被取代或延期而关闭，不是实施完成证据。F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 仍归 B-01，首个真实 Application Migration 仍归 B-02。
 
 2026-08-06，Owner 将 `ISSUE-009` 收窄为务实的本地 MVP，并明确移除 Compromised/Common-password Screening 及其 Vendored Blocklist Asset。该本地 MVP 使用聚焦验收证据，不要求穷举 Matrix 或正式 Argon2 Capacity Benchmark。公开暴露仍由独立 Gate 管理。
 
+2026-08-06，Owner 还明确了 D-26 与 `ISSUE-010`：`/dashboard` 只是用于证明认证路径的刻意精简受保护目标。ISSUE-010 只要求可访问的 Route Identity 与 Logout Control，不包含 Dashboard Card、Metric、Trip Data、Product Navigation、Personalization 或精修 Product Design。这些细节归后续 `W-09`，并需单独授权。
+
+ISSUE-010 的实现与本地验证已于 2026-08-06 完成，包括最小 Web 认证路径、Session-aware 404 Behavior、本地 Hook 与 PR CI 配置。GitHub #10 仍开放，等待正常 PR CI、Review、Merge 与远程关闭；本地完成不代表公开发布获准。
+
 2026-08-03，Owner 通过 D-25 明确取代此前的 Web/ORM 版本约束：使用当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线，同时保留 PostgreSQL 18 和已选测试系列。经 Review 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。将这些视为明确约束：使用精确 Stable Pin，不得静默替换其他 Major 或 Prerelease，并将版本升级与 Feature Work 隔离。已安装 Dependency 立即迁移；尚未进入所属实施任务的 Dependency 在该任务开始时采用新 Pin。每季度、公开暴露前，以及出现严重且无补丁的安全或兼容性阻断时重新 Review Support/Compatibility。再次变更 Major 仍需 Owner 明确批准。
 
-该授权不包含 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更或远程创建 `ISSUE-028` 及之后的 Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata。2026-08-05，Owner 明确授权已完成的 #9/#10 改写与 #11-#27 关闭，同时排除 #7。其他远程 Issue 操作都需单独明确请求。
+该授权不包含 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更或远程创建 `ISSUE-028` 及之后的 Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata。2026-08-05，Owner 明确授权已完成的 #9/#10 改写与 #11-#27 关闭，同时排除 #7。2026-08-06，Owner 另行授权并已完成本次远程 #10 收窄与同步文档。其他远程 Issue 操作都需单独明确请求。
 
 ## 2. 权威顺序、事实与文档
 
@@ -85,7 +89,7 @@ D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 - MUI 是默认组件库。使用 Theme Token 和审慎封装/`sx`；配置官方 App Router SSR Cache；避免 Hydration/样式闪烁及散落的魔法值。
 - 通过 `@mui/material-nextjs/v16-appRouter` 的 `AppRouterCacheProvider` 集成 MUI。将 `next/link` 传给 MUI 的 `component` Prop 时使用本地 Client Component Adapter；Next.js 要求时，将读取 URL 的 Client Control 放在 `Suspense` 后。
 - Form/Schema 层拥有校验规则，MUI Field 负责展示。Client Validation 提供即时反馈，API 重复校验并作为权威。关联字段/帮助文本，提交错误可聚焦或播报，不能只用颜色。
-- 后续 W-03 开始 Product Navigation 时，使用语义链接并支持键盘、Active Route、移动布局、未来 Permission Filtering 与 Feature Flag。ISSUE-010 只需要最小 Sign Up/Login/Protected Dashboard Route Flow。
+- 后续 W-03 开始 Product Navigation 时，使用语义链接并支持键盘、Active Route、移动布局、未来 Permission Filtering 与 Feature Flag。ISSUE-010 只需要最小 Sign Up/Login/Protected Dashboard Route Flow。Dashboard 刻意保持精简，仅包含可访问的页面标识与认证路径所需 Logout Control；Product Dashboard 内容与设计归后续 W-09。
 - API Base URL 来自已校验环境配置；Component 不拼接 URL。Browser 调用相对同源 `/api/v1`；Server Component 使用 Server-only 内部 API Origin，需要时显式转发入站 Cookie，且不得将 Origin 打入 Client Bundle。
 - 认证使用同源 HttpOnly Cookie；Access/Refresh Token 和 Session ID 不得进入 Web Storage。
 - Server Layout 在渲染私有内容前，以 No-store `/auth/me` 保护 `(app)`。清洗同源 Return Path，区分 `401` 与 API 故障，并避免 Redirect Loop。
@@ -161,7 +165,7 @@ D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 
 - Unit：Validation Schema、`PasswordPolicy`、Domain Rule、Service、Error Mapping、Agent Routing。
 - Integration：NestJS + 真实 PostgreSQL、Migration、Repository、Auth Endpoint。
-- Component：Auth Form State、Accessible Error、API Error Mapping、Protected Dashboard Behavior；Responsive Navigation Coverage 随后续 W-03 开始。
+- Component：Auth Form State、Accessible Error、API Error Mapping 与 Protected-route/Session Behavior；Responsive Navigation 与 Product Dashboard Coverage 随后续 W-03/W-09 开始。
 - E2E：Sign-up Auto-login、重复注册、Session Restore、Logout/Login、Invalid Credential 与 Protected Route。
 - Security Contract：Cookie Set/Delete 一致性、精确 Origin/Referer、JSON/Body Limit、No-store、Gateway Private-response Behavior、JWT Claim/Expiry、Dummy-hash Path、Sensitive-value Redaction。
 

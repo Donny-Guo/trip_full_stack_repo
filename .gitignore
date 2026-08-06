@@ -11,6 +11,7 @@ node_modules/
 !apps/api/test/config/.env.compose.example
 !apps/api/test/config/.env.runtime.example
 !apps/api/test/config/.env.migration.example
+!apps/web/.env.example
 .envrc
 *.pem
 
