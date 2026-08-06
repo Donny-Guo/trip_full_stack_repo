@@ -1,35 +1,52 @@
-import type { INestApplication } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
+import { jest } from "@jest/globals";
 import request from "supertest";
-import type { App } from "supertest/types";
-import { AppModule } from "../src/app.module";
-import { configureApp } from "../src/configure-app";
+import {
+  createApiTestHarness,
+  type ApiTestHarness,
+} from "./helpers/test-app.js";
 
-describe("Health liveness (HTTP)", () => {
-  let app: INestApplication<App>;
+describe("health API", () => {
+  let harness: ApiTestHarness;
 
   beforeAll(async () => {
-    const testingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = testingModule.createNestApplication<INestApplication<App>>();
-    configureApp(app);
-    await app.init();
+    harness = await createApiTestHarness();
   });
 
   afterAll(async () => {
-    await app.close();
+    await harness?.close();
   });
 
-  it("serves GET /api/v1/health/live", async () => {
-    await request(app.getHttpServer())
+  it("keeps liveness process-only and reports database readiness", async () => {
+    const querySpy = jest.spyOn(harness.runtime, "query");
+    await request(harness.app.getHttpServer())
       .get("/api/v1/health/live")
       .expect(200)
       .expect({ status: "ok" });
+    expect(querySpy).not.toHaveBeenCalled();
+
+    await request(harness.app.getHttpServer())
+      .get("/api/v1/health/ready")
+      .expect(200)
+      .expect({ status: "ready" });
+    expect(querySpy).toHaveBeenCalledWith("SELECT 1");
+    querySpy.mockRestore();
   });
 
-  it("does not expose liveness outside the API prefix", async () => {
-    await request(app.getHttpServer()).get("/health/live").expect(404);
+  it("maps a readiness query failure to a safe 503", async () => {
+    const querySpy = jest
+      .spyOn(harness.runtime, "query")
+      .mockRejectedValueOnce(new Error("test-only database outage"));
+    const response = await request(harness.app.getHttpServer()).get(
+      "/api/v1/health/ready",
+    );
+    expect(response.status).toBe(503);
+    const body: unknown = response.body;
+    expect(body).toEqual(
+      expect.objectContaining({
+        code: "SERVICE_UNAVAILABLE",
+        message: "The service is temporarily unavailable.",
+      }),
+    );
+    querySpy.mockRestore();
   });
 });

@@ -20,7 +20,7 @@ Owner 将受时间限制的本地认证演示压缩为基础设施之后的两�
 
 2026-08-05，Owner 明确授权改写 GitHub #9、#10，并关闭 #11 至 #27，同时保持 #7 不变。远程整理已经完成。该授权不允许以后在没有新 Owner 明确请求时创建、编辑、重开或关闭 Issue。
 
-本切片中的“生产级”表示保留的认证路径继续满足安全、数据完整性、可访问性、迁移、测试、Hook 与 CI 要求；它不表示应用已经获准公开暴露或生产部署。
+本切片中的 MVP 质量表示，保留的认证路径继续具备真实 PostgreSQL 持久化、密码哈希、Cookie 会话、数据库唯一性与安全 API 失败所需的持久控制。完整的发布前加固仍然延后，应用尚未获准公开暴露或生产部署。
 
 ## 2. 当前远程状态与顺序
 
@@ -69,42 +69,43 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 -> ISSUE-010 / MVP-02
 ## 5. ISSUE-009 / MVP-01 — 构建 PostgreSQL-backed 认证 API
 
 - **GitHub：** [#9](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)
-- **状态：** `TODO`
-- **Blocked by：** ISSUE-007（`DONE`）
+- **状态：** `IN PROGRESS`
+- **Blocked by：** 无；ISSUE-007 已为 `DONE`
 - **合并：** 原 #9、#10、#13、#17、#18 与 #20-#24 的 Task Scope
 - **PR Boundary：** 一个 Outcome-focused Backend PR，按配置/数据、安全边界、Endpoint 与 Test 分层 Commit；仅在 Reviewability 要求时拆为多个 PR
 
 ### Outcome
 
-交付由 Docker Compose PostgreSQL 支撑并经过测试的 NestJS 认证 API，具备生产级 Persistence、Password、JWT、Cookie、Validation、Request Security 与 Failure Boundary。
+交付由 Docker Compose PostgreSQL 支撑并经过测试的 NestJS 认证 API，使用显式 Migration、安全 Persistence、Argon2id、短期 HttpOnly JWT Cookie，以及本地演示所需的最小 Request-security Boundary。
 
 ### Work
 
 - [ ] 添加 Fail-fast API 配置、TypeORM 1.1 DataSource、依赖感知 Readiness、显式 Migration Command 与 Runtime/Migrator 分离。
 - [ ] 创建 `users` Migration：UUID、Canonical Unique Email、默认不选择的 `password_hash` 与 UTC Timestamp。
 - [ ] 实现窄范围 Users Repository/Service，不返回 ORM Entity 或 Credential Field。
-- [ ] 实现 Email Normalization、已确认 PasswordPolicy、本地固定许可/Checksum 的 Compromised-password Blocklist、Argon2id、Dummy Hash 与敏感值 Redaction。
+- [ ] 实现 Email Normalization、已确认 PasswordPolicy、Argon2id、Dummy Hash 与敏感值 Redaction。本 MVP 不添加本地 Blocklist 或远程密码查询。
 - [ ] 添加稳定 API/Field Code、Request ID、全局输入校验、JSON/Body Limit、No-store Header 与 Unsafe Method 的精确可信 Origin/Referer 检查。
 - [ ] 实现已确认的 HS256 Access-JWT Claim/Validation、共享签发、本地/生产 Cookie Profile 与精确 Cookie 删除。
 - [ ] 实现 `POST /api/v1/auth/sign-up`、`POST /api/v1/auth/login`、`GET /api/v1/auth/me`、`POST /api/v1/auth/logout` 与复用 NestJS JWT Guard。
-- [ ] 为完整关键 Contract 与 Negative Security Path 添加 Unit 与真实 PostgreSQL Integration Test。
+- [ ] 为核心成功路径和最高价值失败边界添加聚焦 Unit 与真实 PostgreSQL Integration Test；同步 README、API 文档、环境示例及中英文权威文档。
 
 ### Acceptance
 
 - [ ] 空数据库通过显式命令迁移；应用启动从不执行 Synchronize 或 Migration。
-- [ ] Runtime Database Role 无法执行 DDL 或 Extension Management。
+- [ ] Runtime Role 只能执行所需 Application DML，无法执行 DDL 或 Extension Management；TypeORM 不安装 Extension。
 - [ ] 注册创建一个真实 User，返回 `201` 并设置已确认的 15 分钟 HttpOnly JWT Cookie。
-- [ ] Canonical Duplicate 与 Concurrent Registration 受数据库保护并稳定映射为 `409`。
-- [ ] 有效登录成功；未知邮箱和错误密码走预期验证路径并返回相同的 `401 INVALID_CREDENTIALS` Shape。
+- [ ] PostgreSQL 强制 Canonical Duplicate 并映射为 `409`；一项聚焦并发注册测试证明仅一个请求成功。
+- [ ] 有效登录成功；未知邮箱和错误密码返回相同 `401 INVALID_CREDENTIALS` Contract，并以一项聚焦测试证明 Dummy-hash Path。
 - [ ] `/auth/me` 只返回安全 User Field；Logout Idempotent 且精确清除 Cookie Tuple。
-- [ ] 错误 JWT Algorithm、Signature、Claim 与 Expiration 安全失败。
-- [ ] 不支持的 Media Type、未知字段、超大 Body 与不可信/缺失 Provenance 在 Mutation 前失败。
-- [ ] Response、Log、Screenshot 与 Test Artifact 不出现密码、Hash、JWT 或连接 Secret。
-- [ ] API Format、Lint、Typecheck、Unit/Integration Test 与 Production Build 通过。
+- [ ] 聚焦 JWT 测试拒绝篡改 Signature、过期、非法 Algorithm 与非法必需 Claim。
+- [ ] 聚焦 Request 测试在 Mutation 前拒绝未知字段、超大 Body、不支持的 Media Type 以及缺失/不可信 Provenance。
+- [ ] 公共 Response Body 与正常 Application Log 不出现密码、Hash、JWT、Cookie 或连接 Secret。
+- [ ] API Format、Lint、Typecheck、聚焦 Unit/Integration Test 与 Production Build 通过。
+- [ ] README、API Runbook/Contract、环境示例及中英文 Issue/Plan 文档与真实实现一致。
 
-**Evidence：** Migration/Role Verification、API Contract Report、JWT/Cookie/Provenance Matrix、Concurrent Registration Test、Dummy-hash Path Evidence、Sanitized Log Scan 与根/API 质量命令输出。
+**最小 Evidence：** Clean Migration `show/run/show`、聚焦 Unit 与真实 PostgreSQL Integration Report、API Format/Lint/Typecheck/Build 输出，以及不记录 Cookie/JWT 值的 Postman 或 curl 注册 -> `/auth/me` -> 退出 -> 登录 Smoke。
 
-**Non-goals：** Web 页面、Refresh Token、Redis、Email Verification、Password Reset、Role、公开 Rate Limiting、Swagger/OpenAPI、生产部署或公开暴露。
+**明确延期：** Compromised/Common-password Blocklist 及 Asset；穷举 Password/JWT/Provenance/Database/Log Matrix；正式 Argon2 p95/Peak-memory Benchmark；Web 页面、Refresh Token、Redis、Email Verification、Password Reset、Role、公开 Rate Limiting、Swagger/OpenAPI、生产部署与公开暴露。
 
 ## 6. ISSUE-010 / MVP-02 — 交付本地注册/登录演示与开发质量门
 

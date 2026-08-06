@@ -2,15 +2,15 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-26 已确认；首切片已于 2026-08-02 授权实施并于 2026-08-05 合并范围；P-03、F-01 至 F-05 与 W-01 已在本地完成；仅剩 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02**\
+状态：**D-01 至 D-26 已确认；首切片于 2026-08-02 授权、2026-08-05 合并范围，并于 2026-08-06 收窄为务实的 ISSUE-009 MVP；P-03、F-01 至 F-05 与 W-01 已在本地完成；ISSUE-009 正在进行，之后推进 ISSUE-010**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户要求的项目目录、Sign Up/Login、User 表、Auth API、受保护 Dashboard 与限时演示\
-授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。2026-08-05，Owner 授权 D-26：保留核心本地 Auth Path 的生产级要求，同时把 ISSUE-007 之后全部实施压缩为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02，并把低优先级宽度移入本文档 Backlog。Owner 同时明确授权改写远程 #9/#10、关闭 #11-#27，并保持 #7 不变；该一次性远程整理已完成。F-05 使用 `psql` 证明 Clean Database 上的 Migration-shaped Transactional DDL Probe 与直接 TCP/SCRAM Runtime-role 行为；实际 NestJS/TypeORM Connection 与 Readiness 归 B-01，首个真实 Application Migration 归 B-02。
+授权历史：最初规划轮次只产出文档。2026-07-30 的请求单独授权远程创建 `ISSUE-001` 至 `ISSUE-027`，以及相应 Labels、Milestone、Assignee 和原生依赖。2026-08-02，Owner 明确授权计划内的首个本地认证切片，包括代码与脚手架、依赖与根锁文件、Hook、MIT License 治理、首切片 GitHub CI/治理配置、迁移、本地 PostgreSQL/pgvector 基础设施，以及同步文档/状态更新。2026-08-03，Owner 明确授权 D-25 及隔离的 Next.js/MUI/TypeORM Baseline Change。2026-08-05，Owner 授权 D-26：保留核心本地 Auth Path 的持久控制，同时把 ISSUE-007 之后全部实施压缩为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02，并把低优先级宽度移入本文档 Backlog。Owner 同时明确授权改写远程 #9/#10、关闭 #11-#27，并保持 #7 不变；该一次性远程整理已完成。2026-08-06，Owner 从 ISSUE-009 移除 Compromised/Common-password Screening，并用聚焦 MVP Evidence 取代穷举 Matrix 与正式 Argon2 Capacity Benchmark。F-05 证明底层数据库 Role Boundary；ISSUE-009 负责实际 NestJS/TypeORM Connection、首个 Migration 与认证 API。
 
 授权排除项：Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及超出 2026-08-05 已完成整理的任何远程 Issue 操作，仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及最小且可独立构建的 `apps/web` 与 `apps/api` Scaffold 已存在。统一的根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围的共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8、精确的 MUI v9 App Router SSR/CSS-variable Theme Foundation，以及一项 Vitest/React Testing Library Render Regression。API Scaffold 使用 NestJS 11.1.28、严格 ES2023 TypeScript、Jest/Supertest Test Entry、只检查进程的 `GET /api/v1/health/live` 及 Graceful Shutdown Hook。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施现已提供仅 Loopback 发布的 Healthy Service、具名 Volume、Atomic Privileged Bootstrap，以及相互分离的 Provisioner/Migrator/Runtime Role。Next.js、Node、Jest 与 Vitest 的应用特定关注点仍保留在各应用本地。TypeORM、CI 自动化、Hook、Application Migration、认证与业务代码尚不存在。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及可独立构建的 `apps/web` 与 `apps/api` 已存在。统一根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与 MUI v9 App Router SSR/CSS-variable Theme Foundation。ISSUE-009 Feature Worktree 已加入 NestJS 11.1.28 ESM 认证、TypeORM 1.1 Runtime/Migration DataSource、首个 `users` Migration、PostgreSQL-backed Readiness、Argon2id、JWT/Cookie Session、聚焦 Unit Test 及真实 PostgreSQL Integration Test。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施提供仅 Loopback 的 Healthy Service 与分离的 Provisioner/Migrator/Runtime Role。CI 自动化、Hook、Web 认证页面、Agent 能力和其他业务 Feature 仍不在当前 Worktree。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -78,7 +78,7 @@ D-01 至 D-26 全部已确认并作为当前权威。D-14 至 D-19 是已接受�
 | D-05 | `CONFIRMED` | 注册成功后签发同样的 Access JWT 并自动进入 Dashboard                                                                                                                                                                                                                                                                                                                                                     | B-06、W-06、E2E-01                        |
 | D-06 | `CONFIRMED` | 首个 Agent 用例开始时在 NestJS `AgentModule` 中使用 TypeScript LangGraph；Web 只消费已认证流式事件；需要独立扩缩容时再拆 `apps/agent`；本切片不创建空模块                                                                                                                                                                                                                                                | R-12                                      |
 | D-07 | `CONFIRMED` | UUID 主键、物理表名 `users`、邮箱 trim + 小写规范化后唯一                                                                                                                                                                                                                                                                                                                                                | B-02 起                                   |
-| D-08 | `CONFIRMED` | 首版密码为 8–20 个 ASCII 字符，只允许 `A-Z`、`a-z`、`0-9` 和 `$#@%`，且至少包含一个大写字母、一个小写字母、一个数字和一个 `$#@%` 字符；不 trim；保留常见/已泄露密码阻止与经基准测试的 Argon2id                                                                                                                                                                                                           | B-04、B-06、W-04、R-13                    |
+| D-08 | `CONFIRMED` | 首版密码为 8–20 个 ASCII 字符，只允许 `A-Z`、`a-z`、`0-9` 和 `$#@%`，且至少包含一个大写字母、一个小写字母、一个数字和一个 `$#@%` 字符；不 trim；只存储带 Salt 的 Argon2id Hash 并限制本地并发。本地 MVP 明确不含 Compromised/Common-password Screening 与正式 Capacity Benchmark                                                                                                                         | B-04、B-06、W-04、R-13                    |
 | D-09 | `CONFIRMED` | Next.js/NestJS 独立部署；浏览器通过同一公开 origin 的 `/api/v1` 访问 Gateway 后的 NestJS                                                                                                                                                                                                                                                                                                                 | F-05、B-05、W-05                          |
 | D-10 | `CONFIRMED` | 首版 Product UI 使用英文，后续至少加入 `zh-CN`。D-26 将完整 Message Catalog/Localization Boundary、Switcher 与 Locale URL 延期到本地 Auth Demo 之后                                                                                                                                                                                                                                                      | W-02、R-08、D-26                          |
 | D-11 | `CONFIRMED` | 首个迁移不加入邮箱验证、账户状态或角色；相关能力通过按序前滚迁移加入                                                                                                                                                                                                                                                                                                                                     | B-02 起、R-04/R-06/R-07                   |
@@ -194,12 +194,12 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### 6.5 输入规则草案
 
-| 字段                    | 客户端即时校验                            | 服务端权威校验                                                                     | 说明                                              |
-| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------- |
-| email                   | 必填、trim、ASCII 邮箱结构、最大 254 字符 | trim + 小写后查询/写入；数据库 CHECK + UNIQUE 保证规范形式                         | 国际化邮箱后续另定；不用自制正则追求完整 RFC 覆盖 |
-| 注册/重置/改密 password | 必填、8–20，显示字符类别和允许字符清单    | 只允许 `A-Z`、`a-z`、`0-9`、`$#@%`；四类各至少一个；完整密码 blocklist；不 trim    | 允许粘贴和密码管理器                              |
-| 登录 password           | 必填且最多 1,024 个传输字节               | 将原样提交值与已有哈希比较，不执行当前创建密码策略；未知用户走固定 dummy-hash 路径 | 保持兼容，同时限制资源并降低计时枚举风险          |
-| unknown fields          | 不发送                                    | 拒绝                                                                               | 防止 mass assignment                              |
+| 字段                    | 客户端即时校验                            | 服务端权威校验                                                                     | 说明                                                              |
+| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| email                   | 必填、trim、ASCII 邮箱结构、最大 254 字符 | trim + 小写后查询/写入；数据库 CHECK + UNIQUE 保证规范形式                         | 国际化邮箱后续另定；不用自制正则追求完整 RFC 覆盖                 |
+| 注册/重置/改密 password | 必填、8–20，显示字符类别和允许字符清单    | 只允许 `A-Z`、`a-z`、`0-9`、`$#@%`；四类各至少一个；不 trim                        | 允许粘贴和密码管理器；Compromised-password Screening 不在本地 MVP |
+| 登录 password           | 必填且最多 1,024 个传输字节               | 将原样提交值与已有哈希比较，不执行当前创建密码策略；未知用户走固定 dummy-hash 路径 | 保持兼容，同时限制资源并降低计时枚举风险                          |
+| unknown fields          | 不发送                                    | 拒绝                                                                               | 防止 mass assignment                                              |
 
 前后端可共享规则意图和错误码，但服务端不能信任客户端，也不应为了“复用类型”把 Nest 运行时 DTO 直接导入 Web。
 
@@ -247,7 +247,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 动作：从 Primary Source 维护 Node.js LTS、pnpm、TypeScript、Turborepo、Next.js 16、React/React DOM、MUI v9 及其官方 Next/Emotion Integration、NestJS 及其 CLI/Adapter Package、TypeORM 1.1、PostgreSQL Driver、PostgreSQL 18、pgvector、Argon2、ESLint、Prettier、Jest/Supertest、Vitest/React Testing Library、Playwright、Husky、lint-staged 与 commitlint 的精确兼容基线。选择有明确版本的标准 GitHub-hosted Ubuntu Runner（评估 `ubuntu-24.04`，不用浮动 `-latest` 或 Preview Label），记录后续 Benchmark 的 Debian-slim/Alpine 应用镜像候选，定义精确 Pin/Range 与升级/回滚策略，并建立带可读版本注释、使用完整 SHA 的初始 Action Reference Register。
 - 产出：`.node-version`、权威 `docs/toolchain.md` 及其 `docs/toolchain_ZH.md` 跟随版。Toolchain 文档包含唯一矩阵，记录精确选择、Compatibility/Support Status、Primary-source Link 与检查日期、Pin/Enforcement Location、Update Owner/Cadence、Rollback Target、下游 Verification Task，以及初始不可变 Action Reference Register。
 - 验收：记录精确 Node 与 pnpm 选择，且 `.node-version` 与矩阵一致；不选择浮动 `latest`、Canary、Preview、Prerelease 或可变 Action Reference；明确 D-25 的 Next.js 16/MUI v9/TypeORM 1.1 选择；兼容证据覆盖 MUI/Next SSR、NestJS/TypeORM/PostgreSQL、pgvector、Native Argon2 及受支持 Runtime 交集；每个 Pin 都注明 Owner、回滚与下游 Enforcement Task。F-01 实现根 `packageManager`/Engine Constraint，F-02 证明已安装 Next Line，F-05 固定并验证数据库镜像，B-04 证明 Argon2 Runtime Behavior，W-01 证明 MUI SSR，F-06/F-08 证明 CI 一致性及完整 Action Register；P-03 不声称尚不存在的下游检查。
-- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence；W-01 于 2026-08-05 提供 MUI v9 Installation、SSR、Hydration、Navigation 与 Render-test Evidence。F-05 于 2026-08-05 提供精确 Database-image Digest，以及 PostgreSQL/pgvector Bootstrap、Version、Persistence 与 Role-boundary Evidence；TypeORM Integration 仍由 B-01 负责。
+- 完成证据：2026-08-02，`.node-version`、[`docs/toolchain.md`](./docs/toolchain.md) 及同步跟随版建立原始精确矩阵、Policy、Rollback Class、Candidate Image、Full-SHA Action Register 与 Downstream Enforcement Map。D-25 于 2026-08-03 根据当前 Primary Source 与 Publisher Metadata 修订 Next.js/MUI/TypeORM Row。F-01 提供 Root Installation、Lockfile 与 Task-graph Evidence；F-02 提供 Next.js 16 Installation/Build/Runtime Evidence；W-01 于 2026-08-05 提供 MUI v9 Installation、SSR、Hydration、Navigation 与 Render-test Evidence。F-05 于 2026-08-05 提供精确 Database-image Digest，以及 PostgreSQL/pgvector Bootstrap、Version、Persistence 与 Role-boundary Evidence；ISSUE-009 现提供 TypeORM ESM Runtime/Migration 与真实 PostgreSQL Integration Evidence。
 
 ### Phase 1 — Monorepo 与本地环境
 
@@ -338,9 +338,9 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### B-04 实现密码服务 — `TRACKED BY ISSUE-009`
 
 - 前置：D-08
-- 动作：集中实现已确认的 8–20 ASCII 允许集合和四类字符规则；为每个失败原因定义稳定错误码；固定一个具备许可证、版本和 checksum 的本地完整密码 Blocklist，并记录来源、更新与失败策略；封装 Argon2id hash/verify，基准测试参数并限制并发成本。不得用候选密码或其派生 Hash 调用远程密码检查服务。
+- 动作：集中实现已确认的 8–20 ASCII 允许集合和四类字符规则；为每个失败原因定义稳定错误码；使用所选参数封装 Argon2id Hash/Verify 并限制并发成本。本 MVP 不添加本地或远程 Compromised-password Screening。
 - 产出：可替换、可测试的 `PasswordPolicy` 和 `PasswordHasher`。
-- 验收：覆盖 7/8/20/21 边界和每一种缺失类别；穷举可打印 ASCII 补集，并覆盖空白与 Unicode，证明不允许输入均被拒绝；粘贴输入不被改写；常见密码被拒绝；同一密码产生不同盐值哈希；正确/错误密码验证符合预期；明文和 hash 不写日志；算法、基准、rehash 和未来策略变更行为有记录。
+- 验收：聚焦覆盖 7/8/20/21 边界、每一种缺失类别、允许的特殊字符及代表性不支持/空白/Unicode 输入，并证明粘贴输入不被改写；同一密码产生不同 Salt Hash；正确/错误密码验证符合预期；明文和 Hash 不进入 Response/Log；所选算法、参数、Rehash 行为与有界并发有记录。
 
 #### B-05 建立最小 Access JWT 会话边界 — `TRACKED BY ISSUE-009`
 
@@ -352,9 +352,9 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### B-06 实现注册与自动登录 API — `TRACKED BY ISSUE-009`
 
 - 前置：D-05、B-03、B-04、B-05、B-09
-- 动作：创建 DTO、全局输入校验、规范邮箱、密码策略检查、密码哈希和 User 创建；映射校验/Blocklist/重复错误；成功后复用 TokenIssuer，并返回冻结的安全 User + `messageCode` 契约。
+- 动作：创建 DTO、全局输入校验、规范邮箱、密码策略检查、密码哈希和 User 创建；映射校验/重复错误；成功后复用 TokenIssuer，并返回冻结的安全 User + `messageCode` 契约。
 - 产出：`POST /api/v1/auth/sign-up`。
-- 验收：成功 `201` 并建立真实登录态；空值/格式/长度/缺失类别/不允许字符/常见或已泄露密码/未知字段返回安全、可定位的 `400`；重复邮箱为 `409`；响应和日志无 hash/明文/Token；并发重复注册只成功一次。
+- 验收：成功 `201` 并建立真实登录态；聚焦格式/长度/缺失类别/不允许字符/未知字段返回安全、可定位的 `400`；重复邮箱为 `409`；Response/Log 无 Hash/明文/Token；并发重复注册只成功一次。
 
 #### B-07 实现登录 API — `TRACKED BY ISSUE-009`
 
@@ -382,7 +382,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 前置：B-06、B-07、B-08、B-09
 - 动作：覆盖 DTO/规范化/密码策略/Argon2id/JWT 单元测试，Repository + PostgreSQL 集成测试，注册登录会话 API E2E。
 - 产出：独立、可重复的 API 测试套件。
-- 验收：覆盖成功、空值、非法/非规范邮箱、7/8/20/21 边界、各缺失类别、允许字符、可打印 ASCII 补集、空白/Unicode 拒绝、固定 Blocklist 行为、未知字段/Content-Type/过大 Body、重复/并发注册、Cookie 设置/删除属性、受信/不受信/缺失 Origin 和 Referer、no-store、JWT Claims/到期、自动登录/恢复/退出/无效 Token、未知用户 dummy-hash、错误密码、旧策略登录兼容、数据库角色边界和敏感字段/日志泄露；测试不依赖顺序。
+- 验收：聚焦覆盖注册/登录/会话成功、Canonical Duplicate 与并发注册、未知用户 Dummy-hash、JWT Signature/Algorithm/必需 Claim/过期失败、Cookie 设置/删除一致性、未知字段、不支持 Content Type、过大 Body、受信/不受信/缺失 Provenance、No-store、无效 Token、Runtime/Migrator Boundary 与敏感字段/日志泄露；测试不依赖顺序。
 
 ### Phase 3 — Web 认证演示
 
@@ -427,7 +427,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 前置：D-05、W-04、W-05、B-06
 - 动作：构建 email/password 表单、label、password visibility、密码规则清单、loading、禁用重复提交、字段错误、表单级 Alert 和真实成功反馈。
 - 产出：可用的 `/sign-up`。
-- 验收：空值、非法邮箱及每一项密码规则都获得即时、可访问反馈；常见/已泄露密码和 `409` 服务端错误清晰；API 成功设置 Cookie 后自动进入 Dashboard；键盘提交、粘贴、密码管理器、焦点和错误播报可用；不记录密码或读取 Token。
+- 验收：空值、非法邮箱及每一项现役密码规则都获得即时、可访问反馈；`409` 服务端错误清晰；API 成功设置 Cookie 后自动进入 Dashboard；键盘提交、粘贴、密码管理器、焦点和错误播报可用；不记录密码或读取 Token。
 
 #### W-07 实现 Login 页面 — `TRACKED BY ISSUE-010`
 
@@ -449,7 +449,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 - 前置：B-06、W-06
 - 动作：真实 Web → Gateway `/api/v1/*` → API → PostgreSQL 联调；检查 Proxy Trust、Origin/Referer、Content-Type/Body Limit、Cookie/缓存 Header、环境配置、错误码、规范化和密码边界。
-- 验收：注册成功进入 Dashboard；密码规则/Blocklist、重复邮箱、来源失败和 API 故障符合契约；Gateway 不缓存私有/`Set-Cookie` 响应；数据库无明文密码；Web 不可读取 JWT。
+- 验收：注册成功进入 Dashboard；密码规则、重复邮箱、来源失败和 API 故障符合契约；Gateway 不缓存私有/`Set-Cookie` 响应；数据库无明文密码；Web 不可读取 JWT。
 
 #### I-02 联调登录链路 — `TRACKED BY ISSUE-010`
 
@@ -554,7 +554,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 #### R-13 复审并在有依据时放宽密码策略 — `TODO（后续）`
 
 - 前置：首个切片使用/支持证据，或新合规/MFA 要求
-- 动作：在不记录密码下复审放弃率和支持数据；考虑更长上限、更广字符、Passphrase、移除组合规则，同时保留 Blocklist/Argon2id；同步英文契约和 `_ZH`。
+- 动作：在不记录密码下复审放弃率和支持数据；考虑更长上限、更广字符、Passphrase、移除组合规则，以及公开暴露前是否有依据增加本地 Compromised-password Screening；保留 Argon2id 并同步英文契约和 `_ZH`。
 - 验收：只有一个获批策略；注册/重置/改密测试与文案一致；登录兼容测试证明已有用户有效；仅校验变化不引入 User 表迁移。
 
 #### R-14 Review 并授权公开发布 — `BLOCKED（后续）`
@@ -594,7 +594,6 @@ ISSUE-009 内按 Configuration/Data、Password/JWT Security、Endpoint 与 Test 
 | 密码长度为 7/21           | 清单/字段错误                      | `400 VALIDATION_ERROR`                                 | 无写入                      |
 | 缺失大写/小写/数字/`$#@%` | 对应清单项未满足                   | `400 VALIDATION_ERROR`，稳定字段错误码                 | 无写入                      |
 | 包含不允许的密码字符      | 清晰显示允许字符                   | `400 VALIDATION_ERROR`                                 | 无写入                      |
-| 注册常见/已泄露密码       | 显示可操作的通用密码提示           | `400 VALIDATION_ERROR`，不回显密码                     | 无写入                      |
 | 注册合法凭据              | loading 后自动进入 Dashboard       | `201`，设置 HttpOnly Cookie，返回安全 User             | 一行 User，只有 hash        |
 | 重复注册                  | 表单级明确提示                     | `409 EMAIL_ALREADY_EXISTS`                             | 仍只有一行                  |
 | 登录空值/非法邮箱         | 字段错误                           | `400 VALIDATION_ERROR`                                 | 无变化                      |
@@ -617,7 +616,7 @@ ISSUE-009 内按 Configuration/Data、Password/JWT Security、Endpoint 与 Test 
 | 短期 Access JWT 无主动撤销                                   | Token 泄露后在到期前仍有效                                               | 15 分钟 TTL、Secure/HttpOnly Cookie；R-03 增加 Refresh/撤销                                                                                                   |
 | 分开提示未知邮箱/错误密码                                    | 账户枚举                                                                 | 默认统一 `INVALID_CREDENTIALS`                                                                                                                                |
 | 登录昂贵计算路径不同                                         | 计时信息可能辅助账户枚举                                                 | 未知账户执行固定 dummy Argon2id；测试路径而不比较脆弱的精确耗时                                                                                               |
-| 已选择的 8–20 组合/允许集合规则                              | 拒绝许多密码管理器结果和长 passphrase，并可能诱导可预测的合规模式        | 一次性清晰清单、允许粘贴/自动填充、固定本地 Blocklist、集中策略和明确 R-13 复审路径                                                                           |
+| 已选择的 8–20 组合/允许集合规则                              | 拒绝许多密码管理器结果和长 passphrase，并可能诱导可预测的合规模式        | 一次性清晰清单、允许粘贴/自动填充、集中策略、Argon2id 存储和明确 R-13 复审路径                                                                                |
 | 登录重新执行创建密码规则                                     | 策略变化后已有用户被锁定                                                 | 登录只做精确哈希验证，并以回归测试固定兼容性                                                                                                                  |
 | 客户端校验被当作安全边界                                     | 非法数据写入                                                             | 服务端 DTO + 全局 ValidationPipe + DB 约束                                                                                                                    |
 | ORM 自动同步                                                 | 生产 Schema 漂移/数据损失                                                | 仅 migration，生产关闭 synchronize                                                                                                                            |
