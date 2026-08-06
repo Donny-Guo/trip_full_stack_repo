@@ -1,6 +1,6 @@
 # Authentication API and Local Runbook
 
-Status: ISSUE-009 local MVP implementation. GitHub Issue #9 remains open until owner review and normal merge/closure workflow. This document describes local development only; it is not public-release approval.
+Status: ISSUE-009 is merged and GitHub Issue #9 is closed as completed. The ISSUE-010 Web integration is implemented and verified locally but remains open pending normal PR CI, review, merge, and remote closure. This document describes local development only; it is not public-release approval.
 
 Simplified Chinese follower: [authentication_ZH.md](./authentication_ZH.md). This English file is authoritative.
 
@@ -115,19 +115,17 @@ Current codes are `VALIDATION_ERROR` (`400`), `UNAUTHENTICATED` and `INVALID_CRE
 
 ## Automated verification
 
-Create the three ignored files under `apps/api/test/config/` from their tracked `.example` files, fill distinct test-only credentials/auth values, and set them to mode `0600`. Then run:
+The supported root wrappers generate all three ignored files under `apps/api/test/config/` when none exist, using distinct random test-only credentials/auth values and mode `0600`. Existing complete configuration is preserved and its permissions are corrected; a partial set is rejected rather than overwritten. No manual test-secret preparation is required for the standard path.
 
 ```sh
-pnpm --filter api lint
-pnpm --filter api typecheck
-pnpm --filter api test:unit
-pnpm --filter api test:integration:local
-pnpm --filter api build
+pnpm test:local
+pnpm --filter web exec playwright install chromium # first local browser run only
+pnpm test:e2e
 ```
 
-`test:integration:local` uses only the fixed `trip-auth-api-test` Compose project on `127.0.0.1:55432`. It removes any previous volume for that exact test project, starts a clean database, executes migration `show/run/show`, runs the real-PostgreSQL suite, and removes the test container and volume on exit. It never targets the default development project.
+`test:local` uses only the fixed `trip-root-test` Compose project on `127.0.0.1:55432`. It removes any previous volume for that exact test project, starts a clean database, executes migration `show/run/show`, runs the uncached API and Web test graph, and removes the test container and volume on exit. `test:e2e` uses a separate `trip-auth-web-e2e` project on the same test-only database port and isolated Web/API ports `43000`/`43001`; it also rebuilds Web against an unused upstream to verify outage behavior. Neither wrapper targets the default development project or ports `3000`/`3001`.
 
-Last verified locally on 2026-08-06: formatting, root lint/typecheck/build, API lint/typecheck/build, and the Web test passed; 10 API unit suites passed 48 tests; and 3 API integration suites passed 12 tests after the clean migration changed from pending to applied. The migration run did not attempt to install an extension. This is local MVP evidence, not approval for public exposure or production deployment. The Postman smoke below remains a user-run manual check and was not fabricated as automated evidence.
+Last verified locally on 2026-08-06: root formatting, documentation policy, lint, typecheck, production builds, the isolated database test graph, and browser E2E passed; 10 API unit suites passed 48 tests, 3 API integration suites passed 12 tests, 8 Web suites passed 73 tests, and 6 Playwright journeys passed. The clean migration changed from pending to applied and did not attempt to install an extension. This is local MVP evidence, not approval for public exposure or production deployment. The Postman smoke below remains a user-run manual check and was not fabricated as automated evidence.
 
 ## Manual Postman smoke
 

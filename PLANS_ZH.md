@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`PLANS.md`](./PLANS.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**D-01 至 D-26 已确认；首切片于 2026-08-02 授权、2026-08-05 合并范围，并于 2026-08-06 收窄为务实的 ISSUE-009 Evidence 与 ISSUE-010 中仅用于认证的 Dashboard 目标；P-03、F-01 至 F-05、W-01 与 ISSUE-009 已完成；下一步是 ISSUE-010**\
+状态：**D-01 至 D-26 已确认；首切片于 2026-08-02 授权、2026-08-05 合并范围，并于 2026-08-06 收窄；P-03、F-01 至 F-05、W-01 与 ISSUE-009 已完成；ISSUE-010 已在本地实现并验证，但仍开放，等待 PR CI、Review、Merge 与远程关闭**\
 计划日期：2026-07-30  
 实施授权日期：2026-08-02\
 范围来源：用户要求的项目目录、Sign Up/Login、User 表、Auth API、受保护 Dashboard 与限时演示\
@@ -10,7 +10,7 @@
 
 授权排除项：Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更、远程创建 `ISSUE-028` 及之后的 Issue，以及超出 2026-08-05 已完成整理和 Owner 授权的 2026-08-06 #10 收窄之外的任何远程 Issue 操作，仍需另行明确授权。
 
-当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及可独立构建的 `apps/web` 与 `apps/api` 已存在。统一根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围共享严格 TypeScript 与类型感知 ESLint Package。Web Scaffold 使用 Next.js 16.2.12、React 19.2.8 与 MUI v9 App Router SSR/CSS-variable Theme Foundation。已合并的 ISSUE-009 实现提供 NestJS 11.1.28 ESM 认证、TypeORM 1.1 Runtime/Migration DataSource、首个 `users` Migration、PostgreSQL-backed Readiness、Argon2id、JWT/Cookie Session、聚焦 Unit Test 及真实 PostgreSQL Integration Test。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施提供仅 Loopback 的 Healthy Service 与分离的 Provisioner/Migrator/Runtime Role。CI 自动化、Hook、Web 认证页面、Agent 能力和其他业务 Feature 仍不在当前 Branch。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
+当前仓库状态：`Donny-Guo/trip_full_stack_repo` 为 Public。根 pnpm/Turborepo Workspace、唯一 pnpm Lockfile、Editor/Ignore 约定、仅本地缓存的 Task Graph，以及可独立构建的 `apps/web` 与 `apps/api` 已存在。统一根 Prettier 3.9.6 Policy 与标准化 Root Check 已启用；两个应用都消费窄范围共享严格 TypeScript 与类型感知 ESLint Package。Web Application 使用 Next.js 16.2.12、React 19.2.8 与 MUI v9 App Router SSR/CSS-variable Theme Foundation；ISSUE-010 增加 Sign-up/Login、Server-protected Sparse Dashboard、Session Restore/Logout、Session-aware 且可取消的 404 Redirect、聚焦 Component/E2E Test、本地 Hook 与 Immutable-SHA-pinned PR CI 配置。已合并的 ISSUE-009 实现提供 NestJS 11.1.28 ESM 认证、TypeORM 1.1 Runtime/Migration DataSource、首个 `users` Migration、PostgreSQL-backed Readiness、Argon2id、JWT/Cookie Session、聚焦 Unit Test 及真实 PostgreSQL Integration Test。以 Digest 固定的本地 PostgreSQL 18.4/pgvector 0.8.5 基础设施提供仅 Loopback 的 Healthy Service 与分离的 Provisioner/Migrator/Runtime Role。远程 PR CI/Review/Merge Evidence、Agent 能力和其他业务 Feature 仍待完成。一份已跟踪的根 MIT `LICENSE` 早于本次授权存在，其当前 Notice 待 F-08 与 D-23 对齐。
 
 ## 1. 首个实施切片目标
 
@@ -400,7 +400,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 - 前置：W-01
 - 动作：为 `/sign-up`、`/login` 与受保护 `/dashboard` 建立 `(auth)`、`(app)` Route Group；认证页不显示受保护内容。Dashboard 只保留可访问的 Route Identity 与认证路径所需 Logout Control。Product Dashboard Content/Design 延期至 W-09；D-26 同时延期 Extensible Navigation、Flight Info/User 页面与 Localization Catalog Boundary。
 - 产出：最小 Login、Sign Up Route 与刻意精简的 Protected Dashboard 目标。
-- 验收：URL 不包含 Route Group 名；刷新/直达正常；404、Loading/Error Boundary 清晰；`html lang` 与英文演示一致；Private Content 不闪现；Dashboard 不增加 Card、Metric、Trip/Itinerary Data、Product Navigation、Personalization 或精修 Product Design。
+- 验收：URL 不包含 Route Group 名；刷新/直达正常；404、Loading/Error Boundary 清晰；已认证 404 提供可取消的 Dashboard Countdown，未认证 404 提供可取消的 Sign In Countdown，Session Check 不可用时不跳转；`html lang` 与英文演示一致；Private Content 不闪现；Dashboard 不增加 Card、Metric、Trip/Itinerary Data、Product Navigation、Personalization 或精修 Product Design。
 
 #### W-03 实现可扩展 Navigation Bar — `TODO（后续）`
 
@@ -574,10 +574,10 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ```text
 已完成：P-01..P-03、F-01..F-05、W-01、ISSUE-007、ISSUE-009 / MVP-01
-下一步：ISSUE-010 / MVP-02
+本地通过、远程开放：ISSUE-010 / MVP-02
 ```
 
-ISSUE-009 已完成。ISSUE-010 内的 Web Boundary、Auth UI/Session Behavior、Hook/CI、Test 与文档应分层 Review；真实 Web/Session/E2E 验收消费已完成的 ISSUE-009 API。英文权威文档与 `_ZH` 跟随版由单一 Owner 协调，避免漂移。
+ISSUE-009 已完成。ISSUE-010 的 Web Boundary、Auth UI/Session Behavior、Hook/CI、Test 与文档已按可 Review 层次实现，并针对已完成的 ISSUE-009 API 完成本地验证。远程 PR CI、Review、Merge 与关闭仍待完成。英文权威文档与 `_ZH` 跟随版由单一 Owner 协调，避免漂移。
 
 ## 10. 建议拆分为可 Review 的变更集
 
@@ -659,7 +659,7 @@ D-25 已确认：现役 Framework/ORM Major Line 为 Next.js 16、MUI v9 与 Typ
 
 D-26 已确认：限时本地演示保留核心认证路径的生产级要求，同时把基础设施之后的实施合并为 ISSUE-009/MVP-01 与 ISSUE-010/MVP-02。2026-08-06 的明确说明把 ISSUE-010 Dashboard 限定为刻意精简的 Protected Auth 目标；Product Dashboard Content/Design 移入 W-09。Localization、Extensible Navigation 与完整 GitHub Governance/Security Administration 同样是文档化后续工作；该 Scope Compression 不改变 Public-release Gate。
 
-没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`F-05` 已于 2026-08-05 在本地完成，提供 Digest-pinned PostgreSQL/pgvector 基础设施、Atomic Bootstrap、分离 Role、Clean-start/Security/Persistence Evidence，以及经 Owner 批准的 B-01/B-02 Boundary。ISSUE-009/MVP-01 已合并，#9 于 2026-08-06 按 completed 关闭。仅 `ISSUE-010`/MVP-02 保持开放。GitHub #11-#27 因被取代或延期而关闭，不是 Implementation Evidence。独立 Public-release Gate 仍然 Blocked，首切片授权不延伸至后续或生产工作。
+没有剩余的基础产品、Review 或首切片实施门。Owner 已于 2026-08-02 关闭 `P-02`，Version-policy Evidence 在本地完成了 `P-03`，Monorepo-root Evidence 也在本地完成了 `F-01`。`F-02` 已于 2026-08-03 在本地完成并基于 Next.js 16 重新验证；`F-03` 也已于 2026-08-03 通过经验证的 NestJS Lifecycle 与 Liveness Boundary 在本地完成。`F-04` 已于 2026-08-05 在本地完成，共享 TypeScript/ESLint Config、统一根 Prettier Policy、标准化 Check、Negative-rule Probe，以及 Cache/Ignore/Package-boundary Evidence 均已验证。`F-05` 已于 2026-08-05 在本地完成，提供 Digest-pinned PostgreSQL/pgvector 基础设施、Atomic Bootstrap、分离 Role、Clean-start/Security/Persistence Evidence，以及经 Owner 批准的 B-01/B-02 Boundary。ISSUE-009/MVP-01 已合并，#9 于 2026-08-06 按 completed 关闭。ISSUE-010/MVP-02 已在本地实现并验证，但仍开放，等待 PR CI、Review、Merge 与远程关闭。GitHub #11-#27 因被取代或延期而关闭，不是 Implementation Evidence。独立 Public-release Gate 仍然 Blocked，首切片授权不延伸至后续或生产工作。
 
 对 D-08 的记录假设：`$#@%` 是首版完整允许的特殊字符集合，而不仅是示例。如果用户原意是示例，修改计划很小且不影响架构。
 

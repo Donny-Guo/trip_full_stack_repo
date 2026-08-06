@@ -2,7 +2,7 @@
 
 本文件是权威英文 [authentication.md](./authentication.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-状态：ISSUE-009 本地 MVP 实现。GitHub #9 在 Owner Review 及正常 Merge/Close 流程完成前保持开放。本文只描述本地开发，不代表公开发布获准。
+状态：ISSUE-009 已合并，GitHub #9 已按 completed 关闭。ISSUE-010 Web Integration 已在本地实现并验证，但仍开放，等待正常 PR CI、Review、Merge 与远程关闭。本文只描述本地开发，不代表公开发布获准。
 
 ## 边界
 
@@ -113,19 +113,17 @@ Unsafe Method 要求 `Content-Type: application/json` 及精确配置的 `Origin
 
 ## 自动验证
 
-从 `apps/api/test/config/` 下的 `.example` 创建三个被忽略的 Test 文件，填入相互独立的 Test-only Credential/Auth Value，并设为 `0600`。然后运行：
+标准 Root Wrapper 会在三个文件都不存在时自动生成 `apps/api/test/config/` 下的被忽略配置，使用相互独立的随机 Test-only Credential/Auth Value，并设为 `0600`。完整的既有配置会保留并修正权限；若只存在部分文件则拒绝覆盖。标准路径无需手动准备 Test Secret。
 
 ```sh
-pnpm --filter api lint
-pnpm --filter api typecheck
-pnpm --filter api test:unit
-pnpm --filter api test:integration:local
-pnpm --filter api build
+pnpm test:local
+pnpm --filter web exec playwright install chromium # 仅首次本地 Browser Run
+pnpm test:e2e
 ```
 
-`test:integration:local` 只使用固定 `trip-auth-api-test` Compose Project 与 `127.0.0.1:55432`。它删除该精确 Test Project 的旧 Volume，启动 Clean Database，执行 Migration `show/run/show`，运行真实 PostgreSQL Suite，并在退出时删除 Test Container/Volume；不会定位默认开发 Project。
+`test:local` 只使用固定 `trip-root-test` Compose Project 与 `127.0.0.1:55432`。它删除该精确 Test Project 的旧 Volume，启动 Clean Database，执行 Migration `show/run/show`，运行不使用 Cache 的 API/Web Test Graph，并在退出时删除 Test Container/Volume。`test:e2e` 使用独立的 `trip-auth-web-e2e` Project、相同 Test-only Database Port，以及隔离的 Web/API Port `43000`/`43001`；它还会让 Web 针对一个未使用的 Upstream 重新 Build，以验证 Outage Behavior。两个 Wrapper 都不会定位默认开发 Project 或 `3000`/`3001` 端口。
 
-最近一次本地验证于 2026-08-06 完成：Formatting、Root Lint/Typecheck/Build、API Lint/Typecheck/Build 与 Web Test 均通过；10 个 API Unit Suite 共 48 个 Test 通过；Clean Migration 从 Pending 变为 Applied 后，3 个 API Integration Suite 共 12 个 Test 通过。Migration Run 未尝试安装 Extension。这是本地 MVP 证据，不是公开暴露或生产部署许可。下方 Postman Smoke 仍是由用户手动执行的检查，本文不会把它伪造为自动化证据。
+最近一次本地验证于 2026-08-06 完成：Root Formatting、Documentation Policy、Lint、Typecheck、Production Build、隔离 Database Test Graph 与 Browser E2E 均通过；10 个 API Unit Suite 共 48 个 Test、3 个 API Integration Suite 共 12 个 Test、8 个 Web Suite 共 73 个 Test，以及 6 条 Playwright Journey 全部通过。Clean Migration 从 Pending 变为 Applied，且 Migration Run 未尝试安装 Extension。这是本地 MVP 证据，不是公开暴露或生产部署许可。下方 Postman Smoke 仍是由用户手动执行的检查，本文不会把它伪造为自动化证据。
 
 ## Postman 手动 Smoke
 

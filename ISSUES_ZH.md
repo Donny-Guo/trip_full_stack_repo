@@ -2,7 +2,7 @@
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**Owner 已授权的 Issue 合并于 2026-08-05 完成远程操作；ISSUE-007 与 ISSUE-009/MVP-01 已完成；ISSUE-010/MVP-02 是唯一开放执行 Issue**\
+状态：**Owner 已授权的 Issue 合并于 2026-08-05 完成远程操作；ISSUE-007 与 ISSUE-009/MVP-01 已完成；ISSUE-010/MVP-02 已在本地实现并验证，但仍开放，等待 PR CI、Review、Merge 与远程关闭**\
 计划日期：2026-07-30\
 合并日期：2026-08-05\
 范围来源：[`PLANS.md`](./PLANS.md)\
@@ -24,19 +24,19 @@ Owner 将受时间限制的本地认证演示压缩为基础设施之后的两�
 
 ## 2. 当前远程状态与顺序
 
-|  顺序 | GitHub Issue                                                                                                    | 状态                | 处置                                             |
-| ----: | --------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------ |
-|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                    | 已关闭              | 已完成的历史基础与授权工作                       |
-|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)            | 已关闭              | 已完成本地数据库基础设施                         |
-|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                        | 已关闭              | 已完成 Web UI 基础                               |
-|     9 | [#9 — MVP-01 认证 API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                              | 已关闭              | 已于 2026-08-06 完成并合并                       |
-|    10 | [#10 — MVP-02 本地演示与质量门](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                    | 开放                | 剩余执行 Issue；#9 前置已完成                    |
-| 11-27 | [历史 Issue](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27) | 按 not planned 关闭 | 被 #9/#10 取代或移入文档 Backlog；关闭不代表完成 |
+|  顺序 | GitHub Issue                                                                                                    | 状态                | 处置                                                   |
+| ----: | --------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------ |
+|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                    | 已关闭              | 已完成的历史基础与授权工作                             |
+|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)            | 已关闭              | 已完成本地数据库基础设施                               |
+|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                        | 已关闭              | 已完成 Web UI 基础                                     |
+|     9 | [#9 — MVP-01 认证 API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                              | 已关闭              | 已于 2026-08-06 完成并合并                             |
+|    10 | [#10 — MVP-02 本地演示与质量门](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                    | 开放                | 实现已在本地验证；仍待 PR CI、Review、Merge 与远程关闭 |
+| 11-27 | [历史 Issue](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27) | 按 not planned 关闭 | 被 #9/#10 取代或移入文档 Backlog；关闭不代表完成       |
 
 安全执行顺序：
 
 ```text
-ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS；REMOTE OPEN)
 ```
 
 已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.2.12、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准。
@@ -112,6 +112,7 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02
 
 - **GitHub：** [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)
 - **状态：** `TODO`
+- **本地状态：** 实现与本地验证已于 2026-08-06 完成；仍待 PR CI、Review、Merge 与远程关闭
 - **前置：** ISSUE-009 已为 `DONE`
 - **合并：** 原 #11、#12、#14/#15 中演示必需范围与 #25-#27
 - **PR Boundary：** 一个 Outcome-focused Web/Demo/Quality-gates PR，按 Web Boundary、Auth UI/Session、Hook/CI、Test 与文档分层 Commit；仅在 Reviewability 要求时拆为多个 PR
@@ -122,30 +123,30 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02
 
 ### Work
 
-- [ ] 配置经验证的 Web Environment Boundary 与只代理 NestJS `/api/v1` 的窄范围同源 Proxy。
-- [ ] 使用现有 MUI v9 App Router SSR Foundation 创建最小 `/sign-up`、`/login` 与受保护 `/dashboard` Route。Dashboard 仅保留可访问的 Route Identity 与认证路径所需 Logout Control。
-- [ ] 构建可访问的 MUI Form，提供即时 Client Feedback、稳定 API Error Mapping、Submission State Protection、Keyboard、Paste 与 Autofill 支持。
-- [ ] 通过 Server-side `/auth/me`、显式 Cookie Forwarding、No-store、经过清理的同源 Return Path，以及区分 `401` 与 API Outage 来保护 Dashboard。
-- [ ] 实现 Logout 与 Session Restore，不在 Browser-accessible Persistent State 中保存 Token 或 Session ID。
-- [ ] 添加聚焦的 Vitest/Testing Library Coverage，以及基于真实 PostgreSQL 的 Sign-up、Restore、Logout、Login、Route Protection Playwright Journey。
-- [ ] 添加 Husky、只处理 Staged File 的 lint-staged Pre-commit，以及 `commit-msg` Conventional Commit 校验。
-- [ ] 添加 Least-privilege、Immutable-SHA-pinned PR CI，覆盖 Frozen Install、Format、Lint、Typecheck、Unit/Integration、关键 E2E、Production Build 与稳定 Aggregate Result。
-- [ ] 记录 Environment Variable、Docker/Database Startup、Migration、应用启动、演示路径、验证命令与已知公开发布限制。
+- [x] 配置经验证的 Web Environment Boundary 与只代理 NestJS `/api/v1` 的窄范围同源 Proxy。
+- [x] 使用现有 MUI v9 App Router SSR Foundation 创建最小 `/sign-up`、`/login` 与受保护 `/dashboard` Route。Dashboard 仅保留可访问的 Route Identity 与认证路径所需 Logout Control。
+- [x] 构建可访问的 MUI Form，提供即时 Client Feedback、稳定 API Error Mapping、Submission State Protection、Keyboard、Paste 与 Autofill 支持。
+- [x] 通过 Server-side `/auth/me`、显式 Cookie Forwarding、No-store、经过清理的同源 Return Path，以及区分 `401` 与 API Outage 来保护 Dashboard。
+- [x] 实现 Logout 与 Session Restore，不在 Browser-accessible Persistent State 中保存 Token 或 Session ID。
+- [x] 添加聚焦的 Vitest/Testing Library Coverage，以及基于真实 PostgreSQL 的 Sign-up、Restore、Logout、Login、Route Protection、Session-aware 404 与 API Outage Playwright Journey。
+- [x] 添加 Husky、只处理 Staged File 的 lint-staged Pre-commit，以及 `commit-msg` Conventional Commit 校验。
+- [x] 添加 Least-privilege、Immutable-SHA-pinned PR CI，覆盖 Frozen Install、Format、Lint、Typecheck、Unit/Integration、关键 E2E、Production Build 与稳定 Aggregate Result。
+- [x] 记录 Environment Variable、Docker/Database Startup、Migration、应用启动、演示路径、验证命令与已知公开发布限制。
 
 ### Acceptance
 
 - [ ] 从 Clean Checkout 按文档启动 PostgreSQL、执行 Migration 并在宿主机运行 Web/API。
-- [ ] 注册成功创建数据库 Row、接收 HttpOnly JWT Cookie，并且只进入 Dashboard 一次。
-- [ ] 刷新恢复认证 Session，不闪现或缓存 Private Content。
-- [ ] Logout 后 Dashboard 再次受保护；随后使用有效凭据可恢复访问。
-- [ ] Dashboard 除可访问的 Route Identity 与 Logout 外不要求 Product Content：不包含 Card、Metric、Trip/Itinerary Data、Product Navigation、Personalization 或精修 Product Design。
-- [ ] Duplicate Registration、Password-policy Failure、Invalid Credential、Provenance Failure 与 API Outage 按 Public Contract 产生安全、可访问且应区分的响应。
-- [ ] JWT 不出现在 Response Body、URL、Web Storage、Log、Screenshot、Analytics 或 Persistent Client State。
+- [x] 注册成功创建数据库 Row、接收 HttpOnly JWT Cookie，并且只进入 Dashboard 一次。
+- [x] 刷新恢复认证 Session，不闪现或缓存 Private Content。
+- [x] Logout 后 Dashboard 再次受保护；随后使用有效凭据可恢复访问。
+- [x] Dashboard 除可访问的 Route Identity 与 Logout 外不要求 Product Content：不包含 Card、Metric、Trip/Itinerary Data、Product Navigation、Personalization 或精修 Product Design。
+- [x] Duplicate Registration、Password-policy Failure、Invalid Credential、Provenance Failure 与 API Outage 按 Public Contract 产生安全、可访问且应区分的响应。
+- [x] JWT 不出现在 Response Body、URL、Web Storage、Browser-readable Cookie 或 Persistent Client State；API Redaction Test 覆盖 Log。
 - [ ] Pre-commit 只处理 Staged File，不执行 Network/Database/Full Build，并保留 Partial Staging。
 - [ ] 根 Format、Lint、Typecheck、Test、关键 E2E 与 Production Build 在本地和 PR CI 中通过。
-- [ ] README、Environment Example、Plan/Issue 与中文跟随版和实现一致，并保持 Public-release Gate 关闭。
+- [x] README、Environment Example、Plan/Issue 与中文跟随版和实现一致，并保持 Public-release Gate 关闭。
 
-**Evidence：** Clean-start Transcript、响应式 Sign Up/Login Screenshot、Protected Dashboard Route/Logout Evidence、Accessibility/Component Test、Playwright Critical-path Report、Browser Cookie/Storage Inspection、Hook Partial-staging Check、CI Result 与同步文档。
+**本地 Evidence（2026-08-06）：** 隔离 Migration `show/run/show`；48 个 API Unit、12 个真实 PostgreSQL Integration、73 个 Web Unit/Component 与 6 条 Playwright Journey Test；Production Build；精确 HttpOnly Cookie 与空 Web Storage 检查；Accessibility Scan；Hook/Config Review；以及同步文档。关闭前仍需远程 PR CI 与 Owner 执行的 Partial-staging/Visual Handoff Evidence。
 
 **Non-goals：** Dashboard Product Content/Visual Design、完整 Navigation、Flight Info/User 页面、Localization/Language Switcher、最终 Branding、生成 OpenAPI Client、完整 GitHub Governance/Security Setting、部署或公开暴露。
 

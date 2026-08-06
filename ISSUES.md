@@ -1,6 +1,6 @@
 # Consolidated GitHub Issues for the Local Authentication Demo
 
-Status: **owner-approved issue consolidation completed remotely on 2026-08-05; ISSUE-007 and ISSUE-009/MVP-01 are complete; ISSUE-010/MVP-02 is the only open execution issue**\
+Status: **owner-approved issue consolidation completed remotely on 2026-08-05; ISSUE-007 and ISSUE-009/MVP-01 are complete; ISSUE-010/MVP-02 is implemented and verified locally but remains open pending PR CI, review, merge, and remote closure**\
 Plan date: 2026-07-30\
 Consolidation date: 2026-08-05\
 Scope source: [`PLANS.md`](./PLANS.md)\
@@ -30,13 +30,13 @@ MVP quality in this slice means the retained authentication path keeps the durab
 |     7 | [#7 — Local PostgreSQL and pgvector infrastructure](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)        | Closed                | Completed local database infrastructure                                                     |
 |     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                               | Closed                | Completed Web UI foundation                                                                 |
 |     9 | [#9 — MVP-01 authentication API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                           | Closed                | Completed and merged on 2026-08-06                                                          |
-|    10 | [#10 — MVP-02 local demo and quality gates](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)               | Open                  | Remaining execution issue; #9 prerequisite is complete                                      |
+|    10 | [#10 — MVP-02 local demo and quality gates](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)               | Open                  | Implementation verified locally; PR CI, review, merge, and remote closure remain            |
 | 11-27 | [Historical issues](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27) | Closed as not planned | Superseded by #9/#10 or moved to the documented backlog; closure is not completion evidence |
 
 Safe execution order:
 
 ```text
-ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS; REMOTE OPEN)
 ```
 
 The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.2.12, MUI 9.2.0, and TypeORM 1.1.0.
@@ -112,6 +112,7 @@ Deliver a working, tested NestJS authentication API backed by the Docker Compose
 
 - **GitHub:** [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)
 - **Status:** `TODO`
+- **Local state:** implementation and local verification completed on 2026-08-06; PR CI, review, merge, and remote closure remain
 - **Prerequisite:** ISSUE-009 is `DONE`
 - **Consolidates:** former issues #11, #12, the demo-essential portions of #14/#15, and #25-#27
 - **PR boundary:** one outcome-focused Web/demo/quality-gates PR with layered Web-boundary, auth UI/session, hooks/CI, test, and documentation commits; split into multiple PRs only when reviewability requires it
@@ -122,30 +123,30 @@ Deliver a reproducible local demonstration where a user can register, enter an i
 
 ### Work
 
-- [ ] Configure validated Web environment boundaries and a narrow same-origin `/api/v1` proxy to NestJS.
-- [ ] Create minimal `/sign-up`, `/login`, and protected `/dashboard` routes using the existing MUI v9 App Router SSR foundation. Keep Dashboard to accessible route identity and the logout control required by the auth journey.
-- [ ] Build accessible MUI forms with immediate client feedback, stable API-error mapping, submission-state protection, keyboard support, paste, and autofill.
-- [ ] Protect Dashboard through server-side `/auth/me`, explicit cookie forwarding, no-store behavior, sanitized same-origin return paths, and distinct `401` versus API-outage handling.
-- [ ] Implement logout and session restoration without storing tokens or session identifiers in browser-accessible persistent state.
-- [ ] Add focused Vitest/Testing Library coverage and one Playwright journey covering sign-up, restore, logout, login, and route protection against real PostgreSQL.
-- [ ] Add Husky installation, staged-only lint-staged pre-commit checks, and Conventional Commit validation through `commit-msg`.
-- [ ] Add least-privilege, immutable-SHA-pinned pull-request CI for frozen install, formatting, lint, typecheck, unit/integration tests, the critical E2E journey, production builds, and a stable aggregate result.
-- [ ] Document environment variables, Docker/database startup, migrations, application startup, the demo journey, verification commands, and known public-release limitations.
+- [x] Configure validated Web environment boundaries and a narrow same-origin `/api/v1` proxy to NestJS.
+- [x] Create minimal `/sign-up`, `/login`, and protected `/dashboard` routes using the existing MUI v9 App Router SSR foundation. Keep Dashboard to accessible route identity and the logout control required by the auth journey.
+- [x] Build accessible MUI forms with immediate client feedback, stable API-error mapping, submission-state protection, keyboard support, paste, and autofill.
+- [x] Protect Dashboard through server-side `/auth/me`, explicit cookie forwarding, no-store behavior, sanitized same-origin return paths, and distinct `401` versus API-outage handling.
+- [x] Implement logout and session restoration without storing tokens or session identifiers in browser-accessible persistent state.
+- [x] Add focused Vitest/Testing Library coverage and Playwright journeys covering sign-up, restore, logout, login, route protection, session-aware 404 behavior, and API outage against real PostgreSQL.
+- [x] Add Husky installation, staged-only lint-staged pre-commit checks, and Conventional Commit validation through `commit-msg`.
+- [x] Add least-privilege, immutable-SHA-pinned pull-request CI for frozen install, formatting, lint, typecheck, unit/integration tests, the critical E2E journey, production builds, and a stable aggregate result.
+- [x] Document environment variables, Docker/database startup, migrations, application startup, the demo journey, verification commands, and known public-release limitations.
 
 ### Acceptance
 
 - [ ] From a clean checkout, documented commands start PostgreSQL, migrate it, and run the host Web/API applications.
-- [ ] Successful sign-up creates a database row, receives the HttpOnly JWT cookie, and enters Dashboard exactly once.
-- [ ] Refresh restores the authenticated session without flashing or caching private content.
-- [ ] Logout protects Dashboard again; subsequent valid login restores access.
-- [ ] Dashboard has no required product content beyond accessible route identity and logout: no cards, metrics, trip or itinerary data, product navigation, personalization, or polished product design.
-- [ ] Duplicate registration, password-policy failures, invalid credentials, provenance failures, and API outages produce safe, accessible, distinct responses where the public contract permits.
-- [ ] The JWT is absent from response bodies, URLs, Web Storage, logs, screenshots, analytics, and persistent client state.
+- [x] Successful sign-up creates a database row, receives the HttpOnly JWT cookie, and enters Dashboard exactly once.
+- [x] Refresh restores the authenticated session without flashing or caching private content.
+- [x] Logout protects Dashboard again; subsequent valid login restores access.
+- [x] Dashboard has no required product content beyond accessible route identity and logout: no cards, metrics, trip or itinerary data, product navigation, personalization, or polished product design.
+- [x] Duplicate registration, password-policy failures, invalid credentials, provenance failures, and API outages produce safe, accessible, distinct responses where the public contract permits.
+- [x] The JWT is absent from response bodies, URLs, Web Storage, browser-readable cookies, and persistent client state; API redaction tests cover logs.
 - [ ] Pre-commit touches only staged files, performs no network/database/full-build work, and preserves partial staging.
 - [ ] Root format, lint, typecheck, tests, critical E2E, and production builds pass locally and in pull-request CI.
-- [ ] README, environment examples, plans/issues, and Chinese followers agree with implemented behavior and keep the public-release gate closed.
+- [x] README, environment examples, plans/issues, and Chinese followers agree with implemented behavior and keep the public-release gate closed.
 
-**Evidence:** clean-start transcript, responsive Sign Up/Login screenshots, protected Dashboard route/logout evidence, accessibility/component-test results, Playwright critical-path report, browser cookie/storage inspection, hook partial-staging checks, CI result, and synchronized documentation.
+**Local evidence (2026-08-06):** isolated migration `show/run/show`; 48 API unit, 12 real-PostgreSQL integration, 73 Web unit/component, and 6 Playwright journey tests; production builds; exact HttpOnly cookie and empty Web Storage inspection; accessibility scans; hook/config review; and synchronized documentation. Remote PR CI and owner-performed partial-staging/visual handoff evidence remain before closure.
 
 **Non-goals:** Dashboard product content or visual design, full navigation, Flight Info/User screens, localization or a language switcher, final branding, generated OpenAPI clients, complete GitHub governance/security settings, deployment, or public exposure.
 
