@@ -116,6 +116,15 @@ function markdownOutsideCode(text, preserveInlineCode = false) {
   return lines.join("\n");
 }
 
+function stripHtmlTags(value) {
+  let previous;
+  do {
+    previous = value;
+    value = value.replace(/<[^>]*>/g, "");
+  } while (value !== previous);
+  return value;
+}
+
 function headingAnchors(text) {
   const source = markdownOutsideCode(text, true);
   const lines = source.split(/\r?\n/);
@@ -123,10 +132,10 @@ function headingAnchors(text) {
   const counts = new Map();
 
   function addHeading(value) {
-    const base = value
+    const linkText = value
       .replace(/!\[([^\]]*)]\([^)]*\)/g, "$1")
-      .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
-      .replace(/<[^>]*>/g, "")
+      .replace(/\[([^\]]+)]\([^)]*\)/g, "$1");
+    const base = stripHtmlTags(linkText)
       .replace(/[*_~]/g, "")
       .trim()
       .toLowerCase()
