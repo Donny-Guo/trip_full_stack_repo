@@ -1,8 +1,9 @@
-# Consolidated GitHub Issues for the Local Authentication Demo
+# GitHub Issue Catalog and Dependency Plan
 
-Status: **owner-approved issue consolidation completed remotely on 2026-08-05; ISSUE-007 and ISSUE-009/MVP-01 are complete; ISSUE-010/MVP-02 is implemented and verified locally but remains open pending PR CI, review, merge, and remote closure**\
+Status: **ISSUE-007, ISSUE-009/MVP-01, and ISSUE-010/MVP-02 are merged and remotely closed; ISSUE-039 through ISSUE-044 are open planning issues for the proposed Airline Delay Data slice, whose implementation is not authorized**\
 Plan date: 2026-07-30\
 Consolidation date: 2026-08-05\
+Airline Delay Data planning date: 2026-08-10\
 Scope source: [`PLANS.md`](./PLANS.md)\
 Repository owner: `@Donny-Guo`
 
@@ -10,34 +11,44 @@ Simplified Chinese follower: [`ISSUES_ZH.md`](./ISSUES_ZH.md). This English file
 
 ## 1. Purpose and authority
 
-This catalog gives the repository one current issue answer after the owner compressed the time-limited local authentication demo into two execution issues after infrastructure. Detailed architecture, security decisions, task-level requirements, and later backlog remain in `PLANS.md`; they are not additional active GitHub issues.
+This catalog gives the repository one current issue answer for the completed local authentication slice and the open Airline Delay Data planning chain. Detailed decisions and task requirements remain in `PLANS.md`; [`visual_plan.md`](./visual_plan.md) is the detailed Airline Delay Data proposal.
 
 Authority order:
 
 1. `AGENTS.md` defines repository-wide engineering and safety rules.
 2. `PLANS.md` defines confirmed decisions, detailed requirements, and later backlog.
-3. This file defines active GitHub issue packaging, disposition, dependencies, and acceptance evidence.
+3. This file defines GitHub issue packaging, disposition, dependencies, implementation gates, and acceptance evidence.
 
-On 2026-08-05, the owner explicitly authorized rewriting GitHub issues #9 and #10 and closing #11 through #27 while leaving #7 untouched. The remote reorganization is complete. On 2026-08-06, the owner separately authorized narrowing #10 so Dashboard product details move to the documented backlog, together with synchronized local documentation; that remote update is also complete. Neither authorization permits any other issue creation, editing, reopening, or closure without another explicit owner request.
+On 2026-08-05, the owner explicitly authorized rewriting GitHub issues #9 and #10 and closing #11 through #27 while leaving #7 untouched. The remote reorganization is complete. On 2026-08-06, the owner separately authorized narrowing #10 so Dashboard product details move to the documented backlog, together with synchronized local documentation; that remote update is also complete. PR #38 merged ISSUE-010, and #10 closed on 2026-08-06. On 2026-08-10, the owner separately authorized creation of English planning issues #39-#44 and this synchronized local documentation. That request did not authorize implementation or any additional issue mutation.
 
 MVP quality in this slice means the retained authentication path keeps the durable controls required for real PostgreSQL persistence, password hashing, cookie sessions, database uniqueness, and safe API failures. Exhaustive pre-release hardening remains deferred, and the application is not approved for public exposure or production deployment.
 
 ## 2. Current remote state and order
 
-| Order | GitHub issue                                                                                                           | State                 | Disposition                                                                                 |
-| ----: | ---------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------- |
-|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                           | Closed                | Completed historical foundation and authorization                                           |
-|     7 | [#7 — Local PostgreSQL and pgvector infrastructure](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)        | Closed                | Completed local database infrastructure                                                     |
-|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                               | Closed                | Completed Web UI foundation                                                                 |
-|     9 | [#9 — MVP-01 authentication API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                           | Closed                | Completed and merged on 2026-08-06                                                          |
-|    10 | [#10 — MVP-02 local demo and quality gates](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)               | Open                  | Implementation verified locally; PR CI, review, merge, and remote closure remain            |
-| 11-27 | [Historical issues](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27) | Closed as not planned | Superseded by #9/#10 or moved to the documented backlog; closure is not completion evidence |
+| Order | GitHub issue                                                                                                                          | State                 | Disposition                                                                                 |
+| ----: | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------- |
+|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                                          | Closed                | Completed historical foundation and authorization                                           |
+|     7 | [#7 — Local PostgreSQL and pgvector infrastructure](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)                       | Closed                | Completed local database infrastructure                                                     |
+|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                                              | Closed                | Completed Web UI foundation                                                                 |
+|     9 | [#9 — MVP-01 authentication API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                                          | Closed                | Completed and merged on 2026-08-06                                                          |
+|    10 | [#10 — MVP-02 local demo and quality gates](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                              | Closed                | Merged through PR #38 and remotely closed on 2026-08-06                                     |
+| 11-27 | [Historical issues](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27)                | Closed as not planned | Superseded by #9/#10 or moved to the documented backlog; closure is not completion evidence |
+| 39-44 | [Airline Delay Data planning issues](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aopen+number%3A39..44) | Open                  | Proposed AD-01 through AD-06 sequence; issue creation is not implementation authorization   |
 
 Safe execution order:
 
 ```text
-ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS; REMOTE OPEN)
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (MERGED; CLOSED)
 ```
+
+Proposed Airline Delay Data sequence:
+
+```text
+ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ────────────────┐
+                                           \-> ISSUE-042 / AD-04 -> ISSUE-043 / AD-05 ──┴-> ISSUE-044 / AD-06
+```
+
+AD-03 and AD-04 may proceed in parallel only after AD-02. AD-06 requires both AD-03 and AD-05. No item in this sequence is executable until the owner separately authorizes implementation.
 
 The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.2.12, MUI 9.2.0, and TypeORM 1.1.0.
 
@@ -111,8 +122,8 @@ Deliver a working, tested NestJS authentication API backed by the Docker Compose
 ## 6. ISSUE-010 / MVP-02 — Ship the local sign-up/login demo and developer quality gates
 
 - **GitHub:** [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)
-- **Status:** `TODO`
-- **Local state:** implementation and local verification completed on 2026-08-06; PR CI, review, merge, and remote closure remain
+- **Status:** `DONE (merged; residual evidence note below)`
+- **Remote state:** PR [#38](https://github.com/Donny-Guo/trip_full_stack_repo/pull/38) merged as `e1ad0046f9075e2b35ed5f2ac665076107a7f13a`, and #10 closed on 2026-08-06
 - **Prerequisite:** ISSUE-009 is `DONE`
 - **Consolidates:** former issues #11, #12, the demo-essential portions of #14/#15, and #25-#27
 - **PR boundary:** one outcome-focused Web/demo/quality-gates PR with layered Web-boundary, auth UI/session, hooks/CI, test, and documentation commits; split into multiple PRs only when reviewability requires it
@@ -146,7 +157,9 @@ Deliver a reproducible local demonstration where a user can register, enter an i
 - [ ] Root format, lint, typecheck, tests, critical E2E, and production builds pass locally and in pull-request CI.
 - [x] README, environment examples, plans/issues, and Chinese followers agree with implemented behavior and keep the public-release gate closed.
 
-**Local evidence (2026-08-06):** isolated migration `show/run/show`; 48 API unit, 12 real-PostgreSQL integration, 73 Web unit/component, and 6 Playwright journey tests; production builds; exact HttpOnly cookie and empty Web Storage inspection; accessibility scans; hook/config review; and synchronized documentation. Remote PR CI and owner-performed partial-staging/visual handoff evidence remain before closure.
+**Evidence (2026-08-06):** isolated migration `show/run/show`; 48 API unit, 12 real-PostgreSQL integration, 73 Web unit/component, and 6 Playwright journey tests; production builds; exact HttpOnly cookie and empty Web Storage inspection; accessibility scans; hook/config review; synchronized documentation; merged PR #38; and remotely closed #10.
+
+**Residual evidence warning:** the read-only GitHub PR record returned no status-check rollup or review decision, and the remote issue body retained unchecked acceptance boxes. The previously open clean-checkout, owner-performed partial-staging/visual handoff, and PR-CI evidence are therefore not independently recoverable from remote metadata. This is documentation/evidence debt, not an unmerged implementation claim, and it does not relax future completion rules.
 
 **Non-goals:** Dashboard product content or visual design, full navigation, Flight Info/User screens, localization or a language switcher, final branding, generated OpenAPI clients, complete GitHub governance/security settings, deployment, or public exposure.
 
@@ -163,7 +176,29 @@ Closing a historical issue as not planned records consolidation or deferral, not
 | #16                    | Full GitHub governance and security-administration work moved to later/public-release backlog                             |
 | #19                    | Extensible navigation and Flight Info/User targets moved to later product backlog                                         |
 
-## 8. Documented backlog, not active GitHub issues
+## 8. Active Airline Delay Data planning chain
+
+These English issues are open and assigned to `@Donny-Guo`. Their scope and acceptance criteria are detailed remotely and in [`visual_plan.md`](./visual_plan.md). Every status below is planning-only: `TODO` does not imply implementation authorization.
+
+| Plan task | Local issue ID | GitHub                                                             | Status                 | Depends on           | Review boundary                                                                |
+| --------- | -------------- | ------------------------------------------------------------------ | ---------------------- | -------------------- | ------------------------------------------------------------------------------ |
+| AD-01     | ISSUE-039      | [#39](https://github.com/Donny-Guo/trip_full_stack_repo/issues/39) | `TODO (planning only)` | None                 | Source schema, official mapping provenance, and formula proof                  |
+| AD-02     | ISSUE-040      | [#40](https://github.com/Donny-Guo/trip_full_stack_repo/issues/40) | `TODO (planning only)` | ISSUE-039            | Aggregate/audit migrations, indexes, privileges, and atomic publication        |
+| AD-03     | ISSUE-041      | [#41](https://github.com/Donny-Guo/trip_full_stack_repo/issues/41) | `TODO (planning only)` | ISSUE-039, ISSUE-040 | Development-only streaming import CLI and reconciliation reports               |
+| AD-04     | ISSUE-042      | [#42](https://github.com/Donny-Guo/trip_full_stack_repo/issues/42) | `TODO (planning only)` | ISSUE-039, ISSUE-040 | Authenticated query/options API and real-PostgreSQL tests                      |
+| AD-05     | ISSUE-043      | [#43](https://github.com/Donny-Guo/trip_full_stack_repo/issues/43) | `TODO (planning only)` | ISSUE-042            | Protected 21-field table, linked filters, pagination, and accessibility        |
+| AD-06     | ISSUE-044      | [#44](https://github.com/Donny-Guo/trip_full_stack_repo/issues/44) | `TODO (planning only)` | ISSUE-041, ISSUE-043 | Ten-year import, reconciliation, activation, performance, and handoff evidence |
+
+Shared gates:
+
+- AD-01 is a stop/go data-contract gate. Missing or ambiguous official mappings, source drift, or a formula mismatch blocks AD-02 onward.
+- Full per-flight CSVs, generated reports, and populated environment files stay ignored and uncommitted.
+- `csv-parse@7.0.1` and `decimal.js@10.6.0` belong to the AD-03 importer as direct `apps/api` development-only dependencies outside the `AppModule` runtime graph.
+- AD-02 publishes only the 21-field aggregate and audit metadata; PostgreSQL does not retain raw per-flight rows.
+- AD-04 and AD-05 use authenticated, no-store, server-backed filtering and pagination; the browser never receives more than the selected 100-row maximum.
+- AD-06 activates data only after independent ten-year reconciliation and all applicable documentation, format, lint, typecheck, integration, E2E, and build gates pass.
+
+## 9. Documented backlog, not active GitHub issues
 
 `PLANS.md` remains the detailed source for these later requirements. Listing them does not authorize implementation or remote issue creation.
 

@@ -2,16 +2,16 @@
 
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
-这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Worktree 包含 Workspace 基础、已在本地验证的 ISSUE-010 Next.js/MUI 认证路径，以及已合并的 ISSUE-009 NestJS ESM 认证 API；该 API 由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。Agent 能力属于后续工作。
+这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Worktree 包含已完成的 Next.js/MUI 与 NestJS 认证切片；该切片由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。下一个 Airline Delay Data 切片目前只有文档和规划 Issue，尚未实现，也未获实施授权。Agent 能力属于后续工作。
 
 ## 当前状态
 
-截至 2026-08-06：
+截至 2026-08-10：
 
 - 当前 Worktree 已存在：pnpm/Turborepo 根、共享工程配置、Next.js 16/MUI v9 注册与登录页、服务端保护的精简 Dashboard、Session Restore/Logout、Session-aware 404、本地 Hook、以 Immutable SHA 固定的 PR CI 配置，以及带 PostgreSQL Boundary 的 NestJS 11 认证 API。
-- 本地已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`、`W-01`/`ISSUE-008`，以及 ISSUE-010 的实现与本地验证。
-- 当前顺序：`ISSUE-009`/`MVP-01` 已合并并按 completed 关闭。`ISSUE-010`/`MVP-02` 仍开放，等待正常 PR CI、Review、Merge 与远程关闭。GitHub #11-#27 因被取代或延期而关闭，不是实施完成证据。
-- 尚未实现：Agent 能力、旅行领域业务功能、Product Dashboard 内容或生产部署。
+- 已完成：`P-03`/`ISSUE-002`、`F-01` 至 `F-05`/`ISSUE-003` 至 `ISSUE-007`、`W-01`/`ISSUE-008`、`ISSUE-009`/`MVP-01` 及 `ISSUE-010`/`MVP-02`。PR #38 已合并 ISSUE-010，#10 于 2026-08-06 按 completed 关闭。
+- 仅规划：GitHub #39-#44 记录拟议受保护 Airline Delay Data 切片的 `AD-01` 至 `AD-06`。创建这些 Issue 与同步文档不确认拟议 D-27，也不授权实施。
+- 尚未实现：Airline Delay Data 页面或数据库、Agent 能力、其他旅行领域业务功能、Product Dashboard 内容或生产部署。
 - 生产部署和公开暴露尚未授权。
 
 权威范围与状态见 [PLANS.md](./PLANS.md)。
@@ -126,7 +126,8 @@ docs/api/                   认证 Contract 与本地 Runbook
 .husky/                     快速 Staged-file 与 Commit-message Hook
 AGENTS*.md                  Contributor 与 Agent 的仓库规则
 PLANS*.md                   决策、范围、状态与验收标准
-ISSUES*.md                  两个合并执行 Issue、远程处置与文档 Backlog 路由
+ISSUES*.md                  Issue 状态、验收证据、规划链与依赖顺序
+visual_plan.md              Airline Delay Data 详细拟议计划
 package.json                根命令与 Runtime 约束
 pnpm-workspace.yaml         Workspace 与安装策略
 turbo.json                  跨 Package Task Graph
@@ -145,7 +146,8 @@ Application Container、Redis 与生产数据库选择仍不存在。
 ## 文档入口
 
 - [PLANS_ZH.md](./PLANS_ZH.md) — 权威英文计划的中文跟随版，包含决策、范围、任务状态与验收标准。
-- [ISSUES_ZH.md](./ISSUES_ZH.md) — 两个合并执行规格、远程处置表与文档 Backlog 路由的中文跟随版。
+- [ISSUES_ZH.md](./ISSUES_ZH.md) — 已完成认证 Issue 证据、现役 Airline Delay Data 规划链、远程处置与依赖顺序的中文跟随版。
+- [visual_plan.md](./visual_plan.md) — Airline Delay Data 详细提案及实施 Gate；仅用于规划，不代表实施授权。
 - [docs/toolchain_ZH.md](./docs/toolchain_ZH.md) — 精确 Dependency Pin 与 Source Evidence 的中文跟随版。
 - [docs/api/authentication_ZH.md](./docs/api/authentication_ZH.md) — 认证 Endpoint、Error、环境设置、Migration、Test 与手动 Smoke 的中文跟随版。
 - [AGENTS_ZH.md](./AGENTS_ZH.md) — 仓库工程与安全规则的中文跟随版。
