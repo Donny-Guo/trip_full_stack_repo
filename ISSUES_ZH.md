@@ -1,43 +1,54 @@
-# 本地认证演示的合并 GitHub Issue（中文）
+# GitHub Issue 清单与依赖计划（中文）
 
 本文件是权威英文 [`ISSUES.md`](./ISSUES.md) 的简体中文跟随翻译。若两者冲突，以英文版为准并修正本文件。
 
-状态：**Owner 已授权的 Issue 合并于 2026-08-05 完成远程操作；ISSUE-007 与 ISSUE-009/MVP-01 已完成；ISSUE-010/MVP-02 已在本地实现并验证，但仍开放，等待 PR CI、Review、Merge 与远程关闭**\
+状态：**ISSUE-007、ISSUE-009/MVP-01 与 ISSUE-010/MVP-02 已合并并在远程关闭；ISSUE-039 至 ISSUE-044 是拟议 Airline Delay Data 切片的 Open 规划 Issue，尚未获实施授权**\
 计划日期：2026-07-30\
 合并日期：2026-08-05\
+Airline Delay Data 规划日期：2026-08-10\
 范围来源：[`PLANS.md`](./PLANS.md)\
 仓库 Owner：`@Donny-Guo`
 
 ## 1. 目的与权威性
 
-Owner 将受时间限制的本地认证演示压缩为基础设施之后的两个执行 Issue。本清单为仓库提供唯一的现役 Issue 答案。详细架构、安全决策、Task 级要求与后续 Backlog 仍保留在 `PLANS.md` 中，但它们不是额外的开放 GitHub Issue。
+本清单为已完成的本地认证切片和 Open Airline Delay Data 规划链提供唯一的现役 Issue 答案。详细决策与 Task 要求保留在 `PLANS.md`；[`visual_plan.md`](./visual_plan.md) 是 Airline Delay Data 的详细提案。
 
 权威顺序：
 
 1. `AGENTS.md` 定义全仓工程与安全规则。
 2. `PLANS.md` 定义已确认决策、详细要求与后续 Backlog。
-3. 本文件定义开放 GitHub Issue 的包装、处置、依赖与验收证据。
+3. 本文件定义 GitHub Issue 的包装、处置、依赖、实施 Gate 与验收证据。
 
-2026-08-05，Owner 明确授权改写 GitHub #9、#10，并关闭 #11 至 #27，同时保持 #7 不变。远程整理已经完成。2026-08-06，Owner 另行授权收窄 #10，把 Dashboard Product Detail 移入文档 Backlog，并同步本地文档；该远程更新也已完成。两次授权均不允许在没有新 Owner 明确请求时执行其他 Issue 创建、编辑、重开或关闭操作。
+2026-08-05，Owner 明确授权改写 GitHub #9、#10，并关闭 #11 至 #27，同时保持 #7 不变。远程整理已经完成。2026-08-06，Owner 另行授权收窄 #10，把 Dashboard Product Detail 移入文档 Backlog，并同步本地文档；该远程更新也已完成。PR #38 已合并 ISSUE-010，#10 于 2026-08-06 关闭。2026-08-10，Owner 另行授权创建英文规划 Issue #39-#44，并同步本地文档。该请求不授权实施或任何额外 Issue Mutation。
 
 本切片中的 MVP 质量表示，保留的认证路径继续具备真实 PostgreSQL 持久化、密码哈希、Cookie 会话、数据库唯一性与安全 API 失败所需的持久控制。完整的发布前加固仍然延后，应用尚未获准公开暴露或生产部署。
 
 ## 2. 当前远程状态与顺序
 
-|  顺序 | GitHub Issue                                                                                                    | 状态                | 处置                                                   |
-| ----: | --------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------ |
-|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                    | 已关闭              | 已完成的历史基础与授权工作                             |
-|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)            | 已关闭              | 已完成本地数据库基础设施                               |
-|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                        | 已关闭              | 已完成 Web UI 基础                                     |
-|     9 | [#9 — MVP-01 认证 API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                              | 已关闭              | 已于 2026-08-06 完成并合并                             |
-|    10 | [#10 — MVP-02 本地演示与质量门](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                    | 开放                | 实现已在本地验证；仍待 PR CI、Review、Merge 与远程关闭 |
-| 11-27 | [历史 Issue](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27) | 按 not planned 关闭 | 被 #9/#10 取代或移入文档 Backlog；关闭不代表完成       |
+|  顺序 | GitHub Issue                                                                                                                     | 状态                | 处置                                                |
+| ----: | -------------------------------------------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------- |
+|   1-6 | [#1-#6](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+number%3A1..6)                                     | 已关闭              | 已完成的历史基础与授权工作                          |
+|     7 | [#7 — 本地 PostgreSQL/pgvector 基础设施](https://github.com/Donny-Guo/trip_full_stack_repo/issues/7)                             | 已关闭              | 已完成本地数据库基础设施                            |
+|     8 | [#8 — MUI v9 App Router SSR](https://github.com/Donny-Guo/trip_full_stack_repo/issues/8)                                         | 已关闭              | 已完成 Web UI 基础                                  |
+|     9 | [#9 — MVP-01 认证 API](https://github.com/Donny-Guo/trip_full_stack_repo/issues/9)                                               | 已关闭              | 已于 2026-08-06 完成并合并                          |
+|    10 | [#10 — MVP-02 本地演示与质量门](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)                                     | 已关闭              | 已通过 PR #38 合并，并于 2026-08-06 在远程关闭      |
+| 11-27 | [历史 Issue](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aclosed+number%3A11..27)                  | 按 not planned 关闭 | 被 #9/#10 取代或移入文档 Backlog；关闭不代表完成    |
+| 39-44 | [Airline Delay Data 规划 Issue](https://github.com/Donny-Guo/trip_full_stack_repo/issues?q=is%3Aissue+is%3Aopen+number%3A39..44) | 开放                | 拟议 AD-01 至 AD-06 顺序；创建 Issue 不代表实施授权 |
 
 安全执行顺序：
 
 ```text
-ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS；REMOTE OPEN)
+ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (MERGED；CLOSED)
 ```
+
+拟议 Airline Delay Data 顺序：
+
+```text
+ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ────────────────┐
+                                           \-> ISSUE-042 / AD-04 -> ISSUE-043 / AD-05 ──┴-> ISSUE-044 / AD-06
+```
+
+AD-02 完成后，AD-03 与 AD-04 才可并行。AD-06 同时依赖 AD-03 与 AD-05。在 Owner 另行授权实施前，该顺序中的任何工作都不可执行。
 
 已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.2.12、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准。
 
@@ -111,8 +122,8 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS�
 ## 6. ISSUE-010 / MVP-02 — 交付本地注册/登录演示与开发质量门
 
 - **GitHub：** [#10](https://github.com/Donny-Guo/trip_full_stack_repo/issues/10)
-- **状态：** `TODO`
-- **本地状态：** 实现与本地验证已于 2026-08-06 完成；仍待 PR CI、Review、Merge 与远程关闭
+- **状态：** `DONE (merged; residual evidence note below)`
+- **远程状态：** PR [#38](https://github.com/Donny-Guo/trip_full_stack_repo/pull/38) 已以 `e1ad0046f9075e2b35ed5f2ac665076107a7f13a` 合并，#10 于 2026-08-06 关闭
 - **前置：** ISSUE-009 已为 `DONE`
 - **合并：** 原 #11、#12、#14/#15 中演示必需范围与 #25-#27
 - **PR Boundary：** 一个 Outcome-focused Web/Demo/Quality-gates PR，按 Web Boundary、Auth UI/Session、Hook/CI、Test 与文档分层 Commit；仅在 Reviewability 要求时拆为多个 PR
@@ -146,7 +157,9 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS�
 - [ ] 根 Format、Lint、Typecheck、Test、关键 E2E 与 Production Build 在本地和 PR CI 中通过。
 - [x] README、Environment Example、Plan/Issue 与中文跟随版和实现一致，并保持 Public-release Gate 关闭。
 
-**本地 Evidence（2026-08-06）：** 隔离 Migration `show/run/show`；48 个 API Unit、12 个真实 PostgreSQL Integration、73 个 Web Unit/Component 与 6 条 Playwright Journey Test；Production Build；精确 HttpOnly Cookie 与空 Web Storage 检查；Accessibility Scan；Hook/Config Review；以及同步文档。关闭前仍需远程 PR CI 与 Owner 执行的 Partial-staging/Visual Handoff Evidence。
+**Evidence（2026-08-06）：** 隔离 Migration `show/run/show`；48 个 API Unit、12 个真实 PostgreSQL Integration、73 个 Web Unit/Component 与 6 条 Playwright Journey Test；Production Build；精确 HttpOnly Cookie 与空 Web Storage 检查；Accessibility Scan；Hook/Config Review；同步文档；已合并 PR #38；以及已远程关闭 #10。
+
+**残留 Evidence Warning：** 只读 GitHub PR Record 未返回 Status-check Rollup 或 Review Decision，远程 Issue Body 也保留未勾选 Acceptance Box。因此，之前开放的 Clean-checkout、Owner 执行的 Partial-staging/Visual Handoff 与 PR-CI Evidence 无法从远程 Metadata 独立恢复。这是 Documentation/Evidence Debt，不代表实现尚未合并，也不放宽未来完成规则。
 
 **Non-goals：** Dashboard Product Content/Visual Design、完整 Navigation、Flight Info/User 页面、Localization/Language Switcher、最终 Branding、生成 OpenAPI Client、完整 GitHub Governance/Security Setting、部署或公开暴露。
 
@@ -163,7 +176,29 @@ ISSUE-007 (DONE) -> ISSUE-009 / MVP-01 (DONE) -> ISSUE-010 / MVP-02 (LOCAL PASS�
 | #16                    | 完整 GitHub Governance 与 Security Administration 移入后续/Public-release Backlog                        |
 | #19                    | Extensible Navigation 与 Flight Info/User 页面移入后续 Product Backlog                                   |
 
-## 8. 文档 Backlog，不是开放 GitHub Issue
+## 8. 现役 Airline Delay Data 规划链
+
+这些英文 Issue 均为 Open，并指派给 `@Donny-Guo`。远程正文与 [`visual_plan.md`](./visual_plan.md) 详细记录其范围与验收标准。以下全部状态仅用于规划：`TODO` 不代表实施授权。
+
+| Plan Task | 本地 Issue ID | GitHub                                                             | 状态                   | 依赖                 | Review Boundary                                                          |
+| --------- | ------------- | ------------------------------------------------------------------ | ---------------------- | -------------------- | ------------------------------------------------------------------------ |
+| AD-01     | ISSUE-039     | [#39](https://github.com/Donny-Guo/trip_full_stack_repo/issues/39) | `TODO (planning only)` | 无                   | Source Schema、官方 Mapping Provenance 与 Formula Proof                  |
+| AD-02     | ISSUE-040     | [#40](https://github.com/Donny-Guo/trip_full_stack_repo/issues/40) | `TODO (planning only)` | ISSUE-039            | Aggregate/Audit Migration、Index、Privilege 与 Atomic Publication        |
+| AD-03     | ISSUE-041     | [#41](https://github.com/Donny-Guo/trip_full_stack_repo/issues/41) | `TODO (planning only)` | ISSUE-039、ISSUE-040 | Development-only Streaming Import CLI 与 Reconciliation Report           |
+| AD-04     | ISSUE-042     | [#42](https://github.com/Donny-Guo/trip_full_stack_repo/issues/42) | `TODO (planning only)` | ISSUE-039、ISSUE-040 | 需认证 Query/Option API 与真实 PostgreSQL Test                           |
+| AD-05     | ISSUE-043     | [#43](https://github.com/Donny-Guo/trip_full_stack_repo/issues/43) | `TODO (planning only)` | ISSUE-042            | 受保护 21 字段表格、联动 Filter、Pagination 与 Accessibility             |
+| AD-06     | ISSUE-044     | [#44](https://github.com/Donny-Guo/trip_full_stack_repo/issues/44) | `TODO (planning only)` | ISSUE-041、ISSUE-043 | 十年 Import、Reconciliation、Activation、Performance 与 Handoff Evidence |
+
+统一 Gate：
+
+- AD-01 是 Stop/go Data-contract Gate。官方 Mapping 缺失或含糊、Source Drift 或 Formula Mismatch 都会阻断 AD-02 及之后工作。
+- 完整逐航班 CSV、Generated Report 与已填写 Environment File 保持被 Ignore 且不提交。
+- `csv-parse@7.0.1` 与 `decimal.js@10.6.0` 归 AD-03 Importer，作为 `apps/api` 直接 Development-only Dependency，并保持在 `AppModule` Runtime Graph 之外。
+- AD-02 只发布 21 字段 Aggregate 与 Audit Metadata；PostgreSQL 不保留原始逐航班 Row。
+- AD-04 与 AD-05 使用需认证、No-store、Server-backed Filter 与 Pagination；Browser 永不接收超过所选上限 100 的 Row。
+- AD-06 只有在独立十年 Reconciliation 与全部适用 Documentation、Format、Lint、Typecheck、Integration、E2E 与 Build Gate 通过后才 Activate Data。
+
+## 9. 文档 Backlog，不是开放 GitHub Issue
 
 `PLANS.md` 仍是以下后续要求的详细来源。列出不代表实施授权或远程 Issue 创建授权。
 

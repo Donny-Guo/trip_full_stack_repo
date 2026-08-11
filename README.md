@@ -1,17 +1,17 @@
 # Trip Agent Full Stack
 
-A production-oriented travel-agent monorepo. The current worktree contains the workspace foundation, the locally verified ISSUE-010 Next.js/MUI authentication journey, and the merged ISSUE-009 NestJS ESM authentication API backed by TypeORM and local PostgreSQL/pgvector with separated database roles. Agent capabilities follow in later work.
+A production-oriented travel-agent monorepo. The current worktree contains the completed Next.js/MUI and NestJS authentication slice backed by TypeORM and local PostgreSQL/pgvector with separated database roles. The next Airline Delay Data slice is documented and tracked by planning issues only; it is not implemented or authorized for implementation. Agent capabilities follow in later work.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
 
 ## Current status
 
-As of 2026-08-06:
+As of 2026-08-10:
 
 - Available in this worktree: the pnpm/Turborepo root, shared engineering configuration, Next.js 16/MUI v9 sign-up and login pages, server-protected sparse Dashboard, session restore/logout, session-aware 404 handling, local hooks, immutable-SHA-pinned PR CI configuration, and the NestJS 11 authentication API with its PostgreSQL boundary.
-- Completed locally: `P-03`/`ISSUE-002`, `F-01` through `F-05`/`ISSUE-003` through `ISSUE-007`, `W-01`/`ISSUE-008`, and the ISSUE-010 implementation and local verification.
-- Current order: `ISSUE-009`/`MVP-01` is merged and closed as completed. `ISSUE-010`/`MVP-02` remains open pending normal PR CI, review, merge, and remote closure. GitHub issues #11-#27 are closed as superseded or deferred, not as implementation evidence.
-- Not available yet: agent capabilities, travel business features, product Dashboard content, or production deployment.
+- Completed: `P-03`/`ISSUE-002`, `F-01` through `F-05`/`ISSUE-003` through `ISSUE-007`, `W-01`/`ISSUE-008`, `ISSUE-009`/`MVP-01`, and `ISSUE-010`/`MVP-02`. PR #38 merged ISSUE-010, and #10 closed as completed on 2026-08-06.
+- Planning only: GitHub #39-#44 track `AD-01` through `AD-06` for a proposed protected Airline Delay Data slice. Their creation and documentation do not confirm proposed D-27 or authorize implementation.
+- Not available yet: the Airline Delay Data page or database, agent capabilities, other travel business features, product Dashboard content, or production deployment.
 - Production deployment and public exposure are not authorized.
 
 See [PLANS.md](./PLANS.md) for authoritative scope and status.
@@ -127,6 +127,7 @@ docs/api/                   Authentication contracts and local runbook
 AGENTS*.md                  Repository rules for contributors and agents
 PLANS*.md                   Decisions, scope, status, and acceptance criteria
 ISSUES*.md                  Ordered implementation issue specifications
+visual_plan.md              Detailed proposed Airline Delay Data plan
 package.json                Root commands and runtime constraints
 pnpm-workspace.yaml         Workspace and install policy
 turbo.json                  Cross-package task graph
@@ -145,7 +146,8 @@ Application containers, Redis, and production database selection remain absent.
 ## Documentation
 
 - [PLANS.md](./PLANS.md) — authoritative decisions, scope, task status, and acceptance criteria.
-- [ISSUES.md](./ISSUES.md) — the two consolidated execution specifications, remote disposition map, and documented-backlog routing.
+- [ISSUES.md](./ISSUES.md) — completed authentication issue evidence, the active Airline Delay Data planning chain, remote disposition, and dependency order.
+- [visual_plan.md](./visual_plan.md) — detailed Airline Delay Data proposal and its implementation gates; planning only, not implementation authorization.
 - [docs/toolchain.md](./docs/toolchain.md) — exact dependency pins and source evidence.
 - [docs/api/authentication.md](./docs/api/authentication.md) — authentication endpoints, errors, environment setup, migrations, testing, and manual smoke checks.
 - [AGENTS.md](./AGENTS.md) — repository-wide engineering and safety rules.

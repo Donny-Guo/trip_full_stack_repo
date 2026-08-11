@@ -62,3 +62,6 @@ ISSUE_*.md
 .claude/
 .codex/
 .opencode/
+
+# dataset
+dataset/

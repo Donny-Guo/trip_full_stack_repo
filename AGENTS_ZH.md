@@ -12,11 +12,13 @@ D-01 至 D-26 已确认。2026-08-02，Owner 授权计划内首个本地认证�
 
 2026-08-06，Owner 还明确了 D-26 与 `ISSUE-010`：`/dashboard` 只是用于证明认证路径的刻意精简受保护目标。ISSUE-010 只要求可访问的 Route Identity 与 Logout Control，不包含 Dashboard Card、Metric、Trip Data、Product Navigation、Personalization 或精修 Product Design。这些细节归后续 `W-09`，并需单独授权。
 
-ISSUE-010 的实现与本地验证已于 2026-08-06 完成，包括最小 Web 认证路径、Session-aware 404 Behavior、本地 Hook 与 PR CI 配置。GitHub #10 仍开放，等待正常 PR CI、Review、Merge 与远程关闭；本地完成不代表公开发布获准。
+ISSUE-010 的实现与本地验证已于 2026-08-06 完成，包括最小 Web 认证路径、Session-aware 404 Behavior、本地 Hook 与 PR CI 配置。PR #38 已将该实现合并至 `main`，GitHub #10 也于 2026-08-06 按 completed 关闭。完成本地认证切片不代表公开发布获准。
+
+2026-08-10，Owner 另行授权远程创建英文 GitHub 规划 Issue #39 至 #44，并为拟议的 Airline Delay Data 切片同步本地文档。这些 Issue 均为 Open 并指派给 `@Donny-Guo`；它们只记录 `AD-01` 至 `AD-06` 的范围与依赖顺序。该规划授权不确认拟议 D-27，也不授权依赖、Migration、数据导入、API、Web 实现、部署或公开暴露。
 
 2026-08-03，Owner 通过 D-25 明确取代此前的 Web/ORM 版本约束：使用当前稳定的 Next.js 16、MUI v9 与 TypeORM 版本线，同时保留 PostgreSQL 18 和已选测试系列。经 Review 的精确基线为 Next.js 16.2.12、MUI Material/Icons 9.2.0、`@mui/material-nextjs` 9.1.1，以及 TypeORM 1.1.0。将这些视为明确约束：使用精确 Stable Pin，不得静默替换其他 Major 或 Prerelease，并将版本升级与 Feature Work 隔离。已安装 Dependency 立即迁移；尚未进入所属实施任务的 Dependency 在该任务开始时采用新 Pin。每季度、公开暴露前，以及出现严重且无补丁的安全或兼容性阻断时重新 Review Support/Compatibility。再次变更 Major 仍需 Owner 明确批准。
 
-该授权不包含 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露、仓库 Visibility 变更或远程创建 `ISSUE-028` 及之后的 Issue。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata。2026-08-05，Owner 明确授权已完成的 #9/#10 改写与 #11-#27 关闭，同时排除 #7。2026-08-06，Owner 另行授权并已完成本次远程 #10 收窄与同步文档。其他远程 Issue 操作都需单独明确请求。
+首切片实施授权不包含 Post-MVP 实施、生产部署、启用 CD、Cloud Resource、公开暴露或仓库 Visibility 变更。Owner 于 2026-07-30 另行授权远程创建 `ISSUE-001` 至 `ISSUE-027` 及其限定 Metadata。2026-08-05，Owner 明确授权已完成的 #9/#10 改写与 #11-#27 关闭，同时排除 #7。2026-08-06，Owner 另行授权并已完成本次远程 #10 收窄与同步文档。2026-08-10，Owner 仅授权已经完成的规划 Issue #39-#44 创建及本次配套本地文档同步。任何其他远程 Issue 操作都需单独明确请求。
 
 ## 2. 权威顺序、事实与文档
 
