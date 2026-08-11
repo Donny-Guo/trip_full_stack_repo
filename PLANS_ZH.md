@@ -480,7 +480,7 @@ JWT 使用 allowlist 中的 `HS256`、至少 256-bit 部署托管密钥、15 分
 
 ### Phase 5 — 拟议 Airline Delay Data 切片（仅规划）
 
-详细提案见 [`visual_plan.md`](./visual_plan.md)。GitHub #39-#44 包装经 Review 的顺序，但文档和 Open Issue 均不授权实施。没有单独明确的 Owner 指令，不得开始本 Phase 的依赖、Migration、Importer、API 或 Web 工作。预期年度文件名和与样例一致的 27 个业务列输入形态是已确认的规划输入；AD-01 仍必须在下游工作前证明每个完整文件与官方 Mapping。
+本节是 Airline Delay Data 切片的权威规划摘要。GitHub #39-#44 包装经 Review 的顺序，但本计划和 Open Issue 均不授权实施。没有单独明确的 Owner 指令，不得开始本 Phase 的依赖、Migration、Importer、API 或 Web 工作。预期年度文件名和与样例一致的 27 个业务列输入形态是已确认的规划输入；AD-01 仍必须在下游工作前证明每个完整文件与官方 Mapping。
 
 #### AD-01 证明 Airline Delay Data Contract 与官方 Mapping — `TODO (planning only)`
 

@@ -127,7 +127,6 @@ docs/api/                   Authentication contracts and local runbook
 AGENTS*.md                  Repository rules for contributors and agents
 PLANS*.md                   Decisions, scope, status, and acceptance criteria
 ISSUES*.md                  Ordered implementation issue specifications
-visual_plan.md              Detailed proposed Airline Delay Data plan
 package.json                Root commands and runtime constraints
 pnpm-workspace.yaml         Workspace and install policy
 turbo.json                  Cross-package task graph
@@ -147,7 +146,6 @@ Application containers, Redis, and production database selection remain absent.
 
 - [PLANS.md](./PLANS.md) — authoritative decisions, scope, task status, and acceptance criteria.
 - [ISSUES.md](./ISSUES.md) — completed authentication issue evidence, the active Airline Delay Data planning chain, remote disposition, and dependency order.
-- [visual_plan.md](./visual_plan.md) — detailed Airline Delay Data proposal and its implementation gates; planning only, not implementation authorization.
 - [docs/toolchain.md](./docs/toolchain.md) — exact dependency pins and source evidence.
 - [docs/api/authentication.md](./docs/api/authentication.md) — authentication endpoints, errors, environment setup, migrations, testing, and manual smoke checks.
 - [AGENTS.md](./AGENTS.md) — repository-wide engineering and safety rules.

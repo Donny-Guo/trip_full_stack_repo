@@ -127,7 +127,6 @@ docs/api/                   认证 Contract 与本地 Runbook
 AGENTS*.md                  Contributor 与 Agent 的仓库规则
 PLANS*.md                   决策、范围、状态与验收标准
 ISSUES*.md                  Issue 状态、验收证据、规划链与依赖顺序
-visual_plan.md              Airline Delay Data 详细拟议计划
 package.json                根命令与 Runtime 约束
 pnpm-workspace.yaml         Workspace 与安装策略
 turbo.json                  跨 Package Task Graph
@@ -147,7 +146,6 @@ Application Container、Redis 与生产数据库选择仍不存在。
 
 - [PLANS_ZH.md](./PLANS_ZH.md) — 权威英文计划的中文跟随版，包含决策、范围、任务状态与验收标准。
 - [ISSUES_ZH.md](./ISSUES_ZH.md) — 已完成认证 Issue 证据、现役 Airline Delay Data 规划链、远程处置与依赖顺序的中文跟随版。
-- [visual_plan.md](./visual_plan.md) — Airline Delay Data 详细提案及实施 Gate；仅用于规划，不代表实施授权。
 - [docs/toolchain_ZH.md](./docs/toolchain_ZH.md) — 精确 Dependency Pin 与 Source Evidence 的中文跟随版。
 - [docs/api/authentication_ZH.md](./docs/api/authentication_ZH.md) — 认证 Endpoint、Error、环境设置、Migration、Test 与手动 Smoke 的中文跟随版。
 - [AGENTS_ZH.md](./AGENTS_ZH.md) — 仓库工程与安全规则的中文跟随版。

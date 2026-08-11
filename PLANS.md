@@ -483,7 +483,7 @@ Status legend: decision `CONFIRMED` is authoritative. Task `TODO` is not started
 
 ### Phase 5 — Proposed Airline Delay Data slice (planning only)
 
-The detailed proposal is [`visual_plan.md`](./visual_plan.md). GitHub #39-#44 package the reviewed sequence, but neither the document nor the open issues authorize implementation. No dependency, migration, importer, API, or Web work in this phase may begin without a separate explicit owner instruction. The expected annual filenames and sample-aligned 27-business-column input shape are confirmed planning inputs; AD-01 must still prove every full file and official mapping before downstream work.
+This section is the authoritative planning summary for the Airline Delay Data slice. GitHub #39-#44 package the reviewed sequence, but neither this plan nor the open issues authorize implementation. No dependency, migration, importer, API, or Web work in this phase may begin without a separate explicit owner instruction. The expected annual filenames and sample-aligned 27-business-column input shape are confirmed planning inputs; AD-01 must still prove every full file and official mapping before downstream work.
 
 #### AD-01 Prove the airline-delay data contract and official mappings — `TODO (planning only)`
 

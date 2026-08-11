@@ -11,7 +11,7 @@ Simplified Chinese follower: [`ISSUES_ZH.md`](./ISSUES_ZH.md). This English file
 
 ## 1. Purpose and authority
 
-This catalog gives the repository one current issue answer for the completed local authentication slice and the open Airline Delay Data planning chain. Detailed decisions and task requirements remain in `PLANS.md`; [`visual_plan.md`](./visual_plan.md) is the detailed Airline Delay Data proposal.
+This catalog gives the repository one current issue answer for the completed local authentication slice and the open Airline Delay Data planning chain. Detailed decisions and task requirements remain in `PLANS.md`; this file owns the issue packaging, dependencies, review boundaries, and planning-only status.
 
 Authority order:
 
@@ -178,7 +178,7 @@ Closing a historical issue as not planned records consolidation or deferral, not
 
 ## 8. Active Airline Delay Data planning chain
 
-These English issues are open and assigned to `@Donny-Guo`. Their scope and acceptance criteria are detailed remotely and in [`visual_plan.md`](./visual_plan.md). Every status below is planning-only: `TODO` does not imply implementation authorization.
+These English issues are open and assigned to `@Donny-Guo`. Their scope and acceptance criteria are detailed in their remote bodies, summarized in `PLANS.md`, and packaged here with their dependency order. Every status below is planning-only: `TODO` does not imply implementation authorization.
 
 | Plan task | Local issue ID | GitHub                                                             | Status                 | Depends on           | Review boundary                                                                |
 | --------- | -------------- | ------------------------------------------------------------------ | ---------------------- | -------------------- | ------------------------------------------------------------------------------ |
