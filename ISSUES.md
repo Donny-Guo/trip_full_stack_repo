@@ -11,7 +11,7 @@ Simplified Chinese follower: [`ISSUES_ZH.md`](./ISSUES_ZH.md). This English file
 
 ## 1. Purpose and authority
 
-This catalog gives the repository one current issue answer for the completed local authentication slice and the open Airline Delay Data planning chain. Detailed decisions and task requirements remain in `PLANS.md`; [`visual_plan.md`](./visual_plan.md) is the detailed Airline Delay Data proposal.
+This catalog gives the repository one current issue answer for the completed local authentication slice and the open Airline Delay Data planning chain. Detailed decisions and task requirements remain in `PLANS.md`; this file owns the issue packaging, dependencies, review boundaries, and planning-only status.
 
 Authority order:
 
@@ -50,7 +50,7 @@ ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ──────�
 
 AD-03 and AD-04 may proceed in parallel only after AD-02. AD-06 requires both AD-03 and AD-05. No item in this sequence is executable until the owner separately authorizes implementation.
 
-The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.2.12, MUI 9.2.0, and TypeORM 1.1.0.
+The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.3.0, MUI 9.2.0, and TypeORM 1.1.0; the Next.js 16.3.0 pin is the isolated 2026-08-11 Dependabot remediation.
 
 ## 3. Shared readiness and review rules
 
@@ -178,7 +178,7 @@ Closing a historical issue as not planned records consolidation or deferral, not
 
 ## 8. Active Airline Delay Data planning chain
 
-These English issues are open and assigned to `@Donny-Guo`. Their scope and acceptance criteria are detailed remotely and in [`visual_plan.md`](./visual_plan.md). Every status below is planning-only: `TODO` does not imply implementation authorization.
+These English issues are open and assigned to `@Donny-Guo`. Their scope and acceptance criteria are detailed in their remote bodies, summarized in `PLANS.md`, and packaged here with their dependency order. Every status below is planning-only: `TODO` does not imply implementation authorization.
 
 | Plan task | Local issue ID | GitHub                                                             | Status                 | Depends on           | Review boundary                                                                |
 | --------- | -------------- | ------------------------------------------------------------------ | ---------------------- | -------------------- | ------------------------------------------------------------------------------ |

@@ -1,5 +1,7 @@
 # Trip Agent Full Stack（中文）
 
+[![CI](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml/badge.svg)](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml)
+
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
 这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Worktree 包含已完成的 Next.js/MUI 与 NestJS 认证切片；该切片由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。下一个 Airline Delay Data 切片目前只有文档和规划 Issue，尚未实现，也未获实施授权。Agent 能力属于后续工作。
@@ -34,7 +36,7 @@ Dashboard Product Content/Design、Extensible Navigation、Flight Info/User 页�
 | 领域      | 选择                                                     | 状态                                                              |
 | --------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy              |
-| Web       | Next.js 16.2.12 + React 19.2.8                           | 注册/登录、受保护精简 Dashboard、Logout 与 Session-aware 404      |
+| Web       | Next.js 16.3.0 + React 19.2.8                            | 注册/登录、受保护精简 Dashboard、Logout 与 Session-aware 404      |
 | UI        | MUI Material/Icons 9.2.0                                 | App Router SSR/CSS-variable Theme 与可访问认证表单                |
 | API       | NestJS 11.1.28 REST + TypeScript                         | 已提供合并后的 ESM 认证 API                                       |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 已有显式 Migration 及分离 Runtime/Migrator Connection             |
@@ -127,7 +129,6 @@ docs/api/                   认证 Contract 与本地 Runbook
 AGENTS*.md                  Contributor 与 Agent 的仓库规则
 PLANS*.md                   决策、范围、状态与验收标准
 ISSUES*.md                  Issue 状态、验收证据、规划链与依赖顺序
-visual_plan.md              Airline Delay Data 详细拟议计划
 package.json                根命令与 Runtime 约束
 pnpm-workspace.yaml         Workspace 与安装策略
 turbo.json                  跨 Package Task Graph
@@ -147,7 +148,6 @@ Application Container、Redis 与生产数据库选择仍不存在。
 
 - [PLANS_ZH.md](./PLANS_ZH.md) — 权威英文计划的中文跟随版，包含决策、范围、任务状态与验收标准。
 - [ISSUES_ZH.md](./ISSUES_ZH.md) — 已完成认证 Issue 证据、现役 Airline Delay Data 规划链、远程处置与依赖顺序的中文跟随版。
-- [visual_plan.md](./visual_plan.md) — Airline Delay Data 详细提案及实施 Gate；仅用于规划，不代表实施授权。
 - [docs/toolchain_ZH.md](./docs/toolchain_ZH.md) — 精确 Dependency Pin 与 Source Evidence 的中文跟随版。
 - [docs/api/authentication_ZH.md](./docs/api/authentication_ZH.md) — 认证 Endpoint、Error、环境设置、Migration、Test 与手动 Smoke 的中文跟随版。
 - [AGENTS_ZH.md](./AGENTS_ZH.md) — 仓库工程与安全规则的中文跟随版。

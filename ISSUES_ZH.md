@@ -11,7 +11,7 @@ Airline Delay Data 规划日期：2026-08-10\
 
 ## 1. 目的与权威性
 
-本清单为已完成的本地认证切片和 Open Airline Delay Data 规划链提供唯一的现役 Issue 答案。详细决策与 Task 要求保留在 `PLANS.md`；[`visual_plan.md`](./visual_plan.md) 是 Airline Delay Data 的详细提案。
+本清单为已完成的本地认证切片和 Open Airline Delay Data 规划链提供唯一的现役 Issue 答案。详细决策与 Task 要求保留在 `PLANS.md`；本文件负责 Issue 包装、依赖、Review Boundary 与仅规划状态。
 
 权威顺序：
 
@@ -50,7 +50,7 @@ ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ──────�
 
 AD-02 完成后，AD-03 与 AD-04 才可并行。AD-06 同时依赖 AD-03 与 AD-05。在 Owner 另行授权实施前，该顺序中的任何工作都不可执行。
 
-已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.2.12、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准。
+已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.3.0、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准；Next.js 16.3.0 Pin 是 2026-08-11 隔离实施的 Dependabot 修复。
 
 ## 3. 统一 Ready 与 Review 规则
 
@@ -178,7 +178,7 @@ AD-02 完成后，AD-03 与 AD-04 才可并行。AD-06 同时依赖 AD-03 与 AD
 
 ## 8. 现役 Airline Delay Data 规划链
 
-这些英文 Issue 均为 Open，并指派给 `@Donny-Guo`。远程正文与 [`visual_plan.md`](./visual_plan.md) 详细记录其范围与验收标准。以下全部状态仅用于规划：`TODO` 不代表实施授权。
+这些英文 Issue 均为 Open，并指派给 `@Donny-Guo`。其远程正文详细记录范围与验收标准，`PLANS.md` 提供摘要，本文件则记录其依赖顺序。以下全部状态仅用于规划：`TODO` 不代表实施授权。
 
 | Plan Task | 本地 Issue ID | GitHub                                                             | 状态                   | 依赖                 | Review Boundary                                                          |
 | --------- | ------------- | ------------------------------------------------------------------ | ---------------------- | -------------------- | ------------------------------------------------------------------------ |

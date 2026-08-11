@@ -1,5 +1,7 @@
 # Trip Agent Full Stack
 
+[![CI](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml/badge.svg)](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml)
+
 A production-oriented travel-agent monorepo. The current worktree contains the completed Next.js/MUI and NestJS authentication slice backed by TypeORM and local PostgreSQL/pgvector with separated database roles. The next Airline Delay Data slice is documented and tracked by planning issues only; it is not implemented or authorized for implementation. Agent capabilities follow in later work.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
@@ -34,7 +36,7 @@ Dashboard product content and design, extensible navigation, Flight Info/User pa
 | Area      | Choice                                                   | State                                                                    |
 | --------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | Available with shared TypeScript/ESLint/Prettier policy                  |
-| Web       | Next.js 16.2.12 + React 19.2.8                           | Sign-up/login, protected sparse Dashboard, logout, and session-aware 404 |
+| Web       | Next.js 16.3.0 + React 19.2.8                            | Sign-up/login, protected sparse Dashboard, logout, and session-aware 404 |
 | UI        | MUI Material/Icons 9.2.0                                 | App Router SSR/CSS-variable theme and accessible auth forms              |
 | API       | NestJS 11.1.28 REST + TypeScript                         | Merged ESM authentication API available                                  |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Explicit migration and separated runtime/migrator connections available  |
@@ -53,7 +55,7 @@ test -e apps/web/.env.local || cp apps/web/.env.example apps/web/.env.local
 pnpm --filter web dev
 ```
 
-Open http://localhost:3000. Use `/sign-up` or `/login`; authenticated users land on the intentionally sparse `/dashboard`.
+Open <http://localhost:3000>. Use `/sign-up` or `/login`; authenticated users land on the intentionally sparse `/dashboard`.
 
 Start local PostgreSQL. If `.env` does not exist, create it from `.env.example` without overwriting an existing file. Fill each blank password with a different 64-character lowercase hexadecimal development value (for example, run `openssl rand -hex 32` three times), then keep the file ignored and mode `0600`.
 
@@ -85,7 +87,7 @@ pnpm --filter api migration:show
 pnpm --filter api dev
 ```
 
-The API exposes process liveness at http://localhost:3001/api/v1/health/live and PostgreSQL-aware readiness at http://localhost:3001/api/v1/health/ready.
+The API exposes process liveness at <http://localhost:3001/api/v1/health/live> and PostgreSQL-aware readiness at <http://localhost:3001/api/v1/health/ready>.
 
 Run the repository checks from the root:
 
@@ -127,7 +129,6 @@ docs/api/                   Authentication contracts and local runbook
 AGENTS*.md                  Repository rules for contributors and agents
 PLANS*.md                   Decisions, scope, status, and acceptance criteria
 ISSUES*.md                  Ordered implementation issue specifications
-visual_plan.md              Detailed proposed Airline Delay Data plan
 package.json                Root commands and runtime constraints
 pnpm-workspace.yaml         Workspace and install policy
 turbo.json                  Cross-package task graph
@@ -147,7 +148,6 @@ Application containers, Redis, and production database selection remain absent.
 
 - [PLANS.md](./PLANS.md) — authoritative decisions, scope, task status, and acceptance criteria.
 - [ISSUES.md](./ISSUES.md) — completed authentication issue evidence, the active Airline Delay Data planning chain, remote disposition, and dependency order.
-- [visual_plan.md](./visual_plan.md) — detailed Airline Delay Data proposal and its implementation gates; planning only, not implementation authorization.
 - [docs/toolchain.md](./docs/toolchain.md) — exact dependency pins and source evidence.
 - [docs/api/authentication.md](./docs/api/authentication.md) — authentication endpoints, errors, environment setup, migrations, testing, and manual smoke checks.
 - [AGENTS.md](./AGENTS.md) — repository-wide engineering and safety rules.
