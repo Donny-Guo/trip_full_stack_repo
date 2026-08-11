@@ -50,7 +50,7 @@ ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ──────�
 
 AD-02 完成后，AD-03 与 AD-04 才可并行。AD-06 同时依赖 AD-03 与 AD-05。在 Owner 另行授权实施前，该顺序中的任何工作都不可执行。
 
-已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.2.12、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准。
+已关闭 #2 的正文记录 D-25 之前的版本 Baseline。当前 Next.js 16.3.0、MUI 9.2.0 与 TypeORM 1.1.0 以 D-25 和 `docs/toolchain.md` 为准；Next.js 16.3.0 Pin 是 2026-08-11 隔离实施的 Dependabot 修复。
 
 ## 3. 统一 Ready 与 Review 规则
 

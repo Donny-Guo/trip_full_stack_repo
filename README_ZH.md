@@ -36,7 +36,7 @@ Dashboard Product Content/Design、Extensible Navigation、Flight Info/User 页�
 | 领域      | 选择                                                     | 状态                                                              |
 | --------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | 已存在，并包含共享 TypeScript/ESLint/Prettier Policy              |
-| Web       | Next.js 16.2.12 + React 19.2.8                           | 注册/登录、受保护精简 Dashboard、Logout 与 Session-aware 404      |
+| Web       | Next.js 16.3.0 + React 19.2.8                            | 注册/登录、受保护精简 Dashboard、Logout 与 Session-aware 404      |
 | UI        | MUI Material/Icons 9.2.0                                 | App Router SSR/CSS-variable Theme 与可访问认证表单                |
 | API       | NestJS 11.1.28 REST + TypeScript                         | 已提供合并后的 ESM 认证 API                                       |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | 已有显式 Migration 及分离 Runtime/Migrator Connection             |

@@ -36,7 +36,7 @@ Dashboard product content and design, extensible navigation, Flight Info/User pa
 | Area      | Choice                                                   | State                                                                    |
 | --------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
 | Workspace | pnpm 11.18.0 + Turborepo 2.10.8                          | Available with shared TypeScript/ESLint/Prettier policy                  |
-| Web       | Next.js 16.2.12 + React 19.2.8                           | Sign-up/login, protected sparse Dashboard, logout, and session-aware 404 |
+| Web       | Next.js 16.3.0 + React 19.2.8                            | Sign-up/login, protected sparse Dashboard, logout, and session-aware 404 |
 | UI        | MUI Material/Icons 9.2.0                                 | App Router SSR/CSS-variable theme and accessible auth forms              |
 | API       | NestJS 11.1.28 REST + TypeScript                         | Merged ESM authentication API available                                  |
 | Data      | PostgreSQL 18 + pgvector + TypeORM 1.1                   | Explicit migration and separated runtime/migrator connections available  |

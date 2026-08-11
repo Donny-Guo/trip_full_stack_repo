@@ -50,7 +50,7 @@ ISSUE-039 / AD-01 -> ISSUE-040 / AD-02 -> ISSUE-041 / AD-03 ──────�
 
 AD-03 and AD-04 may proceed in parallel only after AD-02. AD-06 requires both AD-03 and AD-05. No item in this sequence is executable until the owner separately authorizes implementation.
 
-The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.2.12, MUI 9.2.0, and TypeORM 1.1.0.
+The closed #2 body records the pre-D-25 version baseline. D-25 and `docs/toolchain.md` are the current authority for Next.js 16.3.0, MUI 9.2.0, and TypeORM 1.1.0; the Next.js 16.3.0 pin is the isolated 2026-08-11 Dependabot remediation.
 
 ## 3. Shared readiness and review rules
 
