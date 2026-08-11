@@ -1,5 +1,7 @@
 # Trip Agent Full Stack
 
+[![CI](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml/badge.svg)](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml)
+
 A production-oriented travel-agent monorepo. The current worktree contains the completed Next.js/MUI and NestJS authentication slice backed by TypeORM and local PostgreSQL/pgvector with separated database roles. The next Airline Delay Data slice is documented and tracked by planning issues only; it is not implemented or authorized for implementation. Agent capabilities follow in later work.
 
 Simplified Chinese: [README_ZH.md](./README_ZH.md). This English file is authoritative.
@@ -53,7 +55,7 @@ test -e apps/web/.env.local || cp apps/web/.env.example apps/web/.env.local
 pnpm --filter web dev
 ```
 
-Open http://localhost:3000. Use `/sign-up` or `/login`; authenticated users land on the intentionally sparse `/dashboard`.
+Open <http://localhost:3000>. Use `/sign-up` or `/login`; authenticated users land on the intentionally sparse `/dashboard`.
 
 Start local PostgreSQL. If `.env` does not exist, create it from `.env.example` without overwriting an existing file. Fill each blank password with a different 64-character lowercase hexadecimal development value (for example, run `openssl rand -hex 32` three times), then keep the file ignored and mode `0600`.
 
@@ -85,7 +87,7 @@ pnpm --filter api migration:show
 pnpm --filter api dev
 ```
 
-The API exposes process liveness at http://localhost:3001/api/v1/health/live and PostgreSQL-aware readiness at http://localhost:3001/api/v1/health/ready.
+The API exposes process liveness at <http://localhost:3001/api/v1/health/live> and PostgreSQL-aware readiness at <http://localhost:3001/api/v1/health/ready>.
 
 Run the repository checks from the root:
 

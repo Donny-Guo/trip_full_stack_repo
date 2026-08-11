@@ -1,5 +1,7 @@
 # Trip Agent Full Stack（中文）
 
+[![CI](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml/badge.svg)](https://github.com/Donny-Guo/trip_full_stack_repo/actions/workflows/ci.yml)
+
 本文件是权威英文 [README.md](./README.md) 的简体中文跟随版。若两者冲突，以英文版为准并修正本文件。
 
 这是一个面向生产边界设计的旅游 Agent Monorepo。当前 Worktree 包含已完成的 Next.js/MUI 与 NestJS 认证切片；该切片由 TypeORM 与本地 PostgreSQL/pgvector 支撑，并使用分离数据库 Role。下一个 Airline Delay Data 切片目前只有文档和规划 Issue，尚未实现，也未获实施授权。Agent 能力属于后续工作。
